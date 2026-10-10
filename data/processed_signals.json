@@ -1,0 +1,4324 @@
+{
+  "metadata": {
+    "vehicle_line": "BMW 5 Series / i5 (G60 / G68 Successor)",
+    "total_verbatims_ingested": 12000,
+    "verbatims_g60": 5000,
+    "verbatims_g70": 4000,
+    "verbatims_f70": 3000,
+    "study_metrics_count": 758,
+    "annual_report": {
+      "deliveries_2025": {
+        "total_deliveries": "2,463,681 units (+0.5% YoY)",
+        "5_series_deliveries": "299,582 units (+19.5% YoY, representing 13.8% of total BMW deliveries)",
+        "regional_europe": "1,017,600 units (+7.3% YoY)",
+        "regional_china": "626,000 units (-12.5% YoY, still largest single market)",
+        "regional_americas": "Growth of +5.6% YoY"
+      },
+      "financial_rd": {
+        "rd_expenditure_2025": "€8,319 million (focused on Neue Klasse & digitalization)",
+        "automotive_revenue": "€117,557 million",
+        "automotive_equity_ratio": "41.5%"
+      },
+      "neue_klasse_roadmap": {
+        "launch_timeline": "Debuted with iX3 in 2025; BMW i3 in 2026; 40 new/revised models by 2027",
+        "architecture": "800V fast-charging, Gen-6 cylindrical cell battery, central compute & zonal controllers",
+        "cockpit": "BMW Panoramic iDrive spanning entire lower windshield width (BMW Panoramic Vision)"
+      },
+      "china_specific_strategy": {
+        "philosophy": "'In China, for China and with China'",
+        "lwb_model": "Neue Klasse Long-Wheelbase debuting at Auto China 2026 in Beijing",
+        "local_software_share": "70% locally written software in Chinese derivative of BMW OS X",
+        "ai_voice_partnerships": "DeepSeek and Alibaba LLMs integrated for natural, rapid voice control",
+        "device_ecosystem": "Huawei HarmonyOS NEXT, Digital Key, and HiCar integration",
+        "navigation_partner": "Amap (AutoNavi) lane-level navigation for complex Chinese infrastructure",
+        "adas_partner": "Momenta co-developing urban ADAS software stack for dense Chinese traffic"
+      }
+    }
+  },
+  "sales_forecast": {
+    "F70": [
+      {
+        "market": "Europe",
+        "market_code": "EU",
+        "volume_2024": 80000,
+        "volume_2025": 85000,
+        "volume_2030": 87000
+      },
+      {
+        "market": "China",
+        "market_code": "CN",
+        "volume_2024": 0,
+        "volume_2025": 0,
+        "volume_2030": 0
+      },
+      {
+        "market": "USA",
+        "market_code": "US",
+        "volume_2024": 0,
+        "volume_2025": 0,
+        "volume_2030": 0
+      },
+      {
+        "market": "Rest of World",
+        "market_code": "RoW",
+        "volume_2024": 25000,
+        "volume_2025": 28000,
+        "volume_2030": 31000
+      }
+    ],
+    "G60_G68": [
+      {
+        "market": "Europe",
+        "market_code": "EU",
+        "volume_2024": 110000,
+        "volume_2025": 115000,
+        "volume_2030": 127000
+      },
+      {
+        "market": "China",
+        "market_code": "CN",
+        "volume_2024": 68000,
+        "volume_2025": 75000,
+        "volume_2030": 78000
+      },
+      {
+        "market": "USA",
+        "market_code": "US",
+        "volume_2024": 75600,
+        "volume_2025": 78000,
+        "volume_2030": 80000
+      },
+      {
+        "market": "Rest of World",
+        "market_code": "RoW",
+        "volume_2024": 25000,
+        "volume_2025": 28000,
+        "volume_2030": 31000
+      }
+    ],
+    "G70": [
+      {
+        "market": "Europe",
+        "market_code": "EU",
+        "volume_2024": 11000,
+        "volume_2025": 13000,
+        "volume_2030": 17000
+      },
+      {
+        "market": "China",
+        "market_code": "CN",
+        "volume_2024": 8000,
+        "volume_2025": 10000,
+        "volume_2030": 12000
+      },
+      {
+        "market": "USA",
+        "market_code": "US",
+        "volume_2024": 10000,
+        "volume_2025": 12000,
+        "volume_2030": 14000
+      },
+      {
+        "market": "Rest of World",
+        "market_code": "RoW",
+        "volume_2024": 5000,
+        "volume_2025": 7000,
+        "volume_2030": 9000
+      }
+    ]
+  },
+  "customer_studies": {
+    "CN_EU_2025": [
+      {
+        "category": "Overall product satisfaction",
+        "G68_China": 8.77,
+        "G70_China": 9.64,
+        "F70_EU": 8.46,
+        "G60_EU": 8.32,
+        "G70_EU": 7.98
+      },
+      {
+        "category": "Exterior styling",
+        "G68_China": 8.19,
+        "G70_China": 8.79,
+        "F70_EU": 9.01,
+        "G60_EU": 9.83,
+        "G70_EU": 8.38
+      },
+      {
+        "category": "Interior styling",
+        "G68_China": 8.69,
+        "G70_China": 8.57,
+        "F70_EU": 8.9,
+        "G60_EU": 8.55,
+        "G70_EU": 8.92
+      },
+      {
+        "category": "Quality of interior and materials used",
+        "G68_China": 8.44,
+        "G70_China": 8.43,
+        "F70_EU": 8.65,
+        "G60_EU": 7.75,
+        "G70_EU": 9.11
+      },
+      {
+        "category": "Level of equipment",
+        "G68_China": 7.49,
+        "G70_China": 9.82,
+        "F70_EU": 8.26,
+        "G60_EU": 7.77,
+        "G70_EU": 9.24
+      },
+      {
+        "category": "Safety",
+        "G68_China": 8.17,
+        "G70_China": 8.97,
+        "F70_EU": 9.03,
+        "G60_EU": 9.15,
+        "G70_EU": 9.28
+      },
+      {
+        "category": "Freedom from faults/ squeaks/ rattles",
+        "G68_China": 8.48,
+        "G70_China": 8.44,
+        "F70_EU": 8.86,
+        "G60_EU": 8.41,
+        "G70_EU": 8.61
+      },
+      {
+        "category": "Value for money",
+        "G68_China": 7.92,
+        "G70_China": 8.29,
+        "F70_EU": 7.82,
+        "G60_EU": 7.36,
+        "G70_EU": 6.47
+      },
+      {
+        "category": "Reliability",
+        "G68_China": 8.84,
+        "G70_China": 8.22,
+        "F70_EU": 9.4,
+        "G60_EU": 9.25,
+        "G70_EU": 9.67
+      },
+      {
+        "category": "All round visibility",
+        "G68_China": 8.7,
+        "G70_China": 8.43,
+        "F70_EU": 8.89,
+        "G60_EU": 8.64,
+        "G70_EU": 8.3
+      },
+      {
+        "category": "Easy to read and use instruments/ controls/ displays",
+        "G68_China": 8.34,
+        "G70_China": 8.43,
+        "F70_EU": 8.41,
+        "G60_EU": 8.07,
+        "G70_EU": 8.19
+      },
+      {
+        "category": "Smartphone integration/ connectivity",
+        "G68_China": 8.14,
+        "G70_China": 8.43,
+        "F70_EU": 8.59,
+        "G60_EU": 8.46,
+        "G70_EU": 8.36
+      },
+      {
+        "category": "Features of information and entertainment system including in-car apps",
+        "G68_China": 8.37,
+        "G70_China": 8.21,
+        "F70_EU": 8.23,
+        "G60_EU": 8.19,
+        "G70_EU": 8.29
+      },
+      {
+        "category": "Easy to use information and entertainment system including in-car apps",
+        "G68_China": 8.35,
+        "G70_China": 8.1,
+        "F70_EU": 8.16,
+        "G60_EU": 8.26,
+        "G70_EU": 7.99
+      },
+      {
+        "category": "Integrated navigation system",
+        "G68_China": 8.52,
+        "G70_China": 8.18,
+        "F70_EU": 8.3,
+        "G60_EU": 8.59,
+        "G70_EU": 8.82
+      },
+      {
+        "category": "Overall seating comfort",
+        "G68_China": 8.67,
+        "G70_China": 8.72,
+        "F70_EU": 8.98,
+        "G60_EU": 8.81,
+        "G70_EU": 9.29
+      },
+      {
+        "category": "Interior storage for small items",
+        "G68_China": 8.53,
+        "G70_China": 8.41,
+        "F70_EU": 8.1,
+        "G60_EU": 7.72,
+        "G70_EU": 7.96
+      },
+      {
+        "category": "Acceleration",
+        "G68_China": 8.6,
+        "G70_China": 8.83,
+        "F70_EU": 8.21,
+        "G60_EU": 8.85,
+        "G70_EU": 8.94
+      },
+      {
+        "category": "Roadholding",
+        "G68_China": 8.92,
+        "G70_China": 8.6,
+        "F70_EU": 8.29,
+        "G60_EU": 8.15,
+        "G70_EU": 8.94
+      },
+      {
+        "category": "Fuel economy/ energy efficiency",
+        "G68_China": 8.43,
+        "G70_China": 8.18,
+        "F70_EU": 9.3,
+        "G60_EU": 7.45,
+        "G70_EU": 7.68
+      },
+      {
+        "category": "Braking",
+        "G68_China": 7.38,
+        "G70_China": 7.82,
+        "F70_EU": 8.89,
+        "G60_EU": 8.25,
+        "G70_EU": 9.6
+      },
+      {
+        "category": "Sportiness",
+        "G68_China": 8.86,
+        "G70_China": 8.64,
+        "F70_EU": 9.34,
+        "G60_EU": 7.64,
+        "G70_EU": 6.97
+      },
+      {
+        "category": "Prestige/ manufacturer reputation",
+        "G68_China": 8.9,
+        "G70_China": 9.17,
+        "F70_EU": 9.21,
+        "G60_EU": 8.95,
+        "G70_EU": 9.23
+      },
+      {
+        "category": "Manoeuvrability",
+        "G68_China": 8.48,
+        "G70_China": 8.38,
+        "F70_EU": 8.87,
+        "G60_EU": 8.73,
+        "G70_EU": 8.97
+      },
+      {
+        "category": "Quality of ride",
+        "G68_China": 8.45,
+        "G70_China": 8.62,
+        "F70_EU": 9.2,
+        "G60_EU": 9.95,
+        "G70_EU": 9.52
+      },
+      {
+        "category": "Front interior roominess",
+        "G68_China": 7.77,
+        "G70_China": 7.69,
+        "F70_EU": 9.2,
+        "G60_EU": 8.88,
+        "G70_EU": 9.69
+      },
+      {
+        "category": "Rear interior roominess",
+        "G68_China": 8.71,
+        "G70_China": 7.52,
+        "F70_EU": 8.59,
+        "G60_EU": 7.46,
+        "G70_EU": 9.41
+      },
+      {
+        "category": "Ease of loading/ unloading luggage",
+        "G68_China": 7.25,
+        "G70_China": 7.46,
+        "F70_EU": 7.5,
+        "G60_EU": 7.24,
+        "G70_EU": 8.67
+      },
+      {
+        "category": "Luggage capacity",
+        "G68_China": 8.73,
+        "G70_China": 7.66,
+        "F70_EU": 7.07,
+        "G60_EU": 7.54,
+        "G70_EU": 7.41
+      },
+      {
+        "category": "Ease of entry into and out of car",
+        "G68_China": 8.51,
+        "G70_China": 8.71,
+        "F70_EU": 8.76,
+        "G60_EU": 7.91,
+        "G70_EU": 9.25
+      },
+      {
+        "category": "Environm. friendliness",
+        "G68_China": 7.49,
+        "G70_China": 7.44,
+        "F70_EU": 7.55,
+        "G60_EU": 7.59,
+        "G70_EU": 7.51
+      },
+      {
+        "category": "Heating/ ventilation/ air conditioning",
+        "G68_China": 7.58,
+        "G70_China": 8.82,
+        "F70_EU": 7.3,
+        "G60_EU": 7.47,
+        "G70_EU": 8.8
+      },
+      {
+        "category": "Overall build quality",
+        "G68_China": 8.81,
+        "G70_China": 9.36,
+        "F70_EU": 7.95,
+        "G60_EU": 7.67,
+        "G70_EU": 8.78
+      },
+      {
+        "category": "Quietness when driving",
+        "G68_China": 7.52,
+        "G70_China": 9.39,
+        "F70_EU": 7.62,
+        "G60_EU": 7.79,
+        "G70_EU": 9.78
+      },
+      {
+        "category": "Driving position",
+        "G68_China": 8.69,
+        "G70_China": 8.8,
+        "F70_EU": 9.18,
+        "G60_EU": 9.17,
+        "G70_EU": 9.13
+      },
+      {
+        "category": "Connected services",
+        "G68_China": 7.35,
+        "G70_China": 7.32,
+        "F70_EU": 7.36,
+        "G60_EU": 7.37,
+        "G70_EU": 7.86
+      },
+      {
+        "category": "Interior versatility",
+        "G68_China": 8.35,
+        "G70_China": 8.04,
+        "F70_EU": 8.57,
+        "G60_EU": 8.14,
+        "G70_EU": 8.32
+      }
+    ],
+    "US_2025": [
+      {
+        "attribute": "Overall exterior styling",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Overall exterior styling",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Overall exterior styling",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Overall exterior styling",
+        "rating_level": "Satisfactory",
+        "G60_pct": 17.6
+      },
+      {
+        "attribute": "Overall exterior styling",
+        "rating_level": "Excellent",
+        "G60_pct": 16.7
+      },
+      {
+        "attribute": "Overall exterior styling",
+        "rating_level": "Delightful",
+        "G60_pct": 26.3
+      },
+      {
+        "attribute": "Overall exterior styling",
+        "rating_level": "I Love It",
+        "G60_pct": 37.5
+      },
+      {
+        "attribute": "Size/ proportions",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Size/ proportions",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Size/ proportions",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Size/ proportions",
+        "rating_level": "Satisfactory",
+        "G60_pct": 11.8
+      },
+      {
+        "attribute": "Size/ proportions",
+        "rating_level": "Excellent",
+        "G60_pct": 28.9
+      },
+      {
+        "attribute": "Size/ proportions",
+        "rating_level": "Delightful",
+        "G60_pct": 17.4
+      },
+      {
+        "attribute": "Size/ proportions",
+        "rating_level": "I Love It",
+        "G60_pct": 38.8
+      },
+      {
+        "attribute": "Appearance of tires/ wheels",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Appearance of tires/ wheels",
+        "rating_level": "A Failure",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Appearance of tires/ wheels",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.4
+      },
+      {
+        "attribute": "Appearance of tires/ wheels",
+        "rating_level": "Satisfactory",
+        "G60_pct": 8.8
+      },
+      {
+        "attribute": "Appearance of tires/ wheels",
+        "rating_level": "Excellent",
+        "G60_pct": 18.0
+      },
+      {
+        "attribute": "Appearance of tires/ wheels",
+        "rating_level": "Delightful",
+        "G60_pct": 24.6
+      },
+      {
+        "attribute": "Appearance of tires/ wheels",
+        "rating_level": "I Love It",
+        "G60_pct": 44.0
+      },
+      {
+        "attribute": "Exterior door handles",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Exterior door handles",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Exterior door handles",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.1
+      },
+      {
+        "attribute": "Exterior door handles",
+        "rating_level": "Satisfactory",
+        "G60_pct": 21.5
+      },
+      {
+        "attribute": "Exterior door handles",
+        "rating_level": "Excellent",
+        "G60_pct": 28.3
+      },
+      {
+        "attribute": "Exterior door handles",
+        "rating_level": "Delightful",
+        "G60_pct": 17.5
+      },
+      {
+        "attribute": "Exterior door handles",
+        "rating_level": "I Love It",
+        "G60_pct": 28.8
+      },
+      {
+        "attribute": "Headlight/ taillight design",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Headlight/ taillight design",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Headlight/ taillight design",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "Headlight/ taillight design",
+        "rating_level": "Satisfactory",
+        "G60_pct": 14.2
+      },
+      {
+        "attribute": "Headlight/ taillight design",
+        "rating_level": "Excellent",
+        "G60_pct": 22.2
+      },
+      {
+        "attribute": "Headlight/ taillight design",
+        "rating_level": "Delightful",
+        "G60_pct": 21.0
+      },
+      {
+        "attribute": "Headlight/ taillight design",
+        "rating_level": "I Love It",
+        "G60_pct": 40.5
+      },
+      {
+        "attribute": "Sound of doors/ trunk/ hatch shutting",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Sound of doors/ trunk/ hatch shutting",
+        "rating_level": "A Failure",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Sound of doors/ trunk/ hatch shutting",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Sound of doors/ trunk/ hatch shutting",
+        "rating_level": "Satisfactory",
+        "G60_pct": 26.4
+      },
+      {
+        "attribute": "Sound of doors/ trunk/ hatch shutting",
+        "rating_level": "Excellent",
+        "G60_pct": 15.6
+      },
+      {
+        "attribute": "Sound of doors/ trunk/ hatch shutting",
+        "rating_level": "Delightful",
+        "G60_pct": 18.3
+      },
+      {
+        "attribute": "Sound of doors/ trunk/ hatch shutting",
+        "rating_level": "I Love It",
+        "G60_pct": 37.8
+      },
+      {
+        "attribute": "Overall driving performance",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Overall driving performance",
+        "rating_level": "A Failure",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Overall driving performance",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "Overall driving performance",
+        "rating_level": "Satisfactory",
+        "G60_pct": 3.4
+      },
+      {
+        "attribute": "Overall driving performance",
+        "rating_level": "Excellent",
+        "G60_pct": 30.1
+      },
+      {
+        "attribute": "Overall driving performance",
+        "rating_level": "Delightful",
+        "G60_pct": 17.0
+      },
+      {
+        "attribute": "Overall driving performance",
+        "rating_level": "I Love It",
+        "G60_pct": 47.8
+      },
+      {
+        "attribute": "Ground clearance",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Ground clearance",
+        "rating_level": "A Failure",
+        "G60_pct": 3.1
+      },
+      {
+        "attribute": "Ground clearance",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.2
+      },
+      {
+        "attribute": "Ground clearance",
+        "rating_level": "Satisfactory",
+        "G60_pct": 25.3
+      },
+      {
+        "attribute": "Ground clearance",
+        "rating_level": "Excellent",
+        "G60_pct": 34.4
+      },
+      {
+        "attribute": "Ground clearance",
+        "rating_level": "Delightful",
+        "G60_pct": 14.2
+      },
+      {
+        "attribute": "Ground clearance",
+        "rating_level": "I Love It",
+        "G60_pct": 20.3
+      },
+      {
+        "attribute": "Riding comfort",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Riding comfort",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Riding comfort",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Riding comfort",
+        "rating_level": "Satisfactory",
+        "G60_pct": 5.6
+      },
+      {
+        "attribute": "Riding comfort",
+        "rating_level": "Excellent",
+        "G60_pct": 23.6
+      },
+      {
+        "attribute": "Riding comfort",
+        "rating_level": "Delightful",
+        "G60_pct": 20.4
+      },
+      {
+        "attribute": "Riding comfort",
+        "rating_level": "I Love It",
+        "G60_pct": 48.0
+      },
+      {
+        "attribute": "Turning radius",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Turning radius",
+        "rating_level": "A Failure",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Turning radius",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Turning radius",
+        "rating_level": "Satisfactory",
+        "G60_pct": 12.8
+      },
+      {
+        "attribute": "Turning radius",
+        "rating_level": "Excellent",
+        "G60_pct": 22.9
+      },
+      {
+        "attribute": "Turning radius",
+        "rating_level": "Delightful",
+        "G60_pct": 27.4
+      },
+      {
+        "attribute": "Turning radius",
+        "rating_level": "I Love It",
+        "G60_pct": 35.2
+      },
+      {
+        "attribute": "Handling/Maneuverability",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Handling/Maneuverability",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Handling/Maneuverability",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Handling/Maneuverability",
+        "rating_level": "Satisfactory",
+        "G60_pct": 8.5
+      },
+      {
+        "attribute": "Handling/Maneuverability",
+        "rating_level": "Excellent",
+        "G60_pct": 19.5
+      },
+      {
+        "attribute": "Handling/Maneuverability",
+        "rating_level": "Delightful",
+        "G60_pct": 19.4
+      },
+      {
+        "attribute": "Handling/Maneuverability",
+        "rating_level": "I Love It",
+        "G60_pct": 50.5
+      },
+      {
+        "attribute": "If applicable: 4WD/AWD performance",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "If applicable: 4WD/AWD performance",
+        "rating_level": "A Failure",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "If applicable: 4WD/AWD performance",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "If applicable: 4WD/AWD performance",
+        "rating_level": "Satisfactory",
+        "G60_pct": 10.5
+      },
+      {
+        "attribute": "If applicable: 4WD/AWD performance",
+        "rating_level": "Excellent",
+        "G60_pct": 30.8
+      },
+      {
+        "attribute": "If applicable: 4WD/AWD performance",
+        "rating_level": "Delightful",
+        "G60_pct": 17.1
+      },
+      {
+        "attribute": "If applicable: 4WD/AWD performance",
+        "rating_level": "I Love It",
+        "G60_pct": 38.2
+      },
+      {
+        "attribute": "Off-Road capability",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Off-Road capability",
+        "rating_level": "A Failure",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Off-Road capability",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 16.0
+      },
+      {
+        "attribute": "Off-Road capability",
+        "rating_level": "Satisfactory",
+        "G60_pct": 35.5
+      },
+      {
+        "attribute": "Off-Road capability",
+        "rating_level": "Excellent",
+        "G60_pct": 29.7
+      },
+      {
+        "attribute": "Off-Road capability",
+        "rating_level": "Delightful",
+        "G60_pct": 6.7
+      },
+      {
+        "attribute": "Off-Road capability",
+        "rating_level": "I Love It",
+        "G60_pct": 10.2
+      },
+      {
+        "attribute": "Overall power and pickup",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Overall power and pickup",
+        "rating_level": "A Failure",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Overall power and pickup",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Overall power and pickup",
+        "rating_level": "Satisfactory",
+        "G60_pct": 9.2
+      },
+      {
+        "attribute": "Overall power and pickup",
+        "rating_level": "Excellent",
+        "G60_pct": 25.1
+      },
+      {
+        "attribute": "Overall power and pickup",
+        "rating_level": "Delightful",
+        "G60_pct": 18.0
+      },
+      {
+        "attribute": "Overall power and pickup",
+        "rating_level": "I Love It",
+        "G60_pct": 45.6
+      },
+      {
+        "attribute": "Acceleration from stop",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Acceleration from stop",
+        "rating_level": "A Failure",
+        "G60_pct": 1.4
+      },
+      {
+        "attribute": "Acceleration from stop",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Acceleration from stop",
+        "rating_level": "Satisfactory",
+        "G60_pct": 6.1
+      },
+      {
+        "attribute": "Acceleration from stop",
+        "rating_level": "Excellent",
+        "G60_pct": 23.6
+      },
+      {
+        "attribute": "Acceleration from stop",
+        "rating_level": "Delightful",
+        "G60_pct": 19.7
+      },
+      {
+        "attribute": "Acceleration from stop",
+        "rating_level": "I Love It",
+        "G60_pct": 48.2
+      },
+      {
+        "attribute": "Passing capability",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Passing capability",
+        "rating_level": "A Failure",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "Passing capability",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Passing capability",
+        "rating_level": "Satisfactory",
+        "G60_pct": 7.1
+      },
+      {
+        "attribute": "Passing capability",
+        "rating_level": "Excellent",
+        "G60_pct": 29.0
+      },
+      {
+        "attribute": "Passing capability",
+        "rating_level": "Delightful",
+        "G60_pct": 22.0
+      },
+      {
+        "attribute": "Passing capability",
+        "rating_level": "I Love It",
+        "G60_pct": 40.2
+      },
+      {
+        "attribute": "Overall interior styling/ aesthetics",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Overall interior styling/ aesthetics",
+        "rating_level": "A Failure",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "Overall interior styling/ aesthetics",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 4.8
+      },
+      {
+        "attribute": "Overall interior styling/ aesthetics",
+        "rating_level": "Satisfactory",
+        "G60_pct": 22.0
+      },
+      {
+        "attribute": "Overall interior styling/ aesthetics",
+        "rating_level": "Excellent",
+        "G60_pct": 19.1
+      },
+      {
+        "attribute": "Overall interior styling/ aesthetics",
+        "rating_level": "Delightful",
+        "G60_pct": 11.4
+      },
+      {
+        "attribute": "Overall interior styling/ aesthetics",
+        "rating_level": "I Love It",
+        "G60_pct": 41.8
+      },
+      {
+        "attribute": "Interior colors",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Interior colors",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Interior colors",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Interior colors",
+        "rating_level": "Satisfactory",
+        "G60_pct": 9.6
+      },
+      {
+        "attribute": "Interior colors",
+        "rating_level": "Excellent",
+        "G60_pct": 22.5
+      },
+      {
+        "attribute": "Interior colors",
+        "rating_level": "Delightful",
+        "G60_pct": 12.9
+      },
+      {
+        "attribute": "Interior colors",
+        "rating_level": "I Love It",
+        "G60_pct": 52.4
+      },
+      {
+        "attribute": "Interior trim and finish",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Interior trim and finish",
+        "rating_level": "A Failure",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Interior trim and finish",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "Interior trim and finish",
+        "rating_level": "Satisfactory",
+        "G60_pct": 16.6
+      },
+      {
+        "attribute": "Interior trim and finish",
+        "rating_level": "Excellent",
+        "G60_pct": 16.3
+      },
+      {
+        "attribute": "Interior trim and finish",
+        "rating_level": "Delightful",
+        "G60_pct": 17.4
+      },
+      {
+        "attribute": "Interior trim and finish",
+        "rating_level": "I Love It",
+        "G60_pct": 46.9
+      },
+      {
+        "attribute": "Interior lighting",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Interior lighting",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Interior lighting",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Interior lighting",
+        "rating_level": "Satisfactory",
+        "G60_pct": 12.7
+      },
+      {
+        "attribute": "Interior lighting",
+        "rating_level": "Excellent",
+        "G60_pct": 21.0
+      },
+      {
+        "attribute": "Interior lighting",
+        "rating_level": "Delightful",
+        "G60_pct": 11.9
+      },
+      {
+        "attribute": "Interior lighting",
+        "rating_level": "I Love It",
+        "G60_pct": 51.4
+      },
+      {
+        "attribute": "Overall interior workmanship",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Overall interior workmanship",
+        "rating_level": "A Failure",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Overall interior workmanship",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Overall interior workmanship",
+        "rating_level": "Satisfactory",
+        "G60_pct": 10.8
+      },
+      {
+        "attribute": "Overall interior workmanship",
+        "rating_level": "Excellent",
+        "G60_pct": 34.6
+      },
+      {
+        "attribute": "Overall interior workmanship",
+        "rating_level": "Delightful",
+        "G60_pct": 17.3
+      },
+      {
+        "attribute": "Overall interior workmanship",
+        "rating_level": "I Love It",
+        "G60_pct": 35.4
+      },
+      {
+        "attribute": "Quality of seat materials",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Quality of seat materials",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Quality of seat materials",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Quality of seat materials",
+        "rating_level": "Satisfactory",
+        "G60_pct": 12.6
+      },
+      {
+        "attribute": "Quality of seat materials",
+        "rating_level": "Excellent",
+        "G60_pct": 34.1
+      },
+      {
+        "attribute": "Quality of seat materials",
+        "rating_level": "Delightful",
+        "G60_pct": 17.9
+      },
+      {
+        "attribute": "Quality of seat materials",
+        "rating_level": "I Love It",
+        "G60_pct": 32.5
+      },
+      {
+        "attribute": "Quality of interior materials",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Quality of interior materials",
+        "rating_level": "A Failure",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Quality of interior materials",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Quality of interior materials",
+        "rating_level": "Satisfactory",
+        "G60_pct": 19.1
+      },
+      {
+        "attribute": "Quality of interior materials",
+        "rating_level": "Excellent",
+        "G60_pct": 27.0
+      },
+      {
+        "attribute": "Quality of interior materials",
+        "rating_level": "Delightful",
+        "G60_pct": 17.5
+      },
+      {
+        "attribute": "Quality of interior materials",
+        "rating_level": "I Love It",
+        "G60_pct": 34.3
+      },
+      {
+        "attribute": "Interior door handles",
+        "rating_level": "I Hate It",
+        "G60_pct": 4.3
+      },
+      {
+        "attribute": "Interior door handles",
+        "rating_level": "A Failure",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Interior door handles",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.8
+      },
+      {
+        "attribute": "Interior door handles",
+        "rating_level": "Satisfactory",
+        "G60_pct": 24.4
+      },
+      {
+        "attribute": "Interior door handles",
+        "rating_level": "Excellent",
+        "G60_pct": 19.8
+      },
+      {
+        "attribute": "Interior door handles",
+        "rating_level": "Delightful",
+        "G60_pct": 18.0
+      },
+      {
+        "attribute": "Interior door handles",
+        "rating_level": "I Love It",
+        "G60_pct": 31.3
+      },
+      {
+        "attribute": "Overall comfort of the seats",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.7
+      },
+      {
+        "attribute": "Overall comfort of the seats",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Overall comfort of the seats",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Overall comfort of the seats",
+        "rating_level": "Satisfactory",
+        "G60_pct": 13.0
+      },
+      {
+        "attribute": "Overall comfort of the seats",
+        "rating_level": "Excellent",
+        "G60_pct": 16.4
+      },
+      {
+        "attribute": "Overall comfort of the seats",
+        "rating_level": "Delightful",
+        "G60_pct": 33.5
+      },
+      {
+        "attribute": "Overall comfort of the seats",
+        "rating_level": "I Love It",
+        "G60_pct": 33.1
+      },
+      {
+        "attribute": "Comfort of front seat",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Comfort of front seat",
+        "rating_level": "A Failure",
+        "G60_pct": 5.3
+      },
+      {
+        "attribute": "Comfort of front seat",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Comfort of front seat",
+        "rating_level": "Satisfactory",
+        "G60_pct": 12.1
+      },
+      {
+        "attribute": "Comfort of front seat",
+        "rating_level": "Excellent",
+        "G60_pct": 15.6
+      },
+      {
+        "attribute": "Comfort of front seat",
+        "rating_level": "Delightful",
+        "G60_pct": 30.2
+      },
+      {
+        "attribute": "Comfort of front seat",
+        "rating_level": "I Love It",
+        "G60_pct": 35.1
+      },
+      {
+        "attribute": "Comfort of 2nd row seat",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.7
+      },
+      {
+        "attribute": "Comfort of 2nd row seat",
+        "rating_level": "A Failure",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Comfort of 2nd row seat",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.4
+      },
+      {
+        "attribute": "Comfort of 2nd row seat",
+        "rating_level": "Satisfactory",
+        "G60_pct": 28.6
+      },
+      {
+        "attribute": "Comfort of 2nd row seat",
+        "rating_level": "Excellent",
+        "G60_pct": 19.4
+      },
+      {
+        "attribute": "Comfort of 2nd row seat",
+        "rating_level": "Delightful",
+        "G60_pct": 24.7
+      },
+      {
+        "attribute": "Comfort of 2nd row seat",
+        "rating_level": "I Love It",
+        "G60_pct": 22.4
+      },
+      {
+        "attribute": "Overall interior design / layout",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Overall interior design / layout",
+        "rating_level": "A Failure",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Overall interior design / layout",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.8
+      },
+      {
+        "attribute": "Overall interior design / layout",
+        "rating_level": "Satisfactory",
+        "G60_pct": 14.7
+      },
+      {
+        "attribute": "Overall interior design / layout",
+        "rating_level": "Excellent",
+        "G60_pct": 26.5
+      },
+      {
+        "attribute": "Overall interior design / layout",
+        "rating_level": "Delightful",
+        "G60_pct": 19.6
+      },
+      {
+        "attribute": "Overall interior design / layout",
+        "rating_level": "I Love It",
+        "G60_pct": 35.8
+      },
+      {
+        "attribute": "Ease of front seat entry",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Ease of front seat entry",
+        "rating_level": "A Failure",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Ease of front seat entry",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Ease of front seat entry",
+        "rating_level": "Satisfactory",
+        "G60_pct": 19.6
+      },
+      {
+        "attribute": "Ease of front seat entry",
+        "rating_level": "Excellent",
+        "G60_pct": 24.0
+      },
+      {
+        "attribute": "Ease of front seat entry",
+        "rating_level": "Delightful",
+        "G60_pct": 22.8
+      },
+      {
+        "attribute": "Ease of front seat entry",
+        "rating_level": "I Love It",
+        "G60_pct": 31.5
+      },
+      {
+        "attribute": "Front seat roominess",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Front seat roominess",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Front seat roominess",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Front seat roominess",
+        "rating_level": "Satisfactory",
+        "G60_pct": 9.9
+      },
+      {
+        "attribute": "Front seat roominess",
+        "rating_level": "Excellent",
+        "G60_pct": 20.2
+      },
+      {
+        "attribute": "Front seat roominess",
+        "rating_level": "Delightful",
+        "G60_pct": 35.8
+      },
+      {
+        "attribute": "Front seat roominess",
+        "rating_level": "I Love It",
+        "G60_pct": 32.5
+      },
+      {
+        "attribute": "Ease of 2nd row seat entry",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Ease of 2nd row seat entry",
+        "rating_level": "A Failure",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Ease of 2nd row seat entry",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Ease of 2nd row seat entry",
+        "rating_level": "Satisfactory",
+        "G60_pct": 24.6
+      },
+      {
+        "attribute": "Ease of 2nd row seat entry",
+        "rating_level": "Excellent",
+        "G60_pct": 28.2
+      },
+      {
+        "attribute": "Ease of 2nd row seat entry",
+        "rating_level": "Delightful",
+        "G60_pct": 22.2
+      },
+      {
+        "attribute": "Ease of 2nd row seat entry",
+        "rating_level": "I Love It",
+        "G60_pct": 23.6
+      },
+      {
+        "attribute": "2nd row seat roominess",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "2nd row seat roominess",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "2nd row seat roominess",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.4
+      },
+      {
+        "attribute": "2nd row seat roominess",
+        "rating_level": "Satisfactory",
+        "G60_pct": 28.3
+      },
+      {
+        "attribute": "2nd row seat roominess",
+        "rating_level": "Excellent",
+        "G60_pct": 22.0
+      },
+      {
+        "attribute": "2nd row seat roominess",
+        "rating_level": "Delightful",
+        "G60_pct": 22.0
+      },
+      {
+        "attribute": "2nd row seat roominess",
+        "rating_level": "I Love It",
+        "G60_pct": 25.3
+      },
+      {
+        "attribute": "Passenger seating capacity",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Passenger seating capacity",
+        "rating_level": "A Failure",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Passenger seating capacity",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Passenger seating capacity",
+        "rating_level": "Satisfactory",
+        "G60_pct": 20.2
+      },
+      {
+        "attribute": "Passenger seating capacity",
+        "rating_level": "Excellent",
+        "G60_pct": 26.8
+      },
+      {
+        "attribute": "Passenger seating capacity",
+        "rating_level": "Delightful",
+        "G60_pct": 24.7
+      },
+      {
+        "attribute": "Passenger seating capacity",
+        "rating_level": "I Love It",
+        "G60_pct": 26.2
+      },
+      {
+        "attribute": "Interior roominess",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Interior roominess",
+        "rating_level": "A Failure",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Interior roominess",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Interior roominess",
+        "rating_level": "Satisfactory",
+        "G60_pct": 11.8
+      },
+      {
+        "attribute": "Interior roominess",
+        "rating_level": "Excellent",
+        "G60_pct": 33.4
+      },
+      {
+        "attribute": "Interior roominess",
+        "rating_level": "Delightful",
+        "G60_pct": 24.3
+      },
+      {
+        "attribute": "Interior roominess",
+        "rating_level": "I Love It",
+        "G60_pct": 27.9
+      },
+      {
+        "attribute": "Interior storage",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Interior storage",
+        "rating_level": "A Failure",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Interior storage",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 9.2
+      },
+      {
+        "attribute": "Interior storage",
+        "rating_level": "Satisfactory",
+        "G60_pct": 22.5
+      },
+      {
+        "attribute": "Interior storage",
+        "rating_level": "Excellent",
+        "G60_pct": 28.4
+      },
+      {
+        "attribute": "Interior storage",
+        "rating_level": "Delightful",
+        "G60_pct": 16.3
+      },
+      {
+        "attribute": "Interior storage",
+        "rating_level": "I Love It",
+        "G60_pct": 22.3
+      },
+      {
+        "attribute": "Trunk lid/ tailgate and liftgate operations",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Trunk lid/ tailgate and liftgate operations",
+        "rating_level": "A Failure",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Trunk lid/ tailgate and liftgate operations",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.0
+      },
+      {
+        "attribute": "Trunk lid/ tailgate and liftgate operations",
+        "rating_level": "Satisfactory",
+        "G60_pct": 18.3
+      },
+      {
+        "attribute": "Trunk lid/ tailgate and liftgate operations",
+        "rating_level": "Excellent",
+        "G60_pct": 19.4
+      },
+      {
+        "attribute": "Trunk lid/ tailgate and liftgate operations",
+        "rating_level": "Delightful",
+        "G60_pct": 14.7
+      },
+      {
+        "attribute": "Trunk lid/ tailgate and liftgate operations",
+        "rating_level": "I Love It",
+        "G60_pct": 44.6
+      },
+      {
+        "attribute": "Ease of loading/unloading cargo",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Ease of loading/unloading cargo",
+        "rating_level": "A Failure",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Ease of loading/unloading cargo",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.9
+      },
+      {
+        "attribute": "Ease of loading/unloading cargo",
+        "rating_level": "Satisfactory",
+        "G60_pct": 17.0
+      },
+      {
+        "attribute": "Ease of loading/unloading cargo",
+        "rating_level": "Excellent",
+        "G60_pct": 31.1
+      },
+      {
+        "attribute": "Ease of loading/unloading cargo",
+        "rating_level": "Delightful",
+        "G60_pct": 20.6
+      },
+      {
+        "attribute": "Ease of loading/unloading cargo",
+        "rating_level": "I Love It",
+        "G60_pct": 27.9
+      },
+      {
+        "attribute": "Cargo capacity/usefulness",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Cargo capacity/usefulness",
+        "rating_level": "A Failure",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Cargo capacity/usefulness",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.4
+      },
+      {
+        "attribute": "Cargo capacity/usefulness",
+        "rating_level": "Satisfactory",
+        "G60_pct": 17.9
+      },
+      {
+        "attribute": "Cargo capacity/usefulness",
+        "rating_level": "Excellent",
+        "G60_pct": 28.1
+      },
+      {
+        "attribute": "Cargo capacity/usefulness",
+        "rating_level": "Delightful",
+        "G60_pct": 24.5
+      },
+      {
+        "attribute": "Cargo capacity/usefulness",
+        "rating_level": "I Love It",
+        "G60_pct": 25.5
+      },
+      {
+        "attribute": "Instrument panel (IP)",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.8
+      },
+      {
+        "attribute": "Instrument panel (IP)",
+        "rating_level": "A Failure",
+        "G60_pct": 4.5
+      },
+      {
+        "attribute": "Instrument panel (IP)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.7
+      },
+      {
+        "attribute": "Instrument panel (IP)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 18.9
+      },
+      {
+        "attribute": "Instrument panel (IP)",
+        "rating_level": "Excellent",
+        "G60_pct": 24.2
+      },
+      {
+        "attribute": "Instrument panel (IP)",
+        "rating_level": "Delightful",
+        "G60_pct": 14.5
+      },
+      {
+        "attribute": "Instrument panel (IP)",
+        "rating_level": "I Love It",
+        "G60_pct": 34.4
+      },
+      {
+        "attribute": "Cupholders",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Cupholders",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Cupholders",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.6
+      },
+      {
+        "attribute": "Cupholders",
+        "rating_level": "Satisfactory",
+        "G60_pct": 21.8
+      },
+      {
+        "attribute": "Cupholders",
+        "rating_level": "Excellent",
+        "G60_pct": 26.3
+      },
+      {
+        "attribute": "Cupholders",
+        "rating_level": "Delightful",
+        "G60_pct": 19.3
+      },
+      {
+        "attribute": "Cupholders",
+        "rating_level": "I Love It",
+        "G60_pct": 27.9
+      },
+      {
+        "attribute": "Provides a sense of wellbeing",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Provides a sense of wellbeing",
+        "rating_level": "A Failure",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Provides a sense of wellbeing",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Provides a sense of wellbeing",
+        "rating_level": "Satisfactory",
+        "G60_pct": 8.8
+      },
+      {
+        "attribute": "Provides a sense of wellbeing",
+        "rating_level": "Excellent",
+        "G60_pct": 36.3
+      },
+      {
+        "attribute": "Provides a sense of wellbeing",
+        "rating_level": "Delightful",
+        "G60_pct": 9.1
+      },
+      {
+        "attribute": "Provides a sense of wellbeing",
+        "rating_level": "I Love It",
+        "G60_pct": 44.6
+      },
+      {
+        "attribute": "Overall interior versatility/seat stowaway",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Overall interior versatility/seat stowaway",
+        "rating_level": "A Failure",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Overall interior versatility/seat stowaway",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.0
+      },
+      {
+        "attribute": "Overall interior versatility/seat stowaway",
+        "rating_level": "Satisfactory",
+        "G60_pct": 19.2
+      },
+      {
+        "attribute": "Overall interior versatility/seat stowaway",
+        "rating_level": "Excellent",
+        "G60_pct": 21.2
+      },
+      {
+        "attribute": "Overall interior versatility/seat stowaway",
+        "rating_level": "Delightful",
+        "G60_pct": 30.3
+      },
+      {
+        "attribute": "Overall interior versatility/seat stowaway",
+        "rating_level": "I Love It",
+        "G60_pct": 24.7
+      },
+      {
+        "attribute": "Driver seat adjustability",
+        "rating_level": "I Hate It",
+        "G60_pct": 2.3
+      },
+      {
+        "attribute": "Driver seat adjustability",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Driver seat adjustability",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Driver seat adjustability",
+        "rating_level": "Satisfactory",
+        "G60_pct": 13.8
+      },
+      {
+        "attribute": "Driver seat adjustability",
+        "rating_level": "Excellent",
+        "G60_pct": 26.5
+      },
+      {
+        "attribute": "Driver seat adjustability",
+        "rating_level": "Delightful",
+        "G60_pct": 23.2
+      },
+      {
+        "attribute": "Driver seat adjustability",
+        "rating_level": "I Love It",
+        "G60_pct": 32.3
+      },
+      {
+        "attribute": "Passenger seat adjustability",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Passenger seat adjustability",
+        "rating_level": "A Failure",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Passenger seat adjustability",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Passenger seat adjustability",
+        "rating_level": "Satisfactory",
+        "G60_pct": 17.7
+      },
+      {
+        "attribute": "Passenger seat adjustability",
+        "rating_level": "Excellent",
+        "G60_pct": 34.8
+      },
+      {
+        "attribute": "Passenger seat adjustability",
+        "rating_level": "Delightful",
+        "G60_pct": 24.3
+      },
+      {
+        "attribute": "Passenger seat adjustability",
+        "rating_level": "I Love It",
+        "G60_pct": 21.1
+      },
+      {
+        "attribute": "Overall performance of climate control system",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.7
+      },
+      {
+        "attribute": "Overall performance of climate control system",
+        "rating_level": "A Failure",
+        "G60_pct": 2.9
+      },
+      {
+        "attribute": "Overall performance of climate control system",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Overall performance of climate control system",
+        "rating_level": "Satisfactory",
+        "G60_pct": 23.5
+      },
+      {
+        "attribute": "Overall performance of climate control system",
+        "rating_level": "Excellent",
+        "G60_pct": 35.2
+      },
+      {
+        "attribute": "Overall performance of climate control system",
+        "rating_level": "Delightful",
+        "G60_pct": 16.0
+      },
+      {
+        "attribute": "Overall performance of climate control system",
+        "rating_level": "I Love It",
+        "G60_pct": 19.7
+      },
+      {
+        "attribute": "Heater performance",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Heater performance",
+        "rating_level": "A Failure",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Heater performance",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 4.0
+      },
+      {
+        "attribute": "Heater performance",
+        "rating_level": "Satisfactory",
+        "G60_pct": 24.7
+      },
+      {
+        "attribute": "Heater performance",
+        "rating_level": "Excellent",
+        "G60_pct": 28.2
+      },
+      {
+        "attribute": "Heater performance",
+        "rating_level": "Delightful",
+        "G60_pct": 14.1
+      },
+      {
+        "attribute": "Heater performance",
+        "rating_level": "I Love It",
+        "G60_pct": 27.2
+      },
+      {
+        "attribute": "Air conditioner performance",
+        "rating_level": "I Hate It",
+        "G60_pct": 2.6
+      },
+      {
+        "attribute": "Air conditioner performance",
+        "rating_level": "A Failure",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Air conditioner performance",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.7
+      },
+      {
+        "attribute": "Air conditioner performance",
+        "rating_level": "Satisfactory",
+        "G60_pct": 29.6
+      },
+      {
+        "attribute": "Air conditioner performance",
+        "rating_level": "Excellent",
+        "G60_pct": 24.3
+      },
+      {
+        "attribute": "Air conditioner performance",
+        "rating_level": "Delightful",
+        "G60_pct": 11.4
+      },
+      {
+        "attribute": "Air conditioner performance",
+        "rating_level": "I Love It",
+        "G60_pct": 28.0
+      },
+      {
+        "attribute": "Operation of heater/ AC controls",
+        "rating_level": "I Hate It",
+        "G60_pct": 4.2
+      },
+      {
+        "attribute": "Operation of heater/ AC controls",
+        "rating_level": "A Failure",
+        "G60_pct": 1.8
+      },
+      {
+        "attribute": "Operation of heater/ AC controls",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 9.0
+      },
+      {
+        "attribute": "Operation of heater/ AC controls",
+        "rating_level": "Satisfactory",
+        "G60_pct": 28.8
+      },
+      {
+        "attribute": "Operation of heater/ AC controls",
+        "rating_level": "Excellent",
+        "G60_pct": 27.3
+      },
+      {
+        "attribute": "Operation of heater/ AC controls",
+        "rating_level": "Delightful",
+        "G60_pct": 8.4
+      },
+      {
+        "attribute": "Operation of heater/ AC controls",
+        "rating_level": "I Love It",
+        "G60_pct": 20.5
+      },
+      {
+        "attribute": "Overall performance of sound system",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Overall performance of sound system",
+        "rating_level": "A Failure",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Overall performance of sound system",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.4
+      },
+      {
+        "attribute": "Overall performance of sound system",
+        "rating_level": "Satisfactory",
+        "G60_pct": 20.4
+      },
+      {
+        "attribute": "Overall performance of sound system",
+        "rating_level": "Excellent",
+        "G60_pct": 25.5
+      },
+      {
+        "attribute": "Overall performance of sound system",
+        "rating_level": "Delightful",
+        "G60_pct": 17.9
+      },
+      {
+        "attribute": "Overall performance of sound system",
+        "rating_level": "I Love It",
+        "G60_pct": 32.2
+      },
+      {
+        "attribute": "Design and integration of speakers",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Design and integration of speakers",
+        "rating_level": "A Failure",
+        "G60_pct": 1.4
+      },
+      {
+        "attribute": "Design and integration of speakers",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Design and integration of speakers",
+        "rating_level": "Satisfactory",
+        "G60_pct": 12.5
+      },
+      {
+        "attribute": "Design and integration of speakers",
+        "rating_level": "Excellent",
+        "G60_pct": 27.3
+      },
+      {
+        "attribute": "Design and integration of speakers",
+        "rating_level": "Delightful",
+        "G60_pct": 26.3
+      },
+      {
+        "attribute": "Design and integration of speakers",
+        "rating_level": "I Love It",
+        "G60_pct": 30.0
+      },
+      {
+        "attribute": "Audio clarity",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Audio clarity",
+        "rating_level": "A Failure",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Audio clarity",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.7
+      },
+      {
+        "attribute": "Audio clarity",
+        "rating_level": "Satisfactory",
+        "G60_pct": 15.2
+      },
+      {
+        "attribute": "Audio clarity",
+        "rating_level": "Excellent",
+        "G60_pct": 24.4
+      },
+      {
+        "attribute": "Audio clarity",
+        "rating_level": "Delightful",
+        "G60_pct": 18.1
+      },
+      {
+        "attribute": "Audio clarity",
+        "rating_level": "I Love It",
+        "G60_pct": 38.3
+      },
+      {
+        "attribute": "Bass performance",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.4
+      },
+      {
+        "attribute": "Bass performance",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Bass performance",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.6
+      },
+      {
+        "attribute": "Bass performance",
+        "rating_level": "Satisfactory",
+        "G60_pct": 17.7
+      },
+      {
+        "attribute": "Bass performance",
+        "rating_level": "Excellent",
+        "G60_pct": 23.7
+      },
+      {
+        "attribute": "Bass performance",
+        "rating_level": "Delightful",
+        "G60_pct": 22.1
+      },
+      {
+        "attribute": "Bass performance",
+        "rating_level": "I Love It",
+        "G60_pct": 32.8
+      },
+      {
+        "attribute": "Placement/ ease of reading and using controls",
+        "rating_level": "I Hate It",
+        "G60_pct": 4.4
+      },
+      {
+        "attribute": "Placement/ ease of reading and using controls",
+        "rating_level": "A Failure",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Placement/ ease of reading and using controls",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 4.3
+      },
+      {
+        "attribute": "Placement/ ease of reading and using controls",
+        "rating_level": "Satisfactory",
+        "G60_pct": 22.1
+      },
+      {
+        "attribute": "Placement/ ease of reading and using controls",
+        "rating_level": "Excellent",
+        "G60_pct": 25.7
+      },
+      {
+        "attribute": "Placement/ ease of reading and using controls",
+        "rating_level": "Delightful",
+        "G60_pct": 22.4
+      },
+      {
+        "attribute": "Placement/ ease of reading and using controls",
+        "rating_level": "I Love It",
+        "G60_pct": 20.2
+      },
+      {
+        "attribute": "Intuitiveness of controls",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.4
+      },
+      {
+        "attribute": "Intuitiveness of controls",
+        "rating_level": "A Failure",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Intuitiveness of controls",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 5.8
+      },
+      {
+        "attribute": "Intuitiveness of controls",
+        "rating_level": "Satisfactory",
+        "G60_pct": 22.7
+      },
+      {
+        "attribute": "Intuitiveness of controls",
+        "rating_level": "Excellent",
+        "G60_pct": 27.1
+      },
+      {
+        "attribute": "Intuitiveness of controls",
+        "rating_level": "Delightful",
+        "G60_pct": 22.1
+      },
+      {
+        "attribute": "Intuitiveness of controls",
+        "rating_level": "I Love It",
+        "G60_pct": 20.1
+      },
+      {
+        "attribute": "Overall noise/vibration/harshness",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Overall noise/vibration/harshness",
+        "rating_level": "A Failure",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Overall noise/vibration/harshness",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Overall noise/vibration/harshness",
+        "rating_level": "Satisfactory",
+        "G60_pct": 16.8
+      },
+      {
+        "attribute": "Overall noise/vibration/harshness",
+        "rating_level": "Excellent",
+        "G60_pct": 21.6
+      },
+      {
+        "attribute": "Overall noise/vibration/harshness",
+        "rating_level": "Delightful",
+        "G60_pct": 25.3
+      },
+      {
+        "attribute": "Overall noise/vibration/harshness",
+        "rating_level": "I Love It",
+        "G60_pct": 33.1
+      },
+      {
+        "attribute": "Overall vehicle sound",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Overall vehicle sound",
+        "rating_level": "A Failure",
+        "G60_pct": 4.1
+      },
+      {
+        "attribute": "Overall vehicle sound",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Overall vehicle sound",
+        "rating_level": "Satisfactory",
+        "G60_pct": 12.6
+      },
+      {
+        "attribute": "Overall vehicle sound",
+        "rating_level": "Excellent",
+        "G60_pct": 25.8
+      },
+      {
+        "attribute": "Overall vehicle sound",
+        "rating_level": "Delightful",
+        "G60_pct": 25.6
+      },
+      {
+        "attribute": "Overall vehicle sound",
+        "rating_level": "I Love It",
+        "G60_pct": 30.3
+      },
+      {
+        "attribute": "Active noise cancellation",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Active noise cancellation",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Active noise cancellation",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 6.0
+      },
+      {
+        "attribute": "Active noise cancellation",
+        "rating_level": "Satisfactory",
+        "G60_pct": 28.4
+      },
+      {
+        "attribute": "Active noise cancellation",
+        "rating_level": "Excellent",
+        "G60_pct": 17.9
+      },
+      {
+        "attribute": "Active noise cancellation",
+        "rating_level": "Delightful",
+        "G60_pct": 20.4
+      },
+      {
+        "attribute": "Active noise cancellation",
+        "rating_level": "I Love It",
+        "G60_pct": 26.7
+      },
+      {
+        "attribute": "Freedom from squeaks and rattles",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Freedom from squeaks and rattles",
+        "rating_level": "A Failure",
+        "G60_pct": 4.6
+      },
+      {
+        "attribute": "Freedom from squeaks and rattles",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.6
+      },
+      {
+        "attribute": "Freedom from squeaks and rattles",
+        "rating_level": "Satisfactory",
+        "G60_pct": 15.1
+      },
+      {
+        "attribute": "Freedom from squeaks and rattles",
+        "rating_level": "Excellent",
+        "G60_pct": 20.2
+      },
+      {
+        "attribute": "Freedom from squeaks and rattles",
+        "rating_level": "Delightful",
+        "G60_pct": 21.8
+      },
+      {
+        "attribute": "Freedom from squeaks and rattles",
+        "rating_level": "I Love It",
+        "G60_pct": 34.9
+      },
+      {
+        "attribute": "Sound of engine",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Sound of engine",
+        "rating_level": "A Failure",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Sound of engine",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.0
+      },
+      {
+        "attribute": "Sound of engine",
+        "rating_level": "Satisfactory",
+        "G60_pct": 20.7
+      },
+      {
+        "attribute": "Sound of engine",
+        "rating_level": "Excellent",
+        "G60_pct": 17.7
+      },
+      {
+        "attribute": "Sound of engine",
+        "rating_level": "Delightful",
+        "G60_pct": 29.7
+      },
+      {
+        "attribute": "Sound of engine",
+        "rating_level": "I Love It",
+        "G60_pct": 28.8
+      },
+      {
+        "attribute": "Freedom from wind and road noise",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Freedom from wind and road noise",
+        "rating_level": "A Failure",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Freedom from wind and road noise",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 4.1
+      },
+      {
+        "attribute": "Freedom from wind and road noise",
+        "rating_level": "Satisfactory",
+        "G60_pct": 13.2
+      },
+      {
+        "attribute": "Freedom from wind and road noise",
+        "rating_level": "Excellent",
+        "G60_pct": 25.2
+      },
+      {
+        "attribute": "Freedom from wind and road noise",
+        "rating_level": "Delightful",
+        "G60_pct": 29.9
+      },
+      {
+        "attribute": "Freedom from wind and road noise",
+        "rating_level": "I Love It",
+        "G60_pct": 25.8
+      },
+      {
+        "attribute": "Smoothness of transmission",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Smoothness of transmission",
+        "rating_level": "A Failure",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Smoothness of transmission",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Smoothness of transmission",
+        "rating_level": "Satisfactory",
+        "G60_pct": 22.0
+      },
+      {
+        "attribute": "Smoothness of transmission",
+        "rating_level": "Excellent",
+        "G60_pct": 15.5
+      },
+      {
+        "attribute": "Smoothness of transmission",
+        "rating_level": "Delightful",
+        "G60_pct": 20.2
+      },
+      {
+        "attribute": "Smoothness of transmission",
+        "rating_level": "I Love It",
+        "G60_pct": 39.3
+      },
+      {
+        "attribute": "Overall impression of durability/reliability",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Overall impression of durability/reliability",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Overall impression of durability/reliability",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.9
+      },
+      {
+        "attribute": "Overall impression of durability/reliability",
+        "rating_level": "Satisfactory",
+        "G60_pct": 13.9
+      },
+      {
+        "attribute": "Overall impression of durability/reliability",
+        "rating_level": "Excellent",
+        "G60_pct": 16.6
+      },
+      {
+        "attribute": "Overall impression of durability/reliability",
+        "rating_level": "Delightful",
+        "G60_pct": 16.6
+      },
+      {
+        "attribute": "Overall impression of durability/reliability",
+        "rating_level": "I Love It",
+        "G60_pct": 49.4
+      },
+      {
+        "attribute": "Solid vehicle construction",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Solid vehicle construction",
+        "rating_level": "A Failure",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "Solid vehicle construction",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Solid vehicle construction",
+        "rating_level": "Satisfactory",
+        "G60_pct": 11.9
+      },
+      {
+        "attribute": "Solid vehicle construction",
+        "rating_level": "Excellent",
+        "G60_pct": 29.1
+      },
+      {
+        "attribute": "Solid vehicle construction",
+        "rating_level": "Delightful",
+        "G60_pct": 16.0
+      },
+      {
+        "attribute": "Solid vehicle construction",
+        "rating_level": "I Love It",
+        "G60_pct": 41.4
+      },
+      {
+        "attribute": "Freedom from electrical problems",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Freedom from electrical problems",
+        "rating_level": "A Failure",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Freedom from electrical problems",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.1
+      },
+      {
+        "attribute": "Freedom from electrical problems",
+        "rating_level": "Satisfactory",
+        "G60_pct": 20.8
+      },
+      {
+        "attribute": "Freedom from electrical problems",
+        "rating_level": "Excellent",
+        "G60_pct": 35.1
+      },
+      {
+        "attribute": "Freedom from electrical problems",
+        "rating_level": "Delightful",
+        "G60_pct": 10.7
+      },
+      {
+        "attribute": "Freedom from electrical problems",
+        "rating_level": "I Love It",
+        "G60_pct": 30.2
+      },
+      {
+        "attribute": "Overall safety of the vehicle",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Overall safety of the vehicle",
+        "rating_level": "A Failure",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Overall safety of the vehicle",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Overall safety of the vehicle",
+        "rating_level": "Satisfactory",
+        "G60_pct": 12.6
+      },
+      {
+        "attribute": "Overall safety of the vehicle",
+        "rating_level": "Excellent",
+        "G60_pct": 27.5
+      },
+      {
+        "attribute": "Overall safety of the vehicle",
+        "rating_level": "Delightful",
+        "G60_pct": 19.1
+      },
+      {
+        "attribute": "Overall safety of the vehicle",
+        "rating_level": "I Love It",
+        "G60_pct": 39.0
+      },
+      {
+        "attribute": "Front visibility",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.8
+      },
+      {
+        "attribute": "Front visibility",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Front visibility",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Front visibility",
+        "rating_level": "Satisfactory",
+        "G60_pct": 14.0
+      },
+      {
+        "attribute": "Front visibility",
+        "rating_level": "Excellent",
+        "G60_pct": 20.6
+      },
+      {
+        "attribute": "Front visibility",
+        "rating_level": "Delightful",
+        "G60_pct": 21.0
+      },
+      {
+        "attribute": "Front visibility",
+        "rating_level": "I Love It",
+        "G60_pct": 41.6
+      },
+      {
+        "attribute": "Rear visibility",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Rear visibility",
+        "rating_level": "A Failure",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Rear visibility",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 4.2
+      },
+      {
+        "attribute": "Rear visibility",
+        "rating_level": "Satisfactory",
+        "G60_pct": 17.5
+      },
+      {
+        "attribute": "Rear visibility",
+        "rating_level": "Excellent",
+        "G60_pct": 19.4
+      },
+      {
+        "attribute": "Rear visibility",
+        "rating_level": "Delightful",
+        "G60_pct": 19.3
+      },
+      {
+        "attribute": "Rear visibility",
+        "rating_level": "I Love It",
+        "G60_pct": 37.7
+      },
+      {
+        "attribute": "Braking",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Braking",
+        "rating_level": "A Failure",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Braking",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Braking",
+        "rating_level": "Satisfactory",
+        "G60_pct": 17.2
+      },
+      {
+        "attribute": "Braking",
+        "rating_level": "Excellent",
+        "G60_pct": 25.7
+      },
+      {
+        "attribute": "Braking",
+        "rating_level": "Delightful",
+        "G60_pct": 19.8
+      },
+      {
+        "attribute": "Braking",
+        "rating_level": "I Love It",
+        "G60_pct": 35.2
+      },
+      {
+        "attribute": "Warranty coverage",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Warranty coverage",
+        "rating_level": "A Failure",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Warranty coverage",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Warranty coverage",
+        "rating_level": "Satisfactory",
+        "G60_pct": 34.0
+      },
+      {
+        "attribute": "Warranty coverage",
+        "rating_level": "Excellent",
+        "G60_pct": 19.3
+      },
+      {
+        "attribute": "Warranty coverage",
+        "rating_level": "Delightful",
+        "G60_pct": 15.0
+      },
+      {
+        "attribute": "Warranty coverage",
+        "rating_level": "I Love It",
+        "G60_pct": 29.6
+      },
+      {
+        "attribute": "Headlight function/ brightness",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Headlight function/ brightness",
+        "rating_level": "A Failure",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Headlight function/ brightness",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Headlight function/ brightness",
+        "rating_level": "Satisfactory",
+        "G60_pct": 10.4
+      },
+      {
+        "attribute": "Headlight function/ brightness",
+        "rating_level": "Excellent",
+        "G60_pct": 16.4
+      },
+      {
+        "attribute": "Headlight function/ brightness",
+        "rating_level": "Delightful",
+        "G60_pct": 29.1
+      },
+      {
+        "attribute": "Headlight function/ brightness",
+        "rating_level": "I Love It",
+        "G60_pct": 41.2
+      },
+      {
+        "attribute": "Technical innovations",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Technical innovations",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Technical innovations",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Technical innovations",
+        "rating_level": "Satisfactory",
+        "G60_pct": 19.9
+      },
+      {
+        "attribute": "Technical innovations",
+        "rating_level": "Excellent",
+        "G60_pct": 30.0
+      },
+      {
+        "attribute": "Technical innovations",
+        "rating_level": "Delightful",
+        "G60_pct": 21.5
+      },
+      {
+        "attribute": "Technical innovations",
+        "rating_level": "I Love It",
+        "G60_pct": 26.2
+      },
+      {
+        "attribute": "Level of standard equipment",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Level of standard equipment",
+        "rating_level": "A Failure",
+        "G60_pct": 0.4
+      },
+      {
+        "attribute": "Level of standard equipment",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Level of standard equipment",
+        "rating_level": "Satisfactory",
+        "G60_pct": 21.6
+      },
+      {
+        "attribute": "Level of standard equipment",
+        "rating_level": "Excellent",
+        "G60_pct": 37.6
+      },
+      {
+        "attribute": "Level of standard equipment",
+        "rating_level": "Delightful",
+        "G60_pct": 10.3
+      },
+      {
+        "attribute": "Level of standard equipment",
+        "rating_level": "I Love It",
+        "G60_pct": 28.0
+      },
+      {
+        "attribute": "Overall value for money",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Overall value for money",
+        "rating_level": "A Failure",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Overall value for money",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.3
+      },
+      {
+        "attribute": "Overall value for money",
+        "rating_level": "Satisfactory",
+        "G60_pct": 28.8
+      },
+      {
+        "attribute": "Overall value for money",
+        "rating_level": "Excellent",
+        "G60_pct": 28.8
+      },
+      {
+        "attribute": "Overall value for money",
+        "rating_level": "Delightful",
+        "G60_pct": 10.8
+      },
+      {
+        "attribute": "Overall value for money",
+        "rating_level": "I Love It",
+        "G60_pct": 26.8
+      },
+      {
+        "attribute": "Price/deal offered",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Price/deal offered",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Price/deal offered",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.5
+      },
+      {
+        "attribute": "Price/deal offered",
+        "rating_level": "Satisfactory",
+        "G60_pct": 38.1
+      },
+      {
+        "attribute": "Price/deal offered",
+        "rating_level": "Excellent",
+        "G60_pct": 19.9
+      },
+      {
+        "attribute": "Price/deal offered",
+        "rating_level": "Delightful",
+        "G60_pct": 16.2
+      },
+      {
+        "attribute": "Price/deal offered",
+        "rating_level": "I Love It",
+        "G60_pct": 20.1
+      },
+      {
+        "attribute": "Future trade-in or resale value",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Future trade-in or resale value",
+        "rating_level": "A Failure",
+        "G60_pct": 3.0
+      },
+      {
+        "attribute": "Future trade-in or resale value",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 9.4
+      },
+      {
+        "attribute": "Future trade-in or resale value",
+        "rating_level": "Satisfactory",
+        "G60_pct": 31.9
+      },
+      {
+        "attribute": "Future trade-in or resale value",
+        "rating_level": "Excellent",
+        "G60_pct": 18.8
+      },
+      {
+        "attribute": "Future trade-in or resale value",
+        "rating_level": "Delightful",
+        "G60_pct": 15.8
+      },
+      {
+        "attribute": "Future trade-in or resale value",
+        "rating_level": "I Love It",
+        "G60_pct": 20.1
+      },
+      {
+        "attribute": "Gas or electric mileage (fuel economy)",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Gas or electric mileage (fuel economy)",
+        "rating_level": "A Failure",
+        "G60_pct": 3.0
+      },
+      {
+        "attribute": "Gas or electric mileage (fuel economy)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.5
+      },
+      {
+        "attribute": "Gas or electric mileage (fuel economy)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 18.3
+      },
+      {
+        "attribute": "Gas or electric mileage (fuel economy)",
+        "rating_level": "Excellent",
+        "G60_pct": 26.7
+      },
+      {
+        "attribute": "Gas or electric mileage (fuel economy)",
+        "rating_level": "Delightful",
+        "G60_pct": 11.9
+      },
+      {
+        "attribute": "Gas or electric mileage (fuel economy)",
+        "rating_level": "I Love It",
+        "G60_pct": 36.1
+      },
+      {
+        "attribute": "Economical to own (cost of ownership)",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Economical to own (cost of ownership)",
+        "rating_level": "A Failure",
+        "G60_pct": 1.1
+      },
+      {
+        "attribute": "Economical to own (cost of ownership)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 5.2
+      },
+      {
+        "attribute": "Economical to own (cost of ownership)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 34.5
+      },
+      {
+        "attribute": "Economical to own (cost of ownership)",
+        "rating_level": "Excellent",
+        "G60_pct": 30.6
+      },
+      {
+        "attribute": "Economical to own (cost of ownership)",
+        "rating_level": "Delightful",
+        "G60_pct": 9.3
+      },
+      {
+        "attribute": "Economical to own (cost of ownership)",
+        "rating_level": "I Love It",
+        "G60_pct": 18.8
+      },
+      {
+        "attribute": "Affordable to buy",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Affordable to buy",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Affordable to buy",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 6.8
+      },
+      {
+        "attribute": "Affordable to buy",
+        "rating_level": "Satisfactory",
+        "G60_pct": 45.3
+      },
+      {
+        "attribute": "Affordable to buy",
+        "rating_level": "Excellent",
+        "G60_pct": 27.0
+      },
+      {
+        "attribute": "Affordable to buy",
+        "rating_level": "Delightful",
+        "G60_pct": 6.0
+      },
+      {
+        "attribute": "Affordable to buy",
+        "rating_level": "I Love It",
+        "G60_pct": 13.7
+      },
+      {
+        "attribute": "Overall brand image",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Overall brand image",
+        "rating_level": "A Failure",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Overall brand image",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Overall brand image",
+        "rating_level": "Satisfactory",
+        "G60_pct": 13.1
+      },
+      {
+        "attribute": "Overall brand image",
+        "rating_level": "Excellent",
+        "G60_pct": 14.4
+      },
+      {
+        "attribute": "Overall brand image",
+        "rating_level": "Delightful",
+        "G60_pct": 31.9
+      },
+      {
+        "attribute": "Overall brand image",
+        "rating_level": "I Love It",
+        "G60_pct": 37.8
+      },
+      {
+        "attribute": "Reputation/prestige of manufacturer",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Reputation/prestige of manufacturer",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Reputation/prestige of manufacturer",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Reputation/prestige of manufacturer",
+        "rating_level": "Satisfactory",
+        "G60_pct": 11.7
+      },
+      {
+        "attribute": "Reputation/prestige of manufacturer",
+        "rating_level": "Excellent",
+        "G60_pct": 16.5
+      },
+      {
+        "attribute": "Reputation/prestige of manufacturer",
+        "rating_level": "Delightful",
+        "G60_pct": 18.0
+      },
+      {
+        "attribute": "Reputation/prestige of manufacturer",
+        "rating_level": "I Love It",
+        "G60_pct": 52.5
+      },
+      {
+        "attribute": "Overall vehicle image",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Overall vehicle image",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Overall vehicle image",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "Overall vehicle image",
+        "rating_level": "Satisfactory",
+        "G60_pct": 13.5
+      },
+      {
+        "attribute": "Overall vehicle image",
+        "rating_level": "Excellent",
+        "G60_pct": 22.8
+      },
+      {
+        "attribute": "Overall vehicle image",
+        "rating_level": "Delightful",
+        "G60_pct": 17.0
+      },
+      {
+        "attribute": "Overall vehicle image",
+        "rating_level": "I Love It",
+        "G60_pct": 45.0
+      },
+      {
+        "attribute": "Overall driver assist features",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Overall driver assist features",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Overall driver assist features",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Overall driver assist features",
+        "rating_level": "Satisfactory",
+        "G60_pct": 16.5
+      },
+      {
+        "attribute": "Overall driver assist features",
+        "rating_level": "Excellent",
+        "G60_pct": 35.8
+      },
+      {
+        "attribute": "Overall driver assist features",
+        "rating_level": "Delightful",
+        "G60_pct": 12.5
+      },
+      {
+        "attribute": "Overall driver assist features",
+        "rating_level": "I Love It",
+        "G60_pct": 33.5
+      },
+      {
+        "attribute": "If applicable: Backup system (camera, sensors, etc.)",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "If applicable: Backup system (camera, sensors, etc.)",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "If applicable: Backup system (camera, sensors, etc.)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "If applicable: Backup system (camera, sensors, etc.)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 10.8
+      },
+      {
+        "attribute": "If applicable: Backup system (camera, sensors, etc.)",
+        "rating_level": "Excellent",
+        "G60_pct": 29.7
+      },
+      {
+        "attribute": "If applicable: Backup system (camera, sensors, etc.)",
+        "rating_level": "Delightful",
+        "G60_pct": 22.9
+      },
+      {
+        "attribute": "If applicable: Backup system (camera, sensors, etc.)",
+        "rating_level": "I Love It",
+        "G60_pct": 35.5
+      },
+      {
+        "attribute": "Safety monitoring features (blid spot warning, lane departure warning, etc)",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Safety monitoring features (blid spot warning, lane departure warning, etc)",
+        "rating_level": "A Failure",
+        "G60_pct": 1.0
+      },
+      {
+        "attribute": "Safety monitoring features (blid spot warning, lane departure warning, etc)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Safety monitoring features (blid spot warning, lane departure warning, etc)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 15.4
+      },
+      {
+        "attribute": "Safety monitoring features (blid spot warning, lane departure warning, etc)",
+        "rating_level": "Excellent",
+        "G60_pct": 25.9
+      },
+      {
+        "attribute": "Safety monitoring features (blid spot warning, lane departure warning, etc)",
+        "rating_level": "Delightful",
+        "G60_pct": 21.7
+      },
+      {
+        "attribute": "Safety monitoring features (blid spot warning, lane departure warning, etc)",
+        "rating_level": "I Love It",
+        "G60_pct": 35.4
+      },
+      {
+        "attribute": "Adaptive driving assists (lane keeping, cruise, braking)",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Adaptive driving assists (lane keeping, cruise, braking)",
+        "rating_level": "A Failure",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Adaptive driving assists (lane keeping, cruise, braking)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Adaptive driving assists (lane keeping, cruise, braking)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 19.8
+      },
+      {
+        "attribute": "Adaptive driving assists (lane keeping, cruise, braking)",
+        "rating_level": "Excellent",
+        "G60_pct": 17.2
+      },
+      {
+        "attribute": "Adaptive driving assists (lane keeping, cruise, braking)",
+        "rating_level": "Delightful",
+        "G60_pct": 20.0
+      },
+      {
+        "attribute": "Adaptive driving assists (lane keeping, cruise, braking)",
+        "rating_level": "I Love It",
+        "G60_pct": 41.2
+      },
+      {
+        "attribute": "Overall driver-vehicle interaction (HMI)",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Overall driver-vehicle interaction (HMI)",
+        "rating_level": "A Failure",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Overall driver-vehicle interaction (HMI)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.4
+      },
+      {
+        "attribute": "Overall driver-vehicle interaction (HMI)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 15.6
+      },
+      {
+        "attribute": "Overall driver-vehicle interaction (HMI)",
+        "rating_level": "Excellent",
+        "G60_pct": 35.5
+      },
+      {
+        "attribute": "Overall driver-vehicle interaction (HMI)",
+        "rating_level": "Delightful",
+        "G60_pct": 16.3
+      },
+      {
+        "attribute": "Overall driver-vehicle interaction (HMI)",
+        "rating_level": "I Love It",
+        "G60_pct": 28.8
+      },
+      {
+        "attribute": "If applicable: Navigation system",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "If applicable: Navigation system",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "If applicable: Navigation system",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.9
+      },
+      {
+        "attribute": "If applicable: Navigation system",
+        "rating_level": "Satisfactory",
+        "G60_pct": 23.9
+      },
+      {
+        "attribute": "If applicable: Navigation system",
+        "rating_level": "Excellent",
+        "G60_pct": 20.2
+      },
+      {
+        "attribute": "If applicable: Navigation system",
+        "rating_level": "Delightful",
+        "G60_pct": 21.7
+      },
+      {
+        "attribute": "If applicable: Navigation system",
+        "rating_level": "I Love It",
+        "G60_pct": 31.3
+      },
+      {
+        "attribute": "Bluetooth/ smartphone pairing",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.9
+      },
+      {
+        "attribute": "Bluetooth/ smartphone pairing",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "Bluetooth/ smartphone pairing",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.6
+      },
+      {
+        "attribute": "Bluetooth/ smartphone pairing",
+        "rating_level": "Satisfactory",
+        "G60_pct": 24.8
+      },
+      {
+        "attribute": "Bluetooth/ smartphone pairing",
+        "rating_level": "Excellent",
+        "G60_pct": 15.8
+      },
+      {
+        "attribute": "Bluetooth/ smartphone pairing",
+        "rating_level": "Delightful",
+        "G60_pct": 21.5
+      },
+      {
+        "attribute": "Bluetooth/ smartphone pairing",
+        "rating_level": "I Love It",
+        "G60_pct": 35.1
+      },
+      {
+        "attribute": "WiFi hotspot in vehicle",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "WiFi hotspot in vehicle",
+        "rating_level": "A Failure",
+        "G60_pct": 6.0
+      },
+      {
+        "attribute": "WiFi hotspot in vehicle",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 6.2
+      },
+      {
+        "attribute": "WiFi hotspot in vehicle",
+        "rating_level": "Satisfactory",
+        "G60_pct": 29.0
+      },
+      {
+        "attribute": "WiFi hotspot in vehicle",
+        "rating_level": "Excellent",
+        "G60_pct": 19.3
+      },
+      {
+        "attribute": "WiFi hotspot in vehicle",
+        "rating_level": "Delightful",
+        "G60_pct": 14.8
+      },
+      {
+        "attribute": "WiFi hotspot in vehicle",
+        "rating_level": "I Love It",
+        "G60_pct": 23.5
+      },
+      {
+        "attribute": "Mirroring of smartphone content on vehicle display",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "Mirroring of smartphone content on vehicle display",
+        "rating_level": "A Failure",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Mirroring of smartphone content on vehicle display",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 4.0
+      },
+      {
+        "attribute": "Mirroring of smartphone content on vehicle display",
+        "rating_level": "Satisfactory",
+        "G60_pct": 20.1
+      },
+      {
+        "attribute": "Mirroring of smartphone content on vehicle display",
+        "rating_level": "Excellent",
+        "G60_pct": 24.8
+      },
+      {
+        "attribute": "Mirroring of smartphone content on vehicle display",
+        "rating_level": "Delightful",
+        "G60_pct": 18.9
+      },
+      {
+        "attribute": "Mirroring of smartphone content on vehicle display",
+        "rating_level": "I Love It",
+        "G60_pct": 31.0
+      },
+      {
+        "attribute": "Place for phone",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Place for phone",
+        "rating_level": "A Failure",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Place for phone",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.4
+      },
+      {
+        "attribute": "Place for phone",
+        "rating_level": "Satisfactory",
+        "G60_pct": 23.3
+      },
+      {
+        "attribute": "Place for phone",
+        "rating_level": "Excellent",
+        "G60_pct": 19.1
+      },
+      {
+        "attribute": "Place for phone",
+        "rating_level": "Delightful",
+        "G60_pct": 24.4
+      },
+      {
+        "attribute": "Place for phone",
+        "rating_level": "I Love It",
+        "G60_pct": 28.6
+      },
+      {
+        "attribute": "Phone charging",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Phone charging",
+        "rating_level": "A Failure",
+        "G60_pct": 6.4
+      },
+      {
+        "attribute": "Phone charging",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.5
+      },
+      {
+        "attribute": "Phone charging",
+        "rating_level": "Satisfactory",
+        "G60_pct": 18.8
+      },
+      {
+        "attribute": "Phone charging",
+        "rating_level": "Excellent",
+        "G60_pct": 14.6
+      },
+      {
+        "attribute": "Phone charging",
+        "rating_level": "Delightful",
+        "G60_pct": 18.1
+      },
+      {
+        "attribute": "Phone charging",
+        "rating_level": "I Love It",
+        "G60_pct": 38.3
+      },
+      {
+        "attribute": "Ease of reading and using screen interface",
+        "rating_level": "I Hate It",
+        "G60_pct": 2.0
+      },
+      {
+        "attribute": "Ease of reading and using screen interface",
+        "rating_level": "A Failure",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Ease of reading and using screen interface",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 4.7
+      },
+      {
+        "attribute": "Ease of reading and using screen interface",
+        "rating_level": "Satisfactory",
+        "G60_pct": 24.4
+      },
+      {
+        "attribute": "Ease of reading and using screen interface",
+        "rating_level": "Excellent",
+        "G60_pct": 17.8
+      },
+      {
+        "attribute": "Ease of reading and using screen interface",
+        "rating_level": "Delightful",
+        "G60_pct": 28.8
+      },
+      {
+        "attribute": "Ease of reading and using screen interface",
+        "rating_level": "I Love It",
+        "G60_pct": 21.0
+      },
+      {
+        "attribute": "Head-up Display",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Head-up Display",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Head-up Display",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Head-up Display",
+        "rating_level": "Satisfactory",
+        "G60_pct": 22.8
+      },
+      {
+        "attribute": "Head-up Display",
+        "rating_level": "Excellent",
+        "G60_pct": 15.1
+      },
+      {
+        "attribute": "Head-up Display",
+        "rating_level": "Delightful",
+        "G60_pct": 16.2
+      },
+      {
+        "attribute": "Head-up Display",
+        "rating_level": "I Love It",
+        "G60_pct": 43.7
+      },
+      {
+        "attribute": "Position/ integration of displays in dashboard",
+        "rating_level": "I Hate It",
+        "G60_pct": 3.9
+      },
+      {
+        "attribute": "Position/ integration of displays in dashboard",
+        "rating_level": "A Failure",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "Position/ integration of displays in dashboard",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 3.5
+      },
+      {
+        "attribute": "Position/ integration of displays in dashboard",
+        "rating_level": "Satisfactory",
+        "G60_pct": 19.0
+      },
+      {
+        "attribute": "Position/ integration of displays in dashboard",
+        "rating_level": "Excellent",
+        "G60_pct": 29.7
+      },
+      {
+        "attribute": "Position/ integration of displays in dashboard",
+        "rating_level": "Delightful",
+        "G60_pct": 24.0
+      },
+      {
+        "attribute": "Position/ integration of displays in dashboard",
+        "rating_level": "I Love It",
+        "G60_pct": 18.6
+      },
+      {
+        "attribute": "Menu structure of infotainment system",
+        "rating_level": "I Hate It",
+        "G60_pct": 5.0
+      },
+      {
+        "attribute": "Menu structure of infotainment system",
+        "rating_level": "A Failure",
+        "G60_pct": 1.7
+      },
+      {
+        "attribute": "Menu structure of infotainment system",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 5.9
+      },
+      {
+        "attribute": "Menu structure of infotainment system",
+        "rating_level": "Satisfactory",
+        "G60_pct": 26.1
+      },
+      {
+        "attribute": "Menu structure of infotainment system",
+        "rating_level": "Excellent",
+        "G60_pct": 25.6
+      },
+      {
+        "attribute": "Menu structure of infotainment system",
+        "rating_level": "Delightful",
+        "G60_pct": 20.5
+      },
+      {
+        "attribute": "Menu structure of infotainment system",
+        "rating_level": "I Love It",
+        "G60_pct": 15.2
+      },
+      {
+        "attribute": "If applicable: Interactive information system (e.g., OnStar, mbrace, iDrive)",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "If applicable: Interactive information system (e.g., OnStar, mbrace, iDrive)",
+        "rating_level": "A Failure",
+        "G60_pct": 4.0
+      },
+      {
+        "attribute": "If applicable: Interactive information system (e.g., OnStar, mbrace, iDrive)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 2.1
+      },
+      {
+        "attribute": "If applicable: Interactive information system (e.g., OnStar, mbrace, iDrive)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 26.3
+      },
+      {
+        "attribute": "If applicable: Interactive information system (e.g., OnStar, mbrace, iDrive)",
+        "rating_level": "Excellent",
+        "G60_pct": 31.4
+      },
+      {
+        "attribute": "If applicable: Interactive information system (e.g., OnStar, mbrace, iDrive)",
+        "rating_level": "Delightful",
+        "G60_pct": 14.4
+      },
+      {
+        "attribute": "If applicable: Interactive information system (e.g., OnStar, mbrace, iDrive)",
+        "rating_level": "I Love It",
+        "G60_pct": 21.3
+      },
+      {
+        "attribute": "Performance of voice recognition",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.5
+      },
+      {
+        "attribute": "Performance of voice recognition",
+        "rating_level": "A Failure",
+        "G60_pct": 1.6
+      },
+      {
+        "attribute": "Performance of voice recognition",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 14.2
+      },
+      {
+        "attribute": "Performance of voice recognition",
+        "rating_level": "Satisfactory",
+        "G60_pct": 21.9
+      },
+      {
+        "attribute": "Performance of voice recognition",
+        "rating_level": "Excellent",
+        "G60_pct": 23.3
+      },
+      {
+        "attribute": "Performance of voice recognition",
+        "rating_level": "Delightful",
+        "G60_pct": 20.8
+      },
+      {
+        "attribute": "Performance of voice recognition",
+        "rating_level": "I Love It",
+        "G60_pct": 17.7
+      },
+      {
+        "attribute": "Vehicle's Mobile App",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.6
+      },
+      {
+        "attribute": "Vehicle's Mobile App",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Vehicle's Mobile App",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.4
+      },
+      {
+        "attribute": "Vehicle's Mobile App",
+        "rating_level": "Satisfactory",
+        "G60_pct": 15.6
+      },
+      {
+        "attribute": "Vehicle's Mobile App",
+        "rating_level": "Excellent",
+        "G60_pct": 27.5
+      },
+      {
+        "attribute": "Vehicle's Mobile App",
+        "rating_level": "Delightful",
+        "G60_pct": 19.0
+      },
+      {
+        "attribute": "Vehicle's Mobile App",
+        "rating_level": "I Love It",
+        "G60_pct": 34.7
+      },
+      {
+        "attribute": "Overall environmental friendliness",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "Overall environmental friendliness",
+        "rating_level": "A Failure",
+        "G60_pct": 1.2
+      },
+      {
+        "attribute": "Overall environmental friendliness",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.5
+      },
+      {
+        "attribute": "Overall environmental friendliness",
+        "rating_level": "Satisfactory",
+        "G60_pct": 30.0
+      },
+      {
+        "attribute": "Overall environmental friendliness",
+        "rating_level": "Excellent",
+        "G60_pct": 16.4
+      },
+      {
+        "attribute": "Overall environmental friendliness",
+        "rating_level": "Delightful",
+        "G60_pct": 15.7
+      },
+      {
+        "attribute": "Overall environmental friendliness",
+        "rating_level": "I Love It",
+        "G60_pct": 35.0
+      },
+      {
+        "attribute": "If applicable: Flat tire preparedness (spare, run flat, etc.)",
+        "rating_level": "I Hate It",
+        "G60_pct": 2.6
+      },
+      {
+        "attribute": "If applicable: Flat tire preparedness (spare, run flat, etc.)",
+        "rating_level": "A Failure",
+        "G60_pct": 6.0
+      },
+      {
+        "attribute": "If applicable: Flat tire preparedness (spare, run flat, etc.)",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 9.6
+      },
+      {
+        "attribute": "If applicable: Flat tire preparedness (spare, run flat, etc.)",
+        "rating_level": "Satisfactory",
+        "G60_pct": 32.0
+      },
+      {
+        "attribute": "If applicable: Flat tire preparedness (spare, run flat, etc.)",
+        "rating_level": "Excellent",
+        "G60_pct": 14.5
+      },
+      {
+        "attribute": "If applicable: Flat tire preparedness (spare, run flat, etc.)",
+        "rating_level": "Delightful",
+        "G60_pct": 22.8
+      },
+      {
+        "attribute": "If applicable: Flat tire preparedness (spare, run flat, etc.)",
+        "rating_level": "I Love It",
+        "G60_pct": 12.5
+      },
+      {
+        "attribute": "If applicable: Sunroof/ moonroof",
+        "rating_level": "I Hate It",
+        "G60_pct": 1.3
+      },
+      {
+        "attribute": "If applicable: Sunroof/ moonroof",
+        "rating_level": "A Failure",
+        "G60_pct": 0.3
+      },
+      {
+        "attribute": "If applicable: Sunroof/ moonroof",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 1.4
+      },
+      {
+        "attribute": "If applicable: Sunroof/ moonroof",
+        "rating_level": "Satisfactory",
+        "G60_pct": 37.3
+      },
+      {
+        "attribute": "If applicable: Sunroof/ moonroof",
+        "rating_level": "Excellent",
+        "G60_pct": 20.6
+      },
+      {
+        "attribute": "If applicable: Sunroof/ moonroof",
+        "rating_level": "Delightful",
+        "G60_pct": 13.2
+      },
+      {
+        "attribute": "If applicable: Sunroof/ moonroof",
+        "rating_level": "I Love It",
+        "G60_pct": 25.9
+      },
+      {
+        "attribute": "If applicable: Ease of customization",
+        "rating_level": "I Hate It",
+        "G60_pct": 0.2
+      },
+      {
+        "attribute": "If applicable: Ease of customization",
+        "rating_level": "A Failure",
+        "G60_pct": 0.7
+      },
+      {
+        "attribute": "If applicable: Ease of customization",
+        "rating_level": "Unsatisfactory",
+        "G60_pct": 6.7
+      },
+      {
+        "attribute": "If applicable: Ease of customization",
+        "rating_level": "Satisfactory",
+        "G60_pct": 28.9
+      },
+      {
+        "attribute": "If applicable: Ease of customization",
+        "rating_level": "Excellent",
+        "G60_pct": 19.8
+      },
+      {
+        "attribute": "If applicable: Ease of customization",
+        "rating_level": "Delightful",
+        "G60_pct": 22.5
+      },
+      {
+        "attribute": "If applicable: Ease of customization",
+        "rating_level": "I Love It",
+        "G60_pct": 21.2
+      }
+    ]
+  },
+  "competitor_benchmarks": {
+    "China": [
+      {
+        "competitor": "Li Auto L8 / L9",
+        "segment": "Executive Premium E-Segment",
+        "powertrain": "EREV / Dual Motor AWD",
+        "key_features": [
+          "Dual-compressor 8.8L refrigerator (cooling to 0°C, heating to 50°C)",
+          "15.7-inch 3K OLED rear roof-mounted entertainment screen",
+          "Dual zero-gravity executive captain chairs with 10-point massage & 16-way adjustment",
+          "Standard dual-chamber air suspension with continuous damping control"
+        ],
+        "price_bracket": "RMB 339,800 - 399,800",
+        "threat_level": "VERY HIGH (Dominates executive family & chauffeur segment in Tier 1/2 cities)"
+      },
+      {
+        "competitor": "NIO ET7",
+        "segment": "Executive Premium Sedan",
+        "powertrain": "BEV (150 kWh semi-solid option, 1,000+ km CLTC)",
+        "key_features": [
+          "23-speaker 7.1.4 Dolby Atmos 1000W audio as standard equipment",
+          "NOMI AI voice companion with AMOLED articulation & multi-zone spatial audio",
+          "Rear smart touch console embedded into executive armrest",
+          "PanoCinema AR/VR cockpit integration & 3-minute battery swap"
+        ],
+        "price_bracket": "RMB 428,000 - 506,000",
+        "threat_level": "HIGH (Direct 5 Series / i5 sedan rival targeting C-suite buyers)"
+      },
+      {
+        "competitor": "XPENG G9 / P7+",
+        "segment": "Executive Sedan / SUV",
+        "powertrain": "800V SiC Architecture (10-80% in 15 mins)",
+        "key_features": [
+          "XNGP end-to-end AI smart driving (full urban autonomous navigation without HD maps)",
+          "Zero-pressure ergonomic seating with fast ventilation pull-down (30s)",
+          "Ultra-low latency AI voice assistant (<300ms multi-intent response)"
+        ],
+        "price_bracket": "RMB 263,900 - 359,900",
+        "threat_level": "HIGH (Drives EV tech expectations in 800V charging & urban ADAS)"
+      },
+      {
+        "competitor": "Xiaomi SU7 Max",
+        "segment": "Performance Executive Sedan",
+        "powertrain": "800V HyperEngine BEV (800 km CLTC)",
+        "key_features": [
+          "HyperOS seamless ecosystem docking for smartphones & home devices",
+          "Magnetic physical expansion ports on dashboard and center console",
+          "Standard smart active rear wing and track thermal preconditioning"
+        ],
+        "price_bracket": "RMB 215,900 - 299,900",
+        "threat_level": "VERY HIGH (Unmatched brand buzz & smartphone ecosystem synergy)"
+      }
+    ],
+    "Europe": [
+      {
+        "competitor": "Mercedes-Benz EQE Sedan",
+        "segment": "Executive Sedan",
+        "powertrain": "BEV (90.6 kWh usable)",
+        "key_features": [
+          "MBUX Hyperscreen with zero-layer UI",
+          "10° Rear-axle steering for tight European city maneuvering",
+          "Energizing Air Control Plus with HEPA fine dust filtration",
+          "Acoustic comfort package with infrared-reflective laminated glass"
+        ],
+        "threat_level": "VERY HIGH (Core traditional German competitor in fleet & corporate leasing)"
+      },
+      {
+        "competitor": "Porsche Taycan",
+        "segment": "Performance Executive",
+        "powertrain": "800V Architecture (320 kW peak DC charge)",
+        "key_features": [
+          "10-80% charge in 18 minutes with benchmark high-voltage repeatability",
+          "Active Ride suspension balancing high-speed Autobahn composure with comfort",
+          "High build quality and driver-centric cockpit ergonomics"
+        ],
+        "threat_level": "HIGH (Sets the benchmark for driving dynamics and thermal endurance)"
+      },
+      {
+        "competitor": "Audi A6 e-tron",
+        "segment": "Executive Sportback / Avant",
+        "powertrain": "PPE 800V Architecture (100 kWh battery, 750 km WLTP)",
+        "key_features": [
+          "Virtual exterior mirrors and second-generation digital OLED taillights",
+          "Panoramic glass roof with switchable liquid crystal transparency",
+          "Bang & Olufsen 3D sound with headrest speakers"
+        ],
+        "threat_level": "HIGH (Direct German rival launching in 2024/2025)"
+      }
+    ],
+    "USA": [
+      {
+        "competitor": "Tesla Model S Plaid / Long Range",
+        "segment": "Premium Executive Sedan",
+        "powertrain": "Tri-Motor / Dual-Motor BEV (402 miles EPA)",
+        "key_features": [
+          "Full Supercharger network integration with native NACS port",
+          "17-inch cinematic display with 10 teraflops gaming computer",
+          "Yoke/round wheel with pure steer-by-wire and minimalist cabin storage",
+          "Full Self-Driving (Supervised) city streets navigation"
+        ],
+        "threat_level": "VERY HIGH (Sets the EV usability and charging benchmark for US consumers)"
+      },
+      {
+        "competitor": "Lucid Air Grand Touring",
+        "segment": "Full-Size Executive EV",
+        "powertrain": "900V+ Architecture (516 miles EPA range)",
+        "key_features": [
+          "300 kW peak fast-charging (adds 200 miles in 12 minutes)",
+          "Cavernous spatial packaging (280L frunk + bi-level trunk)",
+          "34-inch curved Glass Cockpit 5K display",
+          "Executive 20-way massaging seats with heating and ventilation"
+        ],
+        "threat_level": "HIGH (Benchmark for ultra-luxury range and volumetric efficiency)"
+      }
+    ]
+  },
+  "regional_signals": {
+    "China": {
+      "market_name": "China (CN)",
+      "primary_focus": "Executive Rear Comfort, Localized AI & Ecosystem Parity",
+      "annual_report_context": "626,000 units delivered; intense domestic NEV price pressure (-12.5% YoY); 70% localized software mandate in BMW OS X.",
+      "top_signals": [
+        {
+          "signal_id": "SIG-CN-01",
+          "domain": "Interior",
+          "title": "Rear Executive Seating & Console Cooling Gap",
+          "sentiment": "NEGATIVE",
+          "complaint_frequency": "HIGH (382 related comments)",
+          "evidence_sources": [
+            "G60/G68 customer studies: Rear seat comfort satisfaction lags flagship G70 by 0.86 points",
+            "Competitor delta: Li Auto L8/L9 dual-compressor fridge & zero-gravity seating standard at RMB 339k",
+            "Verbatim citation: G60-0388 'Rear passengers in executive trips expect cold beverages and better thigh support than currently provided in G68 standard seats.'"
+          ],
+          "strategic_urgency": 9.5
+        },
+        {
+          "signal_id": "SIG-CN-02",
+          "domain": "Digital_ADAS",
+          "title": "In-Cabin Voice Latency & Local App Ecosystem Gap",
+          "sentiment": "NEGATIVE",
+          "complaint_frequency": "VERY HIGH (514 related comments)",
+          "evidence_sources": [
+            "Verbatim citation: G60-0812 'Voice assistant takes 2-3 seconds to understand Mandarin commands and struggles with complex navigation destinations.'",
+            "Annual Report p.29: Strategic integration of DeepSeek & Alibaba LLMs + Huawei HarmonyOS NEXT required to achieve parity with NIO NOMI & Xiaomi HyperOS.",
+            "Navigation study: Chinese drivers demand Amap lane-level visual guidance on complex 3D elevated flyovers."
+          ],
+          "strategic_urgency": 9.8
+        },
+        {
+          "signal_id": "SIG-CN-03",
+          "domain": "Powertrain",
+          "title": "800V Ultra-Fast Charging Usability & Battery Preconditioning",
+          "sentiment": "NEUTRAL_TO_NEGATIVE",
+          "complaint_frequency": "MEDIUM (215 related comments)",
+          "evidence_sources": [
+            "Competitor delta: XPENG G9 and Xiaomi SU7 offer 10-80% charging in <=15 minutes on 800V architectures.",
+            "Verbatim citation: G60-1204 'In winter, public charging speed throttles significantly without automated high-power navigation preconditioning.'",
+            "Annual Report p.53: Neue Klasse 800V Gen-6 battery rollout solves high-power charging curve."
+          ],
+          "strategic_urgency": 8.8
+        }
+      ],
+      "conflicts_and_uncertainties": [
+        {
+          "type": "CONFLICT",
+          "description": "Chinese executive buyers expect full-digital voice/touch minimalism, whereas European drivers demand physical tactile iDrive rotary controls.",
+          "resolution_strategy": "Implement BMW Panoramic Vision with gesture/voice as primary in China, while offering optional tactile center haptic puck."
+        },
+        {
+          "type": "UNCERTAINTY",
+          "description": "Split between chauffeur-driven vs. owner-driven usage in lower-tier Chinese cities.",
+          "mitigation": "Modular executive rear package configurable as standard on high-trim G68 LWB variants."
+        }
+      ]
+    },
+    "Europe": {
+      "market_name": "Europe (EU)",
+      "primary_focus": "Autobahn High-Speed Acoustics, Driving Dynamics & WLTP Efficiency",
+      "annual_report_context": "1,017,600 units delivered (+7.3% YoY); 5 Series remains backbone for corporate executive fleet leasing.",
+      "top_signals": [
+        {
+          "signal_id": "SIG-EU-01",
+          "domain": "Exterior_Acoustics",
+          "title": "High-Speed Wind & Road Noise at Autobahn Speeds (>130 km/h)",
+          "sentiment": "NEGATIVE",
+          "complaint_frequency": "HIGH (340 related comments)",
+          "evidence_sources": [
+            "Customer studies: G60 acoustic comfort rated 8.31 vs Mercedes EQE acoustic package benchmark of 8.75.",
+            "Verbatim citation: G60-0419 'Wind rustle around A-pillar and side mirrors noticeable on German Autobahn above 140 km/h.'",
+            "Option list analysis: Acoustic comfort double-glazed glass currently bundled only in top-tier optional packages (SA 3KA)."
+          ],
+          "strategic_urgency": 8.9
+        },
+        {
+          "signal_id": "SIG-EU-02",
+          "domain": "Interior",
+          "title": "Desire for Tactile Haptic Physical Controls vs Screen Sub-menus",
+          "sentiment": "NEGATIVE",
+          "complaint_frequency": "VERY HIGH (462 related comments)",
+          "evidence_sources": [
+            "Verbatim citation: G60-0084 'Adjusting climate controls and seat heating via touchscreen while driving fast is distracting and frustrating compared to previous generation buttons.'",
+            "Verbatim citation: G60-0931 'Miss the physical iDrive rotary controller shortcut buttons.'"
+          ],
+          "strategic_urgency": 8.7
+        },
+        {
+          "signal_id": "SIG-EU-03",
+          "domain": "Powertrain",
+          "title": "Real-World Winter Highway Range Degradation",
+          "sentiment": "NEGATIVE",
+          "complaint_frequency": "HIGH (290 related comments)",
+          "evidence_sources": [
+            "Verbatim citation: G60-1550 'Highway range at freezing temperatures dropped by nearly 30% compared to summer WLTP rating.'",
+            "Annual Report p.53: Heat pump efficiency and Neue Klasse thermal management cited as top R&D priorities."
+          ],
+          "strategic_urgency": 9.1
+        }
+      ],
+      "conflicts_and_uncertainties": [
+        {
+          "type": "CONFLICT",
+          "description": "Desire for physical buttons vs. cost reduction & sleek minimalist dashboard aesthetics.",
+          "resolution_strategy": "Tactile haptic feedback integration on multifunction steering wheel and quick-access physical bar."
+        },
+        {
+          "type": "UNCERTAINTY",
+          "description": "EV transition pace in Southern and Eastern European markets compared to Nordics.",
+          "mitigation": "Neue Klasse flexible architecture maintaining PHEV and BEV coexistence."
+        }
+      ]
+    },
+    "USA": {
+      "market_name": "USA (US)",
+      "primary_focus": "Highway Range Usability, NACS Supercharger Access & Center Storage",
+      "annual_report_context": "Strong luxury sedan demand; high BEV growth (+5.6% Americas deliveries); intense Tesla Model S & Lucid Air benchmark competition.",
+      "top_signals": [
+        {
+          "signal_id": "SIG-US-01",
+          "domain": "Powertrain",
+          "title": "Public Charging Reliability & Tesla NACS Supercharger Parity",
+          "sentiment": "NEGATIVE",
+          "complaint_frequency": "VERY HIGH (420 related comments)",
+          "evidence_sources": [
+            "Verbatim citation: G60-0771 'Non-Tesla DC fast chargers are frequently broken or throttled. Seamless Plug & Charge at Superchargers is a must.'",
+            "Competitor benchmark: Tesla Model S offers unmatched 15-minute Supercharger stopover experience."
+          ],
+          "strategic_urgency": 9.6
+        },
+        {
+          "signal_id": "SIG-US-02",
+          "domain": "Interior",
+          "title": "Cup Holder Sizing & Center Console Everyday Usability",
+          "sentiment": "NEGATIVE",
+          "complaint_frequency": "HIGH (310 related comments)",
+          "evidence_sources": [
+            "US Customer Studies: Interior practical storage scored lower than German sedans of previous generations.",
+            "Verbatim citation: G60-0215 'Cup holders cannot comfortably fit large 32oz insulated travel mugs without blocking phone wireless charging pad.'"
+          ],
+          "strategic_urgency": 8.2
+        },
+        {
+          "signal_id": "SIG-US-03",
+          "domain": "Digital_ADAS",
+          "title": "Hands-Free Highway Assistant Range & Lane Change Confidence",
+          "sentiment": "POSITIVE_TO_OPPORTUNITY",
+          "complaint_frequency": "MEDIUM (195 related comments)",
+          "evidence_sources": [
+            "Annual Report p.54: Highway Assistant UN Regulation 171 approval operates up to 130 km/h with eye-activated lane change.",
+            "Verbatim citation: G60-1120 'Highway Assistant is smooth on I-95, but system disengages unexpectedly during sun glare or fading lane markings.'"
+          ],
+          "strategic_urgency": 8.6
+        }
+      ],
+      "conflicts_and_uncertainties": [
+        {
+          "type": "CONFLICT",
+          "description": "US demand for oversized cup holders & deep center console vs. slim aesthetic European interior packaging.",
+          "resolution_strategy": "Modular center console packaging with adjustable modular organizers."
+        },
+        {
+          "type": "UNCERTAINTY",
+          "description": "Federal and state EV tax credit fluctuations impacting BEV adoption rate.",
+          "mitigation": "Dual offering of i5 BEV and 550e PHEV powertrains."
+        }
+      ]
+    }
+  }
+}
