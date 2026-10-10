@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+# Confidential BMW hackathon data and the database built from it
+data/internal/
+data/briefing/
+database/*.db
+mydata/
+data/external/
+data/source_manifest.json
+CHAT_HISTORY.txt
+PROJECT_HANDOFF.txt

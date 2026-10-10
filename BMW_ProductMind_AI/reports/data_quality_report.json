@@ -1,0 +1,2100 @@
+{
+  "generated_at": "2026-10-10T19:28:54",
+  "documents": [
+    {
+      "file": "261010_BMW_Product_Management_Key_Note.pptx",
+      "dataset_type": "briefing",
+      "original_file_names": "[\"261010_BMW_Product_Management_Key_Note.pptx\"]",
+      "origin": "briefing",
+      "type": "pptx",
+      "sheets_or_pages": 4,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "BMW_Hackathon_Briefing_Short.pdf",
+      "dataset_type": "briefing",
+      "original_file_names": "[\"BMW_Hackathon_Briefing_Short.pdf\"]",
+      "origin": "briefing",
+      "type": "pdf",
+      "sheets_or_pages": 2,
+      "source_of_truth": true,
+      "status": "no_text_layer",
+      "notes": "Pages without a text layer: [1, 2]. Image-only content; OCR not performed, no text invented."
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "dataset_type": "consolidated_workbook",
+      "original_file_names": "[\"BMW_G60_Complete_Prototype_Data.xlsx\"]",
+      "origin": "internal_bmw",
+      "type": "xlsx",
+      "sheets_or_pages": 9,
+      "source_of_truth": false,
+      "status": "registered_only",
+      "notes": "Consolidated workbook. Overlapping sheets compared against originals (see dataset_overlaps); only its START HERE notes are stored. Originals are the single source of truth."
+    },
+    {
+      "file": "F70_G60_G68_G70_customer_studies.xlsx",
+      "dataset_type": "customer_studies",
+      "original_file_names": "[\"F70_G60_G68_G70_customer_studies.xlsx\"]",
+      "origin": "internal_bmw",
+      "type": "xlsx",
+      "sheets_or_pages": 2,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "F70_OptionList.PDF",
+      "dataset_type": "option_list",
+      "original_file_names": "[\"F70_OptionList.PDF\"]",
+      "origin": "internal_bmw",
+      "type": "pdf",
+      "sheets_or_pages": 23,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "F70_feedback_hackathon.xlsx",
+      "dataset_type": "bmw_feedback",
+      "original_file_names": "[\"F70_feedback_hackathon.xlsx\"]",
+      "origin": "internal_bmw",
+      "type": "xlsx",
+      "sheets_or_pages": 1,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "G60_OptionList.PDF",
+      "dataset_type": "option_list",
+      "original_file_names": "[\"G60_OptionList.PDF\"]",
+      "origin": "internal_bmw",
+      "type": "pdf",
+      "sheets_or_pages": 28,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "G60_feedback_hackathon.xlsx",
+      "dataset_type": "bmw_feedback",
+      "original_file_names": "[\"G60_feedback_hackathon.xlsx\"]",
+      "origin": "internal_bmw",
+      "type": "xlsx",
+      "sheets_or_pages": 1,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "G70_OptionList.PDF",
+      "dataset_type": "option_list",
+      "original_file_names": "[\"G70_OptionList.PDF\"]",
+      "origin": "internal_bmw",
+      "type": "pdf",
+      "sheets_or_pages": 27,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "G70_feedback_hackathon.xlsx",
+      "dataset_type": "bmw_feedback",
+      "original_file_names": "[\"G70_feedback_hackathon.xlsx\"]",
+      "origin": "internal_bmw",
+      "type": "xlsx",
+      "sheets_or_pages": 1,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "sales_volumes.xlsx",
+      "dataset_type": "sales_volumes",
+      "original_file_names": "[\"sales_volumes.xlsx\"]",
+      "origin": "internal_bmw",
+      "type": "xlsx",
+      "sheets_or_pages": 3,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "BMW_5_Series_Public_Owner_Feedback.xlsx",
+      "dataset_type": "public_owner_feedback",
+      "original_file_names": "[\"BMW_5_Series_Public_Owner_Feedback.xlsx\"]",
+      "origin": "public_external",
+      "type": "xlsx",
+      "sheets_or_pages": 2,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    },
+    {
+      "file": "BMW_G60_Public_Competitor_Evidence.xlsx",
+      "dataset_type": "public_competitor_evidence",
+      "original_file_names": "[\"BMW_G60_Public_Competitor_Evidence.xlsx\"]",
+      "origin": "public_external",
+      "type": "xlsx",
+      "sheets_or_pages": 2,
+      "source_of_truth": true,
+      "status": "imported",
+      "notes": ""
+    }
+  ],
+  "table_counts": {
+    "source_documents": 13,
+    "source_document_pages": 84,
+    "dataset_notes": 29,
+    "feedback": 10128,
+    "feedback_classifications": 13771,
+    "public_feedback": 15,
+    "competitor_evidence": 18,
+    "customer_studies": 1833,
+    "sales": 36,
+    "equipment": 301,
+    "equipment_availability": 1095,
+    "dataset_overlaps": 9,
+    "possible_duplicates": 13,
+    "ingestion_audit": 22
+  },
+  "count_validation": [
+    {
+      "file": "F70_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "table": "feedback_classifications",
+      "expected": 4076,
+      "basis": "worksheet data rows",
+      "imported": 4076,
+      "status": "ok"
+    },
+    {
+      "file": "F70_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "table": "feedback",
+      "expected": 2128,
+      "basis": "distinct values in ID column",
+      "imported": 2128,
+      "status": "ok"
+    },
+    {
+      "file": "G60_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "table": "feedback_classifications",
+      "expected": 5005,
+      "basis": "worksheet data rows",
+      "imported": 5005,
+      "status": "ok"
+    },
+    {
+      "file": "G60_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "table": "feedback",
+      "expected": 4000,
+      "basis": "distinct values in ID column",
+      "imported": 4000,
+      "status": "ok"
+    },
+    {
+      "file": "G70_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "table": "feedback_classifications",
+      "expected": 4690,
+      "basis": "worksheet data rows",
+      "imported": 4690,
+      "status": "ok"
+    },
+    {
+      "file": "G70_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "table": "feedback",
+      "expected": 4000,
+      "basis": "distinct values in ID column",
+      "imported": 4000,
+      "status": "ok"
+    },
+    {
+      "file": "F70_G60_G68_G70_customer_studies.xlsx",
+      "sheet": "CN_EU_2025",
+      "table": "customer_studies",
+      "expected": 185,
+      "basis": "numeric cells below header rows 1-3, columns B+",
+      "imported": 185,
+      "status": "ok"
+    },
+    {
+      "file": "F70_G60_G68_G70_customer_studies.xlsx",
+      "sheet": "US_2025",
+      "table": "customer_studies",
+      "expected": 1648,
+      "basis": "numeric cells in columns C+",
+      "imported": 1648,
+      "status": "ok"
+    },
+    {
+      "file": "sales_volumes.xlsx",
+      "sheet": "F70",
+      "table": "sales",
+      "expected": 12,
+      "basis": "data rows x volume_YYYY columns",
+      "imported": 12,
+      "status": "ok"
+    },
+    {
+      "file": "sales_volumes.xlsx",
+      "sheet": "G60_G68",
+      "table": "sales",
+      "expected": 12,
+      "basis": "data rows x volume_YYYY columns",
+      "imported": 12,
+      "status": "ok"
+    },
+    {
+      "file": "sales_volumes.xlsx",
+      "sheet": "G70",
+      "table": "sales",
+      "expected": 12,
+      "basis": "data rows x volume_YYYY columns",
+      "imported": 12,
+      "status": "ok"
+    },
+    {
+      "file": "F70_OptionList.PDF",
+      "sheet": null,
+      "table": "source_document_pages",
+      "expected": 23,
+      "basis": "PDF page count",
+      "imported": 23,
+      "status": "ok"
+    },
+    {
+      "file": "G60_OptionList.PDF",
+      "sheet": null,
+      "table": "source_document_pages",
+      "expected": 28,
+      "basis": "PDF page count",
+      "imported": 28,
+      "status": "ok"
+    },
+    {
+      "file": "G70_OptionList.PDF",
+      "sheet": null,
+      "table": "source_document_pages",
+      "expected": 27,
+      "basis": "PDF page count",
+      "imported": 27,
+      "status": "ok"
+    },
+    {
+      "file": "BMW_Hackathon_Briefing_Short.pdf",
+      "sheet": null,
+      "table": "source_document_pages",
+      "expected": 2,
+      "basis": "PDF page count",
+      "imported": 2,
+      "status": "ok"
+    },
+    {
+      "file": "261010_BMW_Product_Management_Key_Note.pptx",
+      "sheet": null,
+      "table": "source_document_pages",
+      "expected": 4,
+      "basis": "slide count",
+      "imported": 4,
+      "status": "ok"
+    },
+    {
+      "file": "BMW_5_Series_Public_Owner_Feedback.xlsx",
+      "sheet": "Public G60 Feedback",
+      "table": "public_feedback",
+      "expected": 15,
+      "basis": "worksheet data rows",
+      "imported": 15,
+      "status": "ok"
+    },
+    {
+      "file": "BMW_5_Series_Public_Owner_Feedback.xlsx",
+      "sheet": "README",
+      "table": "dataset_notes",
+      "expected": 7,
+      "basis": "non-empty rows",
+      "imported": 7,
+      "status": "ok"
+    },
+    {
+      "file": "BMW_G60_Public_Competitor_Evidence.xlsx",
+      "sheet": "Public Evidence",
+      "table": "competitor_evidence",
+      "expected": 18,
+      "basis": "worksheet data rows",
+      "imported": 18,
+      "status": "ok"
+    },
+    {
+      "file": "BMW_G60_Public_Competitor_Evidence.xlsx",
+      "sheet": "Method and caveats",
+      "table": "dataset_notes",
+      "expected": 12,
+      "basis": "non-empty rows",
+      "imported": 12,
+      "status": "ok"
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "START HERE",
+      "table": "dataset_notes",
+      "expected": 10,
+      "basis": "non-empty rows",
+      "imported": 10,
+      "status": "ok"
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": null,
+      "table": "dataset_overlaps",
+      "expected": 9,
+      "basis": "one comparison per sheet",
+      "imported": 9,
+      "status": "ok"
+    }
+  ],
+  "integrity_checks": [
+    {
+      "check": "1. Selected datasets imported",
+      "passed": true,
+      "detail": "all 5 imported"
+    },
+    {
+      "check": "2. Feedback counts match source files",
+      "passed": true,
+      "detail": "F70_feedback_hackathon.xlsx feedback_classifications 4076/4076; F70_feedback_hackathon.xlsx feedback 2128/2128; G60_feedback_hackathon.xlsx feedback_classifications 5005/5005; G60_feedback_hackathon.xlsx feedback 4000/4000; G70_feedback_hackathon.xlsx feedback_classifications 4690/4690; G70_feedback_hackathon.xlsx feedback 4000/4000"
+    },
+    {
+      "check": "3. No duplicate imports",
+      "passed": true,
+      "detail": "duplicate key groups: {'feedback (file, feedback ID)': 0, 'feedback_classifications (file, row)': 0, 'public_feedback (public ID)': 0, 'competitor_evidence (row)': 0, 'customer_studies (sheet, row, column)': 0, 'sales (sheet, row, column)': 0}; rows imported from consolidated workbook: 0"
+    },
+    {
+      "check": "4. Original customer feedback preserved verbatim",
+      "passed": true,
+      "detail": "0 feedback texts differ from source (compared every ID in all feedback files)"
+    },
+    {
+      "check": "5. Public and internal feedback distinguishable",
+      "passed": true,
+      "detail": "feedback.data_origin=['internal_bmw']; public tables data_origin=['public_external']; separate tables (feedback vs public_feedback / competitor_evidence)"
+    },
+    {
+      "check": "6. Sales associated with correct models",
+      "passed": true,
+      "detail": "sheet -> vehicles: F70=F70, G60_G68=G60+G68, G70=G70"
+    },
+    {
+      "check": "7. G60/G68 combined sales not presented as G60-only",
+      "passed": true,
+      "detail": "12 G60_G68 rows, all is_combined_models=True, scope_label='G60 + G68 combined (not G60-only)'; G60-only sales rows: 0"
+    }
+  ],
+  "provenance_gaps": {
+    "source_document_pages": 0,
+    "dataset_notes": 0,
+    "feedback": 0,
+    "feedback_classifications": 0,
+    "public_feedback": 0,
+    "competitor_evidence": 0,
+    "customer_studies": 0,
+    "sales": 0,
+    "equipment": 0,
+    "equipment_availability": 0
+  },
+  "sheet_profiles": [
+    {
+      "file": "F70_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "header_row": 1,
+      "rows": 4076,
+      "columns": [
+        {
+          "column": "ID",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 2128
+        },
+        {
+          "column": "Source",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Brand",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Sales Description",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Country",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 9
+        },
+        {
+          "column": "Derivate (e-code)",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Engine Type",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Feedback Type",
+          "inferred_type": "string",
+          "missing": 1087,
+          "missing_pct": 26.67,
+          "distinct": 4
+        },
+        {
+          "column": "Customer Feedback",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 2128
+        },
+        {
+          "column": "Vfc level2 3 Name",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 336
+        },
+        {
+          "column": "Vfc level2 Name",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 120
+        },
+        {
+          "column": "Vfc level3 Name",
+          "inferred_type": "string",
+          "missing": 1087,
+          "missing_pct": 26.67,
+          "distinct": 57
+        }
+      ],
+      "exact_duplicate_rows": 0,
+      "key_column": "ID",
+      "distinct_keys": 2128,
+      "keys_on_multiple_rows": 1009,
+      "max_rows_per_key": 11
+    },
+    {
+      "file": "G60_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "header_row": 1,
+      "rows": 5005,
+      "columns": [
+        {
+          "column": "ID",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4000
+        },
+        {
+          "column": "Source",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "Brand",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Sales Description",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Country",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 13
+        },
+        {
+          "column": "Derivate (e-code)",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Engine Type",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "Feedback Type",
+          "inferred_type": "string",
+          "missing": 731,
+          "missing_pct": 14.61,
+          "distinct": 4
+        },
+        {
+          "column": "Customer Feedback",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4000
+        },
+        {
+          "column": "Vfc level2 3 Name",
+          "inferred_type": "string",
+          "missing": 200,
+          "missing_pct": 4.0,
+          "distinct": 953
+        },
+        {
+          "column": "Vfc level2 Name",
+          "inferred_type": "string",
+          "missing": 200,
+          "missing_pct": 4.0,
+          "distinct": 221
+        },
+        {
+          "column": "Vfc level3 Name",
+          "inferred_type": "string",
+          "missing": 725,
+          "missing_pct": 14.49,
+          "distinct": 82
+        }
+      ],
+      "exact_duplicate_rows": 0,
+      "key_column": "ID",
+      "distinct_keys": 4000,
+      "keys_on_multiple_rows": 365,
+      "max_rows_per_key": 18
+    },
+    {
+      "file": "G70_feedback_hackathon.xlsx",
+      "sheet": "Feedback_Explorer",
+      "header_row": 1,
+      "rows": 4690,
+      "columns": [
+        {
+          "column": "ID",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4000
+        },
+        {
+          "column": "Source",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "Brand",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Sales Description",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Country",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 13
+        },
+        {
+          "column": "Derivate (e-code)",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Engine Type",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "Feedback Type",
+          "inferred_type": "string",
+          "missing": 682,
+          "missing_pct": 14.54,
+          "distinct": 4
+        },
+        {
+          "column": "Customer Feedback",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3993
+        },
+        {
+          "column": "Vfc level2 3 Name",
+          "inferred_type": "string",
+          "missing": 200,
+          "missing_pct": 4.26,
+          "distinct": 854
+        },
+        {
+          "column": "Vfc level2 Name",
+          "inferred_type": "string",
+          "missing": 200,
+          "missing_pct": 4.26,
+          "distinct": 211
+        },
+        {
+          "column": "Vfc level3 Name",
+          "inferred_type": "string",
+          "missing": 670,
+          "missing_pct": 14.29,
+          "distinct": 77
+        }
+      ],
+      "exact_duplicate_rows": 0,
+      "key_column": "ID",
+      "distinct_keys": 4000,
+      "keys_on_multiple_rows": 262,
+      "max_rows_per_key": 17
+    },
+    {
+      "file": "F70_G60_G68_G70_customer_studies.xlsx",
+      "sheet": "CN_EU_2025",
+      "header_row": null,
+      "rows": 76,
+      "columns": [
+        {
+          "column": "0",
+          "inferred_type": "string",
+          "missing": 2,
+          "missing_pct": 2.63,
+          "distinct": 38
+        },
+        {
+          "column": "1",
+          "inferred_type": "mixed",
+          "missing": 36,
+          "missing_pct": 47.37,
+          "distinct": 40
+        },
+        {
+          "column": "2",
+          "inferred_type": "mixed",
+          "missing": 38,
+          "missing_pct": 50.0,
+          "distinct": 38
+        },
+        {
+          "column": "3",
+          "inferred_type": "mixed",
+          "missing": 37,
+          "missing_pct": 48.68,
+          "distinct": 39
+        },
+        {
+          "column": "4",
+          "inferred_type": "mixed",
+          "missing": 38,
+          "missing_pct": 50.0,
+          "distinct": 38
+        },
+        {
+          "column": "5",
+          "inferred_type": "mixed",
+          "missing": 38,
+          "missing_pct": 50.0,
+          "distinct": 38
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "F70_G60_G68_G70_customer_studies.xlsx",
+      "sheet": "US_2025",
+      "header_row": null,
+      "rows": 929,
+      "columns": [
+        {
+          "column": "0",
+          "inferred_type": "string",
+          "missing": 2,
+          "missing_pct": 0.22,
+          "distinct": 111
+        },
+        {
+          "column": "1",
+          "inferred_type": "string",
+          "missing": 105,
+          "missing_pct": 11.3,
+          "distinct": 1
+        },
+        {
+          "column": "2",
+          "inferred_type": "mixed-integer",
+          "missing": 104,
+          "missing_pct": 11.19,
+          "distinct": 286
+        },
+        {
+          "column": "3",
+          "inferred_type": "mixed-integer",
+          "missing": 104,
+          "missing_pct": 11.19,
+          "distinct": 304
+        }
+      ],
+      "exact_duplicate_rows": 134
+    },
+    {
+      "file": "sales_volumes.xlsx",
+      "sheet": "F70",
+      "header_row": 1,
+      "rows": 4,
+      "columns": [
+        {
+          "column": "market",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "market_code",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2024",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "volume_2025",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "volume_2030",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "sales_volumes.xlsx",
+      "sheet": "G60_G68",
+      "header_row": 1,
+      "rows": 4,
+      "columns": [
+        {
+          "column": "market",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "market_code",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2024",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2025",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2030",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "sales_volumes.xlsx",
+      "sheet": "G70",
+      "header_row": 1,
+      "rows": 4,
+      "columns": [
+        {
+          "column": "market",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "market_code",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2024",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2025",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2030",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_5_Series_Public_Owner_Feedback.xlsx",
+      "sheet": "Public G60 Feedback",
+      "header_row": 1,
+      "rows": 15,
+      "columns": [
+        {
+          "column": "ID",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 15
+        },
+        {
+          "column": "Model",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 5
+        },
+        {
+          "column": "Model year",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 2
+        },
+        {
+          "column": "Review date",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 9
+        },
+        {
+          "column": "Source",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "Source type",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 2
+        },
+        {
+          "column": "Market",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 2
+        },
+        {
+          "column": "Sentiment",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 2
+        },
+        {
+          "column": "Theme",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 15
+        },
+        {
+          "column": "Paraphrased owner feedback",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 15
+        },
+        {
+          "column": "Product implication",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 15
+        },
+        {
+          "column": "Source URL",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 5
+        },
+        {
+          "column": "Evidence note",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 12
+        }
+      ],
+      "exact_duplicate_rows": 0,
+      "key_column": "ID",
+      "distinct_keys": 15,
+      "keys_on_multiple_rows": 0,
+      "max_rows_per_key": 1
+    },
+    {
+      "file": "BMW_5_Series_Public_Owner_Feedback.xlsx",
+      "sheet": "README",
+      "header_row": null,
+      "rows": 7,
+      "columns": [
+        {
+          "column": "0",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 7
+        },
+        {
+          "column": "1",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 7
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Public_Competitor_Evidence.xlsx",
+      "sheet": "Public Evidence",
+      "header_row": 1,
+      "rows": 18,
+      "columns": [
+        {
+          "column": "Brand",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 5
+        },
+        {
+          "column": "Model",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 6
+        },
+        {
+          "column": "Source type",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 6
+        },
+        {
+          "column": "Date or period",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 10
+        },
+        {
+          "column": "Market",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "Theme",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 17
+        },
+        {
+          "column": "Sentiment",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "Extracted insight (paraphrased)",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 18
+        },
+        {
+          "column": "Evidence limitation",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 12
+        },
+        {
+          "column": "Source URL",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 13
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Public_Competitor_Evidence.xlsx",
+      "sheet": "Method and caveats",
+      "header_row": 1,
+      "rows": 11,
+      "columns": [
+        {
+          "column": "Field",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 11
+        },
+        {
+          "column": "Explanation",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 11
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "START HERE",
+      "header_row": null,
+      "rows": 10,
+      "columns": [
+        {
+          "column": "0",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 10
+        },
+        {
+          "column": "1",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 10
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "G60 Feedback All",
+      "header_row": 1,
+      "rows": 5005,
+      "columns": [
+        {
+          "column": "ID",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4000
+        },
+        {
+          "column": "Source",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "Brand",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Sales Description",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Country",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 13
+        },
+        {
+          "column": "Derivate (e-code)",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Engine Type",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "Feedback Type",
+          "inferred_type": "string",
+          "missing": 731,
+          "missing_pct": 14.61,
+          "distinct": 4
+        },
+        {
+          "column": "Customer Feedback",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4000
+        },
+        {
+          "column": "Vfc level2 3 Name",
+          "inferred_type": "string",
+          "missing": 200,
+          "missing_pct": 4.0,
+          "distinct": 953
+        },
+        {
+          "column": "Vfc level2 Name",
+          "inferred_type": "string",
+          "missing": 200,
+          "missing_pct": 4.0,
+          "distinct": 221
+        },
+        {
+          "column": "Vfc level3 Name",
+          "inferred_type": "string",
+          "missing": 725,
+          "missing_pct": 14.49,
+          "distinct": 82
+        }
+      ],
+      "exact_duplicate_rows": 0,
+      "key_column": "ID",
+      "distinct_keys": 4000,
+      "keys_on_multiple_rows": 365,
+      "max_rows_per_key": 18
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "Feedback Theme Counts",
+      "header_row": 1,
+      "rows": 659,
+      "columns": [
+        {
+          "column": "VFC Level 2",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 222
+        },
+        {
+          "column": "Feedback type",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 5
+        },
+        {
+          "column": "Records",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 46
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "Public Competitors",
+      "header_row": 1,
+      "rows": 18,
+      "columns": [
+        {
+          "column": "Brand",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 5
+        },
+        {
+          "column": "Model",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 6
+        },
+        {
+          "column": "Source type",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 6
+        },
+        {
+          "column": "Date or period",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 10
+        },
+        {
+          "column": "Market",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "Theme",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 17
+        },
+        {
+          "column": "Sentiment",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 3
+        },
+        {
+          "column": "Extracted insight (paraphrased)",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 18
+        },
+        {
+          "column": "Evidence limitation",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 12
+        },
+        {
+          "column": "Source URL",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 13
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "Public Caveats",
+      "header_row": 1,
+      "rows": 11,
+      "columns": [
+        {
+          "column": "Field",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 11
+        },
+        {
+          "column": "Explanation",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 11
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "Sales G60 G68",
+      "header_row": 1,
+      "rows": 4,
+      "columns": [
+        {
+          "column": "market",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "market_code",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2024",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2025",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        },
+        {
+          "column": "volume_2030",
+          "inferred_type": "integer",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 4
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "Study CN EU 2025",
+      "header_row": null,
+      "rows": 76,
+      "columns": [
+        {
+          "column": "0",
+          "inferred_type": "string",
+          "missing": 2,
+          "missing_pct": 2.63,
+          "distinct": 38
+        },
+        {
+          "column": "1",
+          "inferred_type": "mixed",
+          "missing": 36,
+          "missing_pct": 47.37,
+          "distinct": 40
+        },
+        {
+          "column": "2",
+          "inferred_type": "mixed",
+          "missing": 38,
+          "missing_pct": 50.0,
+          "distinct": 38
+        },
+        {
+          "column": "3",
+          "inferred_type": "mixed",
+          "missing": 37,
+          "missing_pct": 48.68,
+          "distinct": 39
+        },
+        {
+          "column": "4",
+          "inferred_type": "mixed",
+          "missing": 38,
+          "missing_pct": 50.0,
+          "distinct": 38
+        },
+        {
+          "column": "5",
+          "inferred_type": "mixed",
+          "missing": 38,
+          "missing_pct": 50.0,
+          "distinct": 38
+        }
+      ],
+      "exact_duplicate_rows": 0
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "Study US 2025",
+      "header_row": null,
+      "rows": 929,
+      "columns": [
+        {
+          "column": "0",
+          "inferred_type": "string",
+          "missing": 2,
+          "missing_pct": 0.22,
+          "distinct": 111
+        },
+        {
+          "column": "1",
+          "inferred_type": "string",
+          "missing": 105,
+          "missing_pct": 11.3,
+          "distinct": 1
+        },
+        {
+          "column": "2",
+          "inferred_type": "mixed-integer",
+          "missing": 104,
+          "missing_pct": 11.19,
+          "distinct": 286
+        },
+        {
+          "column": "3",
+          "inferred_type": "mixed-integer",
+          "missing": 104,
+          "missing_pct": 11.19,
+          "distinct": 304
+        }
+      ],
+      "exact_duplicate_rows": 134
+    },
+    {
+      "file": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "sheet": "Evidence Link Template",
+      "header_row": 1,
+      "rows": 1,
+      "columns": [
+        {
+          "column": "Requirement ID",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Vehicle",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Market",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Customer need / VFC",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "BMW feedback IDs",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Public competitor source URLs",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Survey reference",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Existing feature reference",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Proposed requirement",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Assumptions",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        },
+        {
+          "column": "Human decision",
+          "inferred_type": "string",
+          "missing": 0,
+          "missing_pct": 0.0,
+          "distinct": 1
+        }
+      ],
+      "exact_duplicate_rows": 0
+    }
+  ],
+  "feedback_quality": [
+    {
+      "vehicle": "F70",
+      "classification_rows": 4076,
+      "feedback_ids": 2128,
+      "ids_with_multiple_classifications": 1009,
+      "feedback_type_missing": 1087,
+      "vfc_level2_missing": 0,
+      "vfc_no_class_found": 1087,
+      "vfc_level3_missing": 1087,
+      "vfc_classified": 2989,
+      "vfc_level2_3_separator_variants": 0,
+      "distinct_vfc_level2": 120
+    },
+    {
+      "vehicle": "G60",
+      "classification_rows": 5005,
+      "feedback_ids": 4000,
+      "ids_with_multiple_classifications": 365,
+      "feedback_type_missing": 731,
+      "vfc_level2_missing": 200,
+      "vfc_no_class_found": 525,
+      "vfc_level3_missing": 725,
+      "vfc_classified": 4280,
+      "vfc_level2_3_separator_variants": 2,
+      "distinct_vfc_level2": 221
+    },
+    {
+      "vehicle": "G70",
+      "classification_rows": 4690,
+      "feedback_ids": 4000,
+      "ids_with_multiple_classifications": 262,
+      "feedback_type_missing": 682,
+      "vfc_level2_missing": 200,
+      "vfc_no_class_found": 470,
+      "vfc_level3_missing": 670,
+      "vfc_classified": 4020,
+      "vfc_level2_3_separator_variants": 3,
+      "distinct_vfc_level2": 211
+    }
+  ],
+  "study_proportion_check": {
+    "blocks": 206,
+    "blocks_not_summing_to_1_within_0.02": {}
+  },
+  "overlaps": [
+    {
+      "consolidated_sheet": "START HERE",
+      "original": "- / -",
+      "rows_consolidated": 10,
+      "rows_original": null,
+      "result": "metadata",
+      "differing": null,
+      "decision": "Workbook description; stored in dataset_notes."
+    },
+    {
+      "consolidated_sheet": "G60 Feedback All",
+      "original": "G60_feedback_hackathon.xlsx / Feedback_Explorer",
+      "rows_consolidated": 5005,
+      "rows_original": 5005,
+      "result": "exact_copy",
+      "differing": 0,
+      "decision": "Exact copy of G60_feedback_hackathon.xlsx/Feedback_Explorer. Original is the source of truth; not re-imported."
+    },
+    {
+      "consolidated_sheet": "Feedback Theme Counts",
+      "original": "G60_feedback_hackathon.xlsx / Feedback_Explorer",
+      "rows_consolidated": 659,
+      "rows_original": 659,
+      "result": "derived_aggregate",
+      "differing": 0,
+      "decision": "Aggregate of G60 feedback rows by VFC level 2 x feedback type. Recomputed from original and matches exactly. Not imported; aggregates are recomputed from feedback_classifications."
+    },
+    {
+      "consolidated_sheet": "Public Competitors",
+      "original": "BMW_G60_Public_Competitor_Evidence.xlsx / Public Evidence",
+      "rows_consolidated": 18,
+      "rows_original": 18,
+      "result": "exact_copy",
+      "differing": 0,
+      "decision": "Exact copy of BMW_G60_Public_Competitor_Evidence.xlsx/Public Evidence. Original is the source of truth; not re-imported."
+    },
+    {
+      "consolidated_sheet": "Public Caveats",
+      "original": "BMW_G60_Public_Competitor_Evidence.xlsx / Method and caveats",
+      "rows_consolidated": 11,
+      "rows_original": 11,
+      "result": "exact_copy",
+      "differing": 0,
+      "decision": "Exact copy of BMW_G60_Public_Competitor_Evidence.xlsx/Method and caveats. Original is the source of truth; not re-imported."
+    },
+    {
+      "consolidated_sheet": "Sales G60 G68",
+      "original": "sales_volumes.xlsx / G60_G68",
+      "rows_consolidated": 4,
+      "rows_original": 4,
+      "result": "exact_copy",
+      "differing": 0,
+      "decision": "Exact copy of sales_volumes.xlsx/G60_G68. Original is the source of truth; not re-imported."
+    },
+    {
+      "consolidated_sheet": "Study CN EU 2025",
+      "original": "F70_G60_G68_G70_customer_studies.xlsx / CN_EU_2025",
+      "rows_consolidated": 76,
+      "rows_original": 76,
+      "result": "exact_copy",
+      "differing": 0,
+      "decision": "Exact copy of F70_G60_G68_G70_customer_studies.xlsx/CN_EU_2025. Original is the source of truth; not re-imported."
+    },
+    {
+      "consolidated_sheet": "Study US 2025",
+      "original": "F70_G60_G68_G70_customer_studies.xlsx / US_2025",
+      "rows_consolidated": 929,
+      "rows_original": 929,
+      "result": "exact_copy",
+      "differing": 0,
+      "decision": "Exact copy of F70_G60_G68_G70_customer_studies.xlsx/US_2025. Original is the source of truth; not re-imported."
+    },
+    {
+      "consolidated_sheet": "Evidence Link Template",
+      "original": "- / -",
+      "rows_consolidated": 1,
+      "rows_original": null,
+      "result": "template",
+      "differing": null,
+      "decision": "Template with an explicit example row ('Example only'). Not data; not imported."
+    }
+  ],
+  "possible_duplicates": [
+    {
+      "table": "competitor_evidence",
+      "rule": "same_source_url",
+      "groups": 2,
+      "records_involved": 5
+    },
+    {
+      "table": "competitor_evidence+public_feedback",
+      "rule": "same_source_url_across_public_datasets",
+      "groups": 1,
+      "records_involved": 7
+    },
+    {
+      "table": "feedback",
+      "rule": "identical_normalized_text_different_ids",
+      "groups": 7,
+      "records_involved": 15
+    },
+    {
+      "table": "public_feedback",
+      "rule": "same_source_url",
+      "groups": 3,
+      "records_involved": 10
+    }
+  ],
+  "sales_zero_volumes": [
+    "F70 CN 2024",
+    "F70 CN 2025",
+    "F70 CN 2030",
+    "F70 US 2024",
+    "F70 US 2025",
+    "F70 US 2030"
+  ],
+  "vehicle_coverage": {
+    "F70": {
+      "feedback": true,
+      "customer_studies": true,
+      "sales": true,
+      "equipment_option_list": true
+    },
+    "G60": {
+      "feedback": true,
+      "customer_studies": true,
+      "sales": true,
+      "equipment_option_list": true
+    },
+    "G68": {
+      "feedback": false,
+      "customer_studies": true,
+      "sales": true,
+      "equipment_option_list": false
+    },
+    "G70": {
+      "feedback": true,
+      "customer_studies": true,
+      "sales": true,
+      "equipment_option_list": true
+    }
+  },
+  "study_vehicle_markets": {
+    "CN_EU_2025 / China": [
+      "BMW 5 Series G68",
+      "BMW 7 Series G70"
+    ],
+    "CN_EU_2025 / EU": [
+      "BMW 1 Series F70",
+      "BMW 5 Series G60",
+      "BMW 7 Series G70"
+    ],
+    "US_2025 / US": [
+      "BMW 5 Series G60",
+      "BMW 7 Series G70 "
+    ]
+  },
+  "shared_vfc_level2": {
+    "per_vehicle": {
+      "F70": 119,
+      "G60": 220,
+      "G70": 210
+    },
+    "shared_by_all": 118,
+    "g60_only": 15
+  },
+  "feedback_country_distribution": {
+    "F70": {
+      "GB": 1293,
+      "JP": 672,
+      "SE": 71,
+      "FR": 53,
+      "AU": 16,
+      "DK": 8,
+      "FI": 8,
+      "KR": 4,
+      "ZA": 3
+    },
+    "G60": {
+      "US": 3610,
+      "KR": 205,
+      "JP": 53,
+      "GB": 36,
+      "SE": 28,
+      "DK": 20,
+      "CA": 18,
+      "FI": 9,
+      "FR": 8,
+      "NO": 8,
+      "AU": 3,
+      "ES": 1,
+      "LV": 1
+    },
+    "G70": {
+      "US": 3792,
+      "KR": 137,
+      "JP": 40,
+      "CA": 8,
+      "GB": 8,
+      "FR": 3,
+      "AU": 2,
+      "DK": 2,
+      "FI": 2,
+      "SE": 2,
+      "ZA": 2,
+      "ES": 1,
+      "NO": 1
+    }
+  },
+  "equipment": [
+    {
+      "vehicle": "F70",
+      "option_entries": 89,
+      "distinct_option_codes": 68,
+      "pages_with_codes": 10,
+      "availability_cells": 248,
+      "entries_without_name": 0,
+      "entries_with_parse_note": 14,
+      "variants": [
+        "116",
+        "118d",
+        "120",
+        "120d",
+        "123 xDrive",
+        "M135 xDrive"
+      ]
+    },
+    {
+      "vehicle": "G60",
+      "option_entries": 102,
+      "distinct_option_codes": 79,
+      "pages_with_codes": 10,
+      "availability_cells": 541,
+      "entries_without_name": 0,
+      "entries_with_parse_note": 14,
+      "variants": [
+        "520d",
+        "520d xDrive",
+        "520i",
+        "530e",
+        "530e xDrive",
+        "540d xDrive",
+        "550e xDrive",
+        "i5 M60 xDrive",
+        "i5 eDrive40",
+        "i5 xDrive40"
+      ]
+    },
+    {
+      "vehicle": "G70",
+      "option_entries": 110,
+      "distinct_option_codes": 92,
+      "pages_with_codes": 12,
+      "availability_cells": 306,
+      "entries_without_name": 2,
+      "entries_with_parse_note": 19,
+      "variants": [
+        "740 xDrive",
+        "i7 50xDrive",
+        "i7 60xDrive",
+        "i7 M70 xDrive"
+      ]
+    }
+  ],
+  "text_extraction": [
+    {
+      "file": "F70_OptionList.PDF",
+      "pages": 23,
+      "pages_without_text": [],
+      "pages_with_images": 6,
+      "total_chars": 31364
+    },
+    {
+      "file": "G60_OptionList.PDF",
+      "pages": 28,
+      "pages_without_text": [],
+      "pages_with_images": 6,
+      "total_chars": 43720
+    },
+    {
+      "file": "G70_OptionList.PDF",
+      "pages": 27,
+      "pages_without_text": [],
+      "pages_with_images": 6,
+      "total_chars": 38173
+    },
+    {
+      "file": "BMW_Hackathon_Briefing_Short.pdf",
+      "pages": 2,
+      "pages_without_text": [
+        1,
+        2
+      ],
+      "pages_with_images": 2,
+      "total_chars": 0
+    },
+    {
+      "file": "261010_BMW_Product_Management_Key_Note.pptx",
+      "pages": 4,
+      "pages_without_text": [],
+      "pages_with_images": 4,
+      "total_chars": 1914
+    }
+  ],
+  "ingestion": {
+    "imported_at": "2026-10-10T17:28:49.284622",
+    "files": {
+      "F70_feedback_hackathon.xlsx": {
+        "status": "imported",
+        "result": {
+          "source_rows": 4076,
+          "feedback": 2128,
+          "classifications": 4076,
+          "inconsistent_fields_within_id": []
+        }
+      },
+      "G60_feedback_hackathon.xlsx": {
+        "status": "imported",
+        "result": {
+          "source_rows": 5005,
+          "feedback": 4000,
+          "classifications": 5005,
+          "inconsistent_fields_within_id": []
+        }
+      },
+      "G70_feedback_hackathon.xlsx": {
+        "status": "imported",
+        "result": {
+          "source_rows": 4690,
+          "feedback": 4000,
+          "classifications": 4690,
+          "inconsistent_fields_within_id": []
+        }
+      },
+      "F70_G60_G68_G70_customer_studies.xlsx": {
+        "status": "imported",
+        "result": {
+          "CN_EU_2025": 185,
+          "US_2025": 1648
+        }
+      },
+      "sales_volumes.xlsx": {
+        "status": "imported",
+        "result": {
+          "F70": 12,
+          "G60_G68": 12,
+          "G70": 12
+        }
+      },
+      "F70_OptionList.PDF": {
+        "status": "imported",
+        "result": {
+          "pages": 23,
+          "pages_without_text": [],
+          "pages_with_equipment": 10,
+          "equipment": 89,
+          "equipment_availability": 248
+        }
+      },
+      "G60_OptionList.PDF": {
+        "status": "imported",
+        "result": {
+          "pages": 28,
+          "pages_without_text": [],
+          "pages_with_equipment": 10,
+          "equipment": 102,
+          "equipment_availability": 541
+        }
+      },
+      "G70_OptionList.PDF": {
+        "status": "imported",
+        "result": {
+          "pages": 27,
+          "pages_without_text": [],
+          "pages_with_equipment": 12,
+          "equipment": 110,
+          "equipment_availability": 306
+        }
+      },
+      "BMW_5_Series_Public_Owner_Feedback.xlsx": {
+        "status": "imported",
+        "result": {
+          "source_rows": 15,
+          "public_feedback": 15,
+          "notes": 7
+        }
+      },
+      "BMW_G60_Public_Competitor_Evidence.xlsx": {
+        "status": "imported",
+        "result": {
+          "source_rows": 18,
+          "competitor_evidence": 18,
+          "notes": 12
+        }
+      },
+      "BMW_Hackathon_Briefing_Short.pdf": {
+        "status": "no_text_layer",
+        "result": {
+          "pages": 2,
+          "pages_without_text": [
+            1,
+            2
+          ]
+        }
+      },
+      "261010_BMW_Product_Management_Key_Note.pptx": {
+        "status": "imported",
+        "result": {
+          "slides": 4
+        }
+      },
+      "BMW_G60_Complete_Prototype_Data.xlsx": {
+        "status": "registered_only",
+        "result": {
+          "START HERE": "metadata",
+          "G60 Feedback All": "exact_copy",
+          "Feedback Theme Counts": "derived_aggregate",
+          "Public Competitors": "exact_copy",
+          "Public Caveats": "exact_copy",
+          "Sales G60 G68": "exact_copy",
+          "Study CN EU 2025": "exact_copy",
+          "Study US 2025": "exact_copy",
+          "Evidence Link Template": "template"
+        }
+      }
+    },
+    "public_shared_source_groups": 6,
+    "unregistered_files": []
+  }
+}
