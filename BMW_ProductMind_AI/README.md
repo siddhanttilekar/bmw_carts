@@ -2,7 +2,7 @@
 
 AI-powered product decision support for the BMW 5 Series (G60). Hackathon prototype.
 
-**Status: Part 4, evidence-backed vehicle requirement generation, is built on top of the Parts 1–3 data, intelligence and dashboard layers.** There is no prioritisation and no export yet. No real LLM extraction has been run, and external LLM use is disabled by default.
+**Status: Parts 1–6 are complete. Part 6 adds the Decision Intelligence layer: assistant, agent chat, debate, what-if simulation, scenarios, challenges and management reports.** Everything works offline. No real LLM extraction has been run, and external LLM use is disabled by default.
 
 ## Quick start
 
@@ -15,7 +15,7 @@ python -m scripts.status                # prints table counts and document statu
 streamlit run app.py                    # dashboard (reads SQLite; makes no LLM calls)
 python -m scripts.customer_intelligence setup         # taxonomy, mappings, clusters, insights (no LLM)
 python -m scripts.customer_intelligence demo --category CONTROLS
-pytest                                  # 122 tests against the real datasets (LLM mocked)
+pytest                                  # 188 tests against the real datasets (LLM mocked)
 ```
 
 `sync_source_data` identifies each file by its content (worksheets, header columns, PDF metadata), not only by name. Copies with identical SHA-256 collapse to one canonical file, and names such as `x(1).xlsx` are normalised. Originals are never moved or deleted, and a destination whose content differs is never overwritten. The original names and paths are recorded in `data/source_manifest.json` and stored in `source_documents.original_file_names` / `original_source_paths`.
@@ -81,6 +81,67 @@ All functions are deterministic SQL over the stored data and return Pydantic mod
 - **Feedback Type is not sentiment.** It labels each classification row, not each comment. 119 G60 comments carry both a `Likes` row and a `Defect` or `Difficult to Use` row. Source D never sets it, Source C never uses `Likes`/`Wants`, and 731 G60 rows have no value. The values are reported as supplied, and no sentiment is derived.
 - **Sales for G60 exist only combined with G68.** `sales_context("G60")` returns those rows with `scope_label = "G60 + G68 combined (not G60-only)"` plus a warning, and it never splits volumes.
 - **Public evidence is returned as its own record types** with `data_origin = public_external`. Sentiment there is the curator's label from the source file.
+
+## Decision Intelligence (Part 6)
+
+The Decision Intelligence page has its own navigation section and five screens: A Overview, B Ask the assistant, C Agent debate, D What-if and scenarios, E Management reports. Every answer is bound to one saved prioritisation run. Nothing on the page changes official scores, agents, requirements or review decisions.
+
+| Module | Purpose |
+|---|---|
+| `services/decision_assistant.py` | Controller. Routes 8 intents (explain priority, explain agent, evidence, compare, missing, scenario, challenge, reliability) to deterministic handlers. Unclear free text gets suggestions instead of a guessed answer. Every question and structured answer is persisted (evidence IDs only, no verbatim feedback). |
+| `services/decision_grounding.py` | Typed statements (FACT, ASSESSMENT, ASSUMPTION, LIMITATION, SIMULATION), run binding, evidence-reference validation, and historical-context notices when a newer run, a newer agent version or an edited requirement exists. |
+| `services/agent_chat.py` | Discuss one agent, using its configuration as stored in the run (method, version, resources). Covers custom agents too, shows the human rationale exactly as recorded, and explains what is missing when an agent is UNSCORED. |
+| `services/agent_debate.py` | Four rounds: positions from stored scores (agents may abstain with "Unable to conclude"), disagreements, drivers of the difference, and synthesis. The synthesis includes exact sensitivity: the weight shift to one agent that would tie the two requirements. No winner is declared when either requirement is incomplete. |
+| `services/what_if_simulator.py` | Re-ranks the whole population of a run under alternative weights, dropped agents, added agents or another profile. It reuses the Part 5 scoring and ranking code. Results are SIMULATION only; "Save as Scenario" never touches profiles, runs or assessments. |
+| `services/scenario_comparison.py` | Compares any two of run, scenario and simulation. It discloses input differences (scores and assessments, agent set and versions, requirement version, review status) and attributes changes to weights only when those inputs are held constant. |
+| `services/priority_challenges.py` | Challenge workflow (OPEN, UNDER_REVIEW, RESOLVED or DISMISSED, reopen) with an evidence snapshot, a list of what needs review and an audit trail. Challenges never change scores; a reassessment goes through Part 5 and can be linked to the challenge. |
+| `services/management_reports.py` | Excel (organised sheets, filters, frozen headers), CSV (long format with source references) and PDF (ReportLab). Reports include run and configuration versions, the prototype disclaimer, incomplete requirements listed unranked, flags, assessments, assumptions, history, and optional scenarios, challenges and debates. Verbatim feedback is excluded by default; secrets are never included; each export is logged. |
+| `services/decision_llm.py` | Optional rephrasing only. It is disabled unless `PRODUCTMIND_ALLOW_EXTERNAL_LLM=true`, credentials are present, a cost estimate has been shown and the user confirms. There is no fallback model. Text containing new numbers or IDs is rejected. `register_local_model()` is the hook for a future on-premise model. |
+
+**Tables** (additive): `decision_conversations`, `decision_messages`, `agent_debate_sessions`, `priority_challenges`, `priority_challenge_events`, `prioritization_scenarios`, `scenario_comparisons`, `management_report_exports`. `requirement_priority_scores` also gains a nullable `requirement_version` column, set for runs made from Part 6 onwards.
+
+**Security note:** the prototype has **no authentication**. The user and reviewer IDs you type are labels, not identities. Run the dashboard on localhost (`streamlit run app.py --server.address localhost`).
+
+## Agent-based prioritisation (Part 5)
+
+> Agents are configurable evaluation components. They are not necessarily autonomous LLM agents.
+
+**Flow:** Streamlit → agent configuration → resource registry → execution engine → deterministic scoring → weighted prioritisation → SQLite → explainable results. There is no LangChain, CrewAI or AutoGen, no microservice and no user-supplied SQL or Python.
+
+| Module | Purpose |
+|---|---|
+| `services/agent_configuration.py` | Create, edit, duplicate, deactivate and remove agents. Each change writes a new configuration version, and removal is a soft delete. An agent's behaviour comes only from its scoring method and resources, never from its name. `seed_starter_agents` loads an optional illustrative starter set. |
+| `services/agent_resources.py` | Registry of 8 approved resources over existing tables, with live record counts, fields, limitations and supported methods. |
+| `services/agent_scoring.py` | Scoring methods and compatibility checks. Every result has a score from 0–100 or is UNSCORED, and records its inputs, source references, rationale, limitations and method version. |
+| `services/agent_weights.py` | Integer basis points (10000 = 100%), Decimal parsing, validation, remaining weight, and a "distribute remaining" proposal that is never applied automatically. |
+| `services/prioritization_profiles.py` | Create, edit (as new versions), duplicate, activate (only when weights total 100%) and archive profiles. Each profile version pins every agent's configuration version. |
+| `services/dynamic_prioritization.py` | Human assessments and runs. Final score = Σ score × weight / 100. A requirement is COMPLETE only if every agent is SCORED and has provenance; otherwise it is INCOMPLETE with a NULL score and no weight redistribution. Ranking uses competition order (1, 2, 2, 4). |
+| `services/agent_explanations.py` | Structured explanations with FACT, ASSESSMENT, ASSUMPTION and LIMITATION items, stored for Part 6. |
+| `services/critical_issues.py` | Safety, regulatory and severe-reliability flags, raised and decided only by people. They are never inferred from VFC labels and never change a score. |
+| `services/decision_context.py` | Read-only Part 6 interface: `get_decision_context`, `what_if_weights` (recomputes from stored scores and saves nothing) and `compare_requirements`. |
+
+**Execution methods:**
+- `DATA_ANALYSIS`: deterministic.
+- `HUMAN_ASSESSMENT`: a score from 0–100 with rationale, assessor and timestamp. It is never auto-filled.
+- `AI_ANALYSIS`: disabled. It always returns UNSCORED with "AI analysis unavailable. Use Data Analysis or Human Assessment."
+
+**Scoring methods (v1.0):**
+- `LOG_NORMALIZED_FEEDBACK_COUNT`: 100 × ln(1+n) / ln(1+N). Here n is the number of distinct G60 feedback IDs linked as direct evidence and N is all distinct G60 feedback IDs (4,000). Unknown, F70 or G70 IDs make the result UNSCORED.
+- `HUMAN_SCORE`: the latest assessment for the requirement and agent.
+- `EVIDENCE_COVERAGE`: 100 × covered evidence types / assigned evidence types. It is labelled as coverage, not impact.
+- `VALIDATED_MARKET_RELEVANCE`: UNSCORED until market mappings are validated. G60 and G68 sales are combined, and country-to-region mappings are unvalidated.
+
+**Reproducibility.** Every run stores the profile version, agent configuration versions, weights, method versions, each agent result (score, weighted contribution, inputs, references, explanation), the final scores, ranks, missing agents and the critical flags at run time. Editing or removing agents later does not change past runs.
+
+**Page.** "Agent Prioritization" has six sections: A Agent Builder, B Weights, C Execution with human assessment forms, D Ranking (incomplete requirements are listed separately), E Profiles and F Explain my score (Plotly charts for contributions, scores and ranking). You can reach it from Vehicle Requirements, Customer Insights and the Evidence Explorer, and the requirement ID is preserved. A priority score never changes approval status.
+
+**Limitations.**
+- The log normalisation, equal-weight coverage and starter weights are prototype methodology.
+- Demand reflects frequency in the supplied export (about 90% US), not severity or prevalence.
+- Supporting evidence is linked per need category.
+- Market relevance is always UNSCORED for now.
+- The starter profile is illustrative, not an official BMW profile.
+- Reviewer, assessor and user IDs are typed in by hand; there is no authentication.
 
 ## Vehicle requirements (Part 4)
 

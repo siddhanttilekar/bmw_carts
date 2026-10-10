@@ -20,6 +20,7 @@ cards = data.insight_cards(key)
 need_names = {n["code"]: n["name"] for n in data.filter_options(key)["needs"]}
 
 counts = {s: sum(c.status == s for c in cards) for s in STATUSES}
+req_by_cluster = data.requirements_by_cluster(key)
 c1, c2, c3, c4 = st.columns(4)
 kpi(c1, len(cards), "Insights stored")
 kpi(c2, counts[STATUS_TEMPLATE], "TEMPLATE", "from VFC classifications - not AI-generated")
@@ -95,10 +96,14 @@ for card in shown[(page - 1) * PAGE_SIZE: page * PAGE_SIZE]:
         with e2.expander(f"Evidence limitations ({len(card.limitations)})"):
             for lim in card.limitations:
                 st.markdown(f"- {esc(lim)}")
-        v1, v2, _ = st.columns([1, 1, 2])
+        v1, v2, v3 = st.columns([1, 1, 2])
         if v1.button("View Supporting Evidence", key=f"view_{card.insight_id}"):
             st.session_state["explorer_target_cluster"] = card.cluster_id
             st.switch_page("ui/pages/evidence_explorer.py")
         if v2.button("Draft Requirement", key=f"req_{card.insight_id}"):
             st.session_state["req_target"] = {"insight_id": card.insight_id}
             st.switch_page("ui/pages/vehicle_requirements.py")
+        saved_reqs = req_by_cluster.get(card.cluster_id, [])
+        if saved_reqs and v3.button(f"Prioritize saved requirement ({len(saved_reqs)})", key=f"prio_{card.insight_id}"):
+            st.session_state["prio_requirement"] = saved_reqs[0]
+            st.switch_page("ui/pages/agent_prioritization.py")

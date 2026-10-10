@@ -56,9 +56,14 @@ f.need_codes = [need_code]
 if cluster and cluster.cluster_level == "vfc_category":
     f.vfc_names = [cluster.vfc_level2_name]
 
-if need_code != "OTHER" and st.button("Draft requirement from this selection", key="ex_to_req"):
+nav1, nav2 = st.columns([1, 1])
+if need_code != "OTHER" and nav1.button("Draft requirement from this selection", key="ex_to_req"):
     st.session_state["req_target"] = {"cluster_id": cluster_id if cluster else f"NEED-{need_code}"}
     st.switch_page("ui/pages/vehicle_requirements.py")
+_saved = data.requirements_by_cluster(key).get(cluster_id if cluster else f"NEED-{need_code}", [])
+if _saved and nav2.button(f"Prioritize saved requirement ({len(_saved)})", key="ex_to_prio"):
+    st.session_state["prio_requirement"] = _saved[0]
+    st.switch_page("ui/pages/agent_prioritization.py")
 
 mapping = data.mapping_status(key)
 if cluster and cluster.requires_review:

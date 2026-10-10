@@ -159,3 +159,15 @@ def insight_options(key: str) -> list[dict]:
 def write_session():
     """Uncached session for requirement reads/writes (workflow state must be fresh)."""
     return _session(db_key())
+
+
+@st.cache_data(ttl=TTL_SECONDS, show_spinner=False)
+def requirements_by_cluster(key: str) -> dict[str, list[str]]:
+    """Saved requirement IDs per source cluster (for cross-page navigation)."""
+    from services.requirement_review import list_requirements
+
+    with _session(key) as s:
+        out: dict[str, list[str]] = {}
+        for r in list_requirements(s):
+            out.setdefault(r["cluster"], []).append(r["requirement_id"])
+        return out

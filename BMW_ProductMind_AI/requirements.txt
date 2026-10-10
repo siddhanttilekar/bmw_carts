@@ -10,3 +10,4 @@ pytest>=8.0
 anthropic>=1.13
 streamlit>=1.40
 plotly>=5.24
+reportlab>=4.0

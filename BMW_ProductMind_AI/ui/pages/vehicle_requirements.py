@@ -299,5 +299,9 @@ else:
             st.markdown(f"**v{v['version']}** · {v['change_type']} · {v['generation_method']} · by {esc(v['changed_by'])} "
                         f"· {v['created_at']:%Y-%m-%d %H:%M} · changed: {', '.join(v['changed_fields']) or '-'}")
             st.caption(v["snapshot"]["proposed_requirement"])
+    if st.button("Open in Agent Prioritization"):
+        st.session_state["prio_requirement"] = saved["requirement_id"]
+        st.switch_page("ui/pages/agent_prioritization.py")
+    st.caption("Prioritization scores are separate from review: a priority score never approves a requirement.")
     with st.expander("Evidence attached to this requirement"):
         st.json(saved["supporting_evidence_ids"], expanded=False)
