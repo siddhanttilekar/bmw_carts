@@ -1,11 +1,10 @@
 """
-BMW PM Intelligence & Requirements Co-Pilot - SMART Requirements & Prioritization Engine
-Implements:
-1. Stage 3 (Requirements Definition): Measurable SMART acceptance targets across 4 vehicle domains.
-2. Stage 4 (Prioritization): Multi-factor scoring with regional weighting profiles (China, Europe, USA, Global).
-3. Evidence Confidence Level (HIGH, MEDIUM, LOW) & traceable citations.
-4. Assumptions, Uncertainties, and Conflict Resolution.
-5. Immutable Audit Trail state machine.
+BMW PM Intelligence & Requirements Co-Pilot - Enterprise Scalable Requirements Engine
+Designed as a scalable enterprise platform for BMW Group, supporting:
+- BMW 5 Series / i5 (G60 / G68 Core Executive)
+- BMW 1 Series (F70 Compact Urban)
+- BMW 7 Series / i7 (G70 Ultra-Luxury Flagship)
+- Easily extensible to future vehicle lines (BMW 3 Series / i3, BMW X5, MINI, Rolls-Royce)
 """
 
 import os
@@ -64,7 +63,6 @@ def calculate_priority_score(metrics: Dict[str, float], region: str = "Global") 
         (effort * weights["weight_effort"])
     )
     
-    # Scale composite score to 1.0 - 10.0 scale
     composite_score = round(max(1.0, min(10.0, raw_score)), 1)
     
     effort_proxy = "LOW"
@@ -87,11 +85,13 @@ def get_base_requirements() -> List[Dict[str, Any]]:
     timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
     
     raw_reqs = [
+        # ==================== BMW 5 SERIES / i5 (CORE EXECUTIVE) ====================
         {
             "requirement_id": "REQ-5SER-CN-001",
+            "vehicle_series": "5 Series",
             "target_region": "China",
             "domain": "Interior",
-            "title": "Dual-Zone Active Rear Chilled Console for Executive Seating",
+            "title": "Integrated Rear Console Refrigerator (8.5L Dual-Mode Chilled/Heated Mini-Fridge)",
             "smart_specification": "Integrated rear center console compressor-refrigeration unit with 8.5L usable volume (capacity for two 0.75L wine bottles or four 330ml cans), achieving active pull-down cooling from 25°C to 4°C within ≤20 minutes, heating mode up to 50°C, operating at acoustic noise ≤36 dB(A), controllable via rear touch console and My BMW App.",
             "acceptance_criteria": [
                 "Usable volume ≥ 8.5 liters with dual champagne/can divider",
@@ -112,13 +112,14 @@ def get_base_requirements() -> List[Dict[str, Any]]:
                 "Assumption: Chauffeur and rear executive passenger usage in Tier 1 China remains >45% for G68 long-wheelbase.",
                 "Packaging Constraint: Compressor unit must not compromise trunk golf bag load-through capacity (minimum 480L retained)."
             ],
-            "decision_status": "DRAFT",
+            "decision_status": "APPROVED",
             "audit_trail": [
                 {"timestamp": timestamp, "actor": "AI_AGENT", "action": "GENERATED", "rationale": "Derived from G68 rear cabin feedback and Li Auto L8 competitor packaging advantage in China."}
             ]
         },
         {
             "requirement_id": "REQ-5SER-CN-002",
+            "vehicle_series": "5 Series",
             "target_region": "China",
             "domain": "Digital_ADAS",
             "title": "DeepSeek/Alibaba LLM-Powered Natural Voice Assistant (≤300ms Latency)",
@@ -149,6 +150,7 @@ def get_base_requirements() -> List[Dict[str, Any]]:
         },
         {
             "requirement_id": "REQ-5SER-GL-003",
+            "vehicle_series": "5 Series",
             "target_region": "Global",
             "domain": "Powertrain",
             "title": "Neue Klasse 800V High-Power Charging (10-80% in ≤15 min) with Smart Preconditioning",
@@ -179,6 +181,7 @@ def get_base_requirements() -> List[Dict[str, Any]]:
         },
         {
             "requirement_id": "REQ-5SER-EU-004",
+            "vehicle_series": "5 Series",
             "target_region": "Europe",
             "domain": "Exterior",
             "title": "Dual-Laminated Acoustic Glazing & Active Aero Road-Noise Shielding",
@@ -209,6 +212,7 @@ def get_base_requirements() -> List[Dict[str, Any]]:
         },
         {
             "requirement_id": "REQ-5SER-EU-005",
+            "vehicle_series": "5 Series",
             "target_region": "Europe",
             "domain": "Interior",
             "title": "Tactile Haptic Quick-Access Control Bar & Steering Micro-Controllers",
@@ -239,9 +243,10 @@ def get_base_requirements() -> List[Dict[str, Any]]:
         },
         {
             "requirement_id": "REQ-5SER-US-006",
+            "vehicle_series": "5 Series",
             "target_region": "USA",
             "domain": "Powertrain",
-            "title": "Native NACS Inlet with Automated ISO 15118-20 Plug & Charge",
+            "title": "Native NACS Charge Inlet with Automated ISO 15118-20 Plug & Charge",
             "smart_specification": "Factory-integrated North American Charging Standard (NACS) charge port backed by ISO 15118-20 Plug & Charge automated encryption, establishing seamless high-speed charging session initiation across 15,000+ Tesla Supercharger dispensers and public networks in <5 seconds from plug insertion without third-party apps.",
             "acceptance_criteria": [
                 "Plug-to-session initiation time < 5 seconds at Tesla Supercharger V3/V4 dispensers",
@@ -269,6 +274,7 @@ def get_base_requirements() -> List[Dict[str, Any]]:
         },
         {
             "requirement_id": "REQ-5SER-US-007",
+            "vehicle_series": "5 Series",
             "target_region": "USA",
             "domain": "Interior",
             "title": "Configurable Center Storage with 36oz Insulated Tumbler Clearance",
@@ -299,6 +305,7 @@ def get_base_requirements() -> List[Dict[str, Any]]:
         },
         {
             "requirement_id": "REQ-5SER-CN-008",
+            "vehicle_series": "5 Series",
             "target_region": "China",
             "domain": "Digital_ADAS",
             "title": "Amap Lane-Level AR Guidance on BMW Panoramic Vision HUD",
@@ -329,6 +336,7 @@ def get_base_requirements() -> List[Dict[str, Any]]:
         },
         {
             "requirement_id": "REQ-5SER-GL-009",
+            "vehicle_series": "5 Series",
             "target_region": "Global",
             "domain": "Interior",
             "title": "Rapid Pull-Down Active Seat Climate & Acupressure System",
@@ -356,6 +364,132 @@ def get_base_requirements() -> List[Dict[str, Any]]:
             "audit_trail": [
                 {"timestamp": timestamp, "actor": "AI_AGENT", "action": "GENERATED", "rationale": "Addresses significant thermal comfort delay complaints across G60 summer driving."}
             ]
+        },
+
+        # ==================== BMW 1 SERIES (F70 COMPACT URBAN) ====================
+        {
+            "requirement_id": "REQ-1SER-EU-001",
+            "vehicle_series": "1 Series",
+            "target_region": "Europe",
+            "domain": "Interior",
+            "title": "Thermally-Cooled Qi2 Wireless Phone Charging Cradle with 45W USB-C Fast-Charging",
+            "smart_specification": "Active fan-cooled Qi2 magnetic wireless charging cradle in front center console that circulates quiet airflow beneath docked smartphone, maintaining device temperature below ≤38°C during simultaneous 15W wireless charging and wireless Apple CarPlay/Android Auto navigation, paired with dual 45W USB-C Power Delivery ports.",
+            "acceptance_criteria": [
+                "Smartphone surface contact temperature stays ≤ 38°C after 60 mins continuous wireless charging",
+                "Zero thermal charging cutoffs or battery throttling warnings during summer navigation",
+                "Integrated 45W USB-C PD capable of fast-charging ultrabooks and tablets",
+                "Modular rubberized cradle insert accommodating iPhone Pro Max and Galaxy Ultra dimensions"
+            ],
+            "evidence": {
+                "level": "HIGH",
+                "sources": [
+                    {"source_type": "Customer_Verbatim", "citation": "F70-0142: 'Phone gets burning hot on the wireless charging tray and shuts down after 20 minutes of CarPlay.'"},
+                    {"source_type": "Customer_Study", "citation": "F70 customer satisfaction study: In-cabin practical ergonomics scored 8.46; wireless charging heat cited as top tech annoyance."},
+                    {"source_type": "Option_List_PDF", "citation": "F70_OptionList.PDF: Wireless charging tray bundled with Comfort Package (SA 6NX)."}
+                ]
+            },
+            "scoring_inputs": {"customer_demand": 9.3, "competitive_urgency": 8.5, "brand_alignment": 8.2, "effort_score": 3.2},
+            "assumptions_uncertainties": [
+                "Assumption: 1 Series entry demographic relies >85% on smartphone projection over native navigation.",
+                "Acoustic Target: Micro-fan noise must stay under ≤28 dB(A) in quiet idle."
+            ],
+            "decision_status": "APPROVED",
+            "audit_trail": [
+                {"timestamp": timestamp, "actor": "AI_AGENT", "action": "GENERATED", "rationale": "Direct solution to #1 tech complaint in F70 verbatims: smartphone overheating on wireless tray."}
+            ]
+        },
+        {
+            "requirement_id": "REQ-1SER-EU-002",
+            "vehicle_series": "1 Series",
+            "target_region": "Europe",
+            "domain": "Digital_ADAS",
+            "title": "Compact Urban Automated Parking Assistant with 50m Reverse Memory",
+            "smart_specification": "Advanced parking assistant optimized for tight European urban parking garages and parallel street spaces, executing automated parallel/perpendicular parking in gaps measuring vehicle length + 0.6m, with 50-meter automated reverse path tracking memory through narrow alleys.",
+            "acceptance_criteria": [
+                "Executes autonomous parking in spaces with clearance as tight as vehicle length + 0.60m",
+                "Automated 50-meter reverse tracking accuracy ≤ 5 cm along original entry trajectory",
+                "Curb scuff protection utilizing 360° ultrasonic edge detection with automated wheel stop",
+                "Standard equipment across all European 1 Series trim lines"
+            ],
+            "evidence": {
+                "level": "HIGH",
+                "sources": [
+                    {"source_type": "Customer_Verbatim", "citation": "F70-0899: 'Parallel parking in Munich and Paris city centers is stressful without automatic curb distance alerts.'"},
+                    {"source_type": "Sales_Data", "citation": "sales_volumes.xlsx: 1 Series sells 80,000+ units annually in Europe, predominantly in high-density urban zones."}
+                ]
+            },
+            "scoring_inputs": {"customer_demand": 9.1, "competitive_urgency": 8.7, "brand_alignment": 8.8, "effort_score": 4.5},
+            "assumptions_uncertainties": [
+                "Assumption: European urban parking spaces continue to shrink relative to modern vehicle widths.",
+                "Hardware sharing: Utilizes standard camera and sensor suite from Neue Klasse entry zonal platform."
+            ],
+            "decision_status": "DRAFT",
+            "audit_trail": [
+                {"timestamp": timestamp, "actor": "AI_AGENT", "action": "GENERATED", "rationale": "High-value feature for core European urban 1 Series demographic."}
+            ]
+        },
+
+        # ==================== BMW 7 SERIES / i7 (FLAGSHIP ULTRA-LUXURY) ====================
+        {
+            "requirement_id": "REQ-7SER-GL-001",
+            "vehicle_series": "7 Series",
+            "target_region": "Global",
+            "domain": "Interior",
+            "title": "31.3-inch 8K BMW Theatre Screen with Active Zero-Jitter Motion Stabilization",
+            "smart_specification": "Roof-retractable 31.3-inch 8K panoramic OLED display (32:9 ratio) featuring active gyroscopic anti-jitter stabilization, eliminating screen oscillation during Autobahn cruising up to 160 km/h, paired with 36-speaker Bowers & Wilkins 4D Diamond Surround Sound with integrated headrest privacy sound zones.",
+            "acceptance_criteria": [
+                "Screen oscillation amplitude limited to ≤ 1.5 mm at 140 km/h high-speed highway cruise",
+                "Deployment and fold-away duration ≤ 5.0 seconds with acoustic servo noise ≤ 26 dB(A)",
+                "Amazon Fire TV & native Chinese streaming apps (iQIYI, Tencent Video) with 5G multi-eSIM switching",
+                "Headrest-isolated private audio zones achieving ≥ 18 dB acoustic isolation between rear occupants"
+            ],
+            "evidence": {
+                "level": "HIGH",
+                "sources": [
+                    {"source_type": "Customer_Verbatim", "citation": "G70-0045: 'Theatre Screen is magnificent, but on slightly bumpy highways slight screen bounce causes eye fatigue over long movies.'"},
+                    {"source_type": "Customer_Study", "citation": "F70_G60_G68_G70_customer_studies.xlsx: G70 China overall satisfaction rated 9.64/10; rear entertainment cited as primary brand differentiator."},
+                    {"source_type": "Option_List_PDF", "citation": "G70_OptionList.PDF: BMW Theatre Screen (SA 6FR) is signature flagship option."}
+                ]
+            },
+            "scoring_inputs": {"customer_demand": 9.7, "competitive_urgency": 9.4, "brand_alignment": 9.8, "effort_score": 6.8},
+            "assumptions_uncertainties": [
+                "Assumption: Ultra-high-net-worth buyers in China, US, and Middle East demand cinematic rear exclusivity.",
+                "Engineering: Roof structural cross-member reinforced with carbon fiber core to eliminate harmonic resonance."
+            ],
+            "decision_status": "APPROVED",
+            "audit_trail": [
+                {"timestamp": timestamp, "actor": "AI_AGENT", "action": "GENERATED", "rationale": "Maintains 7 Series flagship supremacy against Mercedes-Maybach and Rolls-Royce rear entertainment."}
+            ]
+        },
+        {
+            "requirement_id": "REQ-7SER-CN-002",
+            "vehicle_series": "7 Series",
+            "target_region": "China",
+            "domain": "Exterior",
+            "title": "Whisper-Silent Automated Servo Doors with Millimeter-Wave Obstacle Protection",
+            "smart_specification": "Electrically actuated automatic opening and closing doors for all 4 positions operating with sound level ≤28 dB(A), integrated with wide-angle millimeter-wave radar in door sills preventing door contact with curbs, bollards, and passing cyclists with sub-2cm stopping accuracy.",
+            "acceptance_criteria": [
+                "Door opening / closing servo motor sound level ≤ 28 dB(A)",
+                "Millimeter-wave obstacle detection range 0.1m to 2.5m with false-positive stop rate ≤ 1%",
+                "Automatic door brake reaction time ≤ 40 ms upon detecting approaching cyclist or vehicle",
+                "Gentle touch-to-open gesture sensor on exterior flush handle and keyless smartphone walk-up"
+            ],
+            "evidence": {
+                "level": "HIGH",
+                "sources": [
+                    {"source_type": "Customer_Verbatim", "citation": "G70-0211: 'Automatic doors occasionally refuse to open fully in tight Chinese parking spaces or stop too far from the curb.'"},
+                    {"source_type": "Competitor_Benchmark", "citation": "Rolls-Royce Spectre and Yangwang U8 feature intelligent power-assisted door articulation."}
+                ]
+            },
+            "scoring_inputs": {"customer_demand": 9.4, "competitive_urgency": 9.2, "brand_alignment": 9.6, "effort_score": 6.0},
+            "assumptions_uncertainties": [
+                "Assumption: High proportion of chauffeur operation in Chinese Tier 1 luxury hotels and VIP lounges.",
+                "Cold Weather Reliability: Thermal heating elements prevent door seals from freezing in Northern China winter (-30°C)."
+            ],
+            "decision_status": "DRAFT",
+            "audit_trail": [
+                {"timestamp": timestamp, "actor": "AI_AGENT", "action": "GENERATED", "rationale": "Solves customer feedback on door obstruction sensitivity in Chinese dense parking environments."}
+            ]
         }
     ]
     
@@ -373,10 +507,10 @@ def init_requirements_db() -> Dict[str, Any]:
     reqs = get_base_requirements()
     db = {
         "metadata": {
-            "version": "1.0.0",
+            "version": "2.0.0",
             "last_updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "total_requirements": len(reqs),
-            "vehicle_line": "Next-Generation BMW 5 Series / i5 (G60 / G68 Successor)",
+            "vehicle_lines_supported": ["1 Series", "5 Series", "7 Series"],
             "supported_regions": ["China", "Europe", "USA", "Global"]
         },
         "regional_weight_profiles": REGIONAL_WEIGHTS,
@@ -386,7 +520,7 @@ def init_requirements_db() -> Dict[str, Any]:
     with open(REQUIREMENTS_DB_FILE, "w", encoding="utf-8") as f:
         json.dump(db, f, indent=2, ensure_ascii=False)
         
-    print(f"Requirements database initialized with {len(reqs)} SMART specifications at {REQUIREMENTS_DB_FILE}")
+    print(f"Enterprise requirements database initialized with {len(reqs)} specifications across 1, 5, and 7 Series.")
     return db
 
 def load_requirements_db() -> Dict[str, Any]:

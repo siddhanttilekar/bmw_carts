@@ -4035,120 +4035,281 @@
     ]
   },
   "competitor_benchmarks": {
-    "China": [
-      {
-        "competitor": "Li Auto L8 / L9",
-        "segment": "Executive Premium E-Segment",
-        "powertrain": "EREV / Dual Motor AWD",
-        "key_features": [
-          "Dual-compressor 8.8L refrigerator (cooling to 0°C, heating to 50°C)",
-          "15.7-inch 3K OLED rear roof-mounted entertainment screen",
-          "Dual zero-gravity executive captain chairs with 10-point massage & 16-way adjustment",
-          "Standard dual-chamber air suspension with continuous damping control"
-        ],
-        "price_bracket": "RMB 339,800 - 399,800",
-        "threat_level": "VERY HIGH (Dominates executive family & chauffeur segment in Tier 1/2 cities)"
-      },
-      {
-        "competitor": "NIO ET7",
-        "segment": "Executive Premium Sedan",
-        "powertrain": "BEV (150 kWh semi-solid option, 1,000+ km CLTC)",
-        "key_features": [
-          "23-speaker 7.1.4 Dolby Atmos 1000W audio as standard equipment",
-          "NOMI AI voice companion with AMOLED articulation & multi-zone spatial audio",
-          "Rear smart touch console embedded into executive armrest",
-          "PanoCinema AR/VR cockpit integration & 3-minute battery swap"
-        ],
-        "price_bracket": "RMB 428,000 - 506,000",
-        "threat_level": "HIGH (Direct 5 Series / i5 sedan rival targeting C-suite buyers)"
-      },
-      {
-        "competitor": "XPENG G9 / P7+",
-        "segment": "Executive Sedan / SUV",
-        "powertrain": "800V SiC Architecture (10-80% in 15 mins)",
-        "key_features": [
-          "XNGP end-to-end AI smart driving (full urban autonomous navigation without HD maps)",
-          "Zero-pressure ergonomic seating with fast ventilation pull-down (30s)",
-          "Ultra-low latency AI voice assistant (<300ms multi-intent response)"
-        ],
-        "price_bracket": "RMB 263,900 - 359,900",
-        "threat_level": "HIGH (Drives EV tech expectations in 800V charging & urban ADAS)"
-      },
-      {
-        "competitor": "Xiaomi SU7 Max",
-        "segment": "Performance Executive Sedan",
-        "powertrain": "800V HyperEngine BEV (800 km CLTC)",
-        "key_features": [
-          "HyperOS seamless ecosystem docking for smartphones & home devices",
-          "Magnetic physical expansion ports on dashboard and center console",
-          "Standard smart active rear wing and track thermal preconditioning"
-        ],
-        "price_bracket": "RMB 215,900 - 299,900",
-        "threat_level": "VERY HIGH (Unmatched brand buzz & smartphone ecosystem synergy)"
-      }
-    ],
-    "Europe": [
-      {
-        "competitor": "Mercedes-Benz EQE Sedan",
-        "segment": "Executive Sedan",
-        "powertrain": "BEV (90.6 kWh usable)",
-        "key_features": [
-          "MBUX Hyperscreen with zero-layer UI",
-          "10° Rear-axle steering for tight European city maneuvering",
-          "Energizing Air Control Plus with HEPA fine dust filtration",
-          "Acoustic comfort package with infrared-reflective laminated glass"
-        ],
-        "threat_level": "VERY HIGH (Core traditional German competitor in fleet & corporate leasing)"
-      },
-      {
-        "competitor": "Porsche Taycan",
-        "segment": "Performance Executive",
-        "powertrain": "800V Architecture (320 kW peak DC charge)",
-        "key_features": [
-          "10-80% charge in 18 minutes with benchmark high-voltage repeatability",
-          "Active Ride suspension balancing high-speed Autobahn composure with comfort",
-          "High build quality and driver-centric cockpit ergonomics"
-        ],
-        "threat_level": "HIGH (Sets the benchmark for driving dynamics and thermal endurance)"
-      },
-      {
-        "competitor": "Audi A6 e-tron",
-        "segment": "Executive Sportback / Avant",
-        "powertrain": "PPE 800V Architecture (100 kWh battery, 750 km WLTP)",
-        "key_features": [
-          "Virtual exterior mirrors and second-generation digital OLED taillights",
-          "Panoramic glass roof with switchable liquid crystal transparency",
-          "Bang & Olufsen 3D sound with headrest speakers"
-        ],
-        "threat_level": "HIGH (Direct German rival launching in 2024/2025)"
-      }
-    ],
-    "USA": [
-      {
-        "competitor": "Tesla Model S Plaid / Long Range",
-        "segment": "Premium Executive Sedan",
-        "powertrain": "Tri-Motor / Dual-Motor BEV (402 miles EPA)",
-        "key_features": [
-          "Full Supercharger network integration with native NACS port",
-          "17-inch cinematic display with 10 teraflops gaming computer",
-          "Yoke/round wheel with pure steer-by-wire and minimalist cabin storage",
-          "Full Self-Driving (Supervised) city streets navigation"
-        ],
-        "threat_level": "VERY HIGH (Sets the EV usability and charging benchmark for US consumers)"
-      },
-      {
-        "competitor": "Lucid Air Grand Touring",
-        "segment": "Full-Size Executive EV",
-        "powertrain": "900V+ Architecture (516 miles EPA range)",
-        "key_features": [
-          "300 kW peak fast-charging (adds 200 miles in 12 minutes)",
-          "Cavernous spatial packaging (280L frunk + bi-level trunk)",
-          "34-inch curved Glass Cockpit 5K display",
-          "Executive 20-way massaging seats with heating and ventilation"
-        ],
-        "threat_level": "HIGH (Benchmark for ultra-luxury range and volumetric efficiency)"
-      }
-    ]
+    "5 Series": {
+      "China": [
+        {
+          "competitor": "Li Auto L8 / L9",
+          "segment": "Executive Premium E-Segment",
+          "powertrain": "EREV / Dual Motor AWD",
+          "key_features": [
+            "Dual-compressor 8.8L refrigerator (cooling to 0°C, heating to 50°C)",
+            "15.7-inch 3K OLED rear roof-mounted entertainment screen",
+            "Dual zero-gravity executive captain chairs with 10-point massage & 16-way adjustment",
+            "Standard dual-chamber air suspension with continuous damping control"
+          ],
+          "price_bracket": "RMB 339,800 - 399,800",
+          "threat_level": "VERY HIGH (Dominates executive family & chauffeur segment in Tier 1/2 cities)"
+        },
+        {
+          "competitor": "NIO ET7",
+          "segment": "Executive Premium Sedan",
+          "powertrain": "BEV (150 kWh semi-solid option, 1,000+ km CLTC)",
+          "key_features": [
+            "23-speaker 7.1.4 Dolby Atmos 1000W audio as standard equipment",
+            "NOMI AI voice companion with AMOLED articulation & multi-zone spatial audio",
+            "Rear smart touch console embedded into executive armrest",
+            "PanoCinema AR/VR cockpit integration & 3-minute battery swap"
+          ],
+          "price_bracket": "RMB 428,000 - 506,000",
+          "threat_level": "HIGH (Direct 5 Series / i5 sedan rival targeting C-suite buyers)"
+        },
+        {
+          "competitor": "XPENG G9 / P7+",
+          "segment": "Executive Sedan / SUV",
+          "powertrain": "800V SiC Architecture (10-80% in 15 mins)",
+          "key_features": [
+            "XNGP end-to-end AI smart driving (full urban autonomous navigation without HD maps)",
+            "Zero-pressure ergonomic seating with fast ventilation pull-down (30s)",
+            "Ultra-low latency AI voice assistant (<300ms multi-intent response)"
+          ],
+          "price_bracket": "RMB 263,900 - 359,900",
+          "threat_level": "HIGH (Drives EV tech expectations in 800V charging & urban ADAS)"
+        },
+        {
+          "competitor": "Xiaomi SU7 Max",
+          "segment": "Performance Executive Sedan",
+          "powertrain": "800V HyperEngine BEV (800 km CLTC)",
+          "key_features": [
+            "HyperOS seamless ecosystem docking for smartphones & home devices",
+            "Magnetic physical expansion ports on dashboard and center console",
+            "Standard smart active rear wing and track thermal preconditioning"
+          ],
+          "price_bracket": "RMB 215,900 - 299,900",
+          "threat_level": "VERY HIGH (Unmatched brand buzz & smartphone ecosystem synergy)"
+        }
+      ],
+      "Europe": [
+        {
+          "competitor": "Mercedes-Benz EQE Sedan",
+          "segment": "Executive Sedan",
+          "powertrain": "BEV (90.6 kWh usable)",
+          "key_features": [
+            "MBUX Hyperscreen with zero-layer UI",
+            "10° Rear-axle steering for tight European city maneuvering",
+            "Energizing Air Control Plus with HEPA fine dust filtration",
+            "Acoustic comfort package with infrared-reflective laminated glass"
+          ],
+          "threat_level": "VERY HIGH (Core traditional German competitor in fleet & corporate leasing)"
+        },
+        {
+          "competitor": "Porsche Taycan",
+          "segment": "Performance Executive",
+          "powertrain": "800V Architecture (320 kW peak DC charge)",
+          "key_features": [
+            "10-80% charge in 18 minutes with benchmark high-voltage repeatability",
+            "Active Ride suspension balancing high-speed Autobahn composure with comfort",
+            "High build quality and driver-centric cockpit ergonomics"
+          ],
+          "threat_level": "HIGH (Sets the benchmark for driving dynamics and thermal endurance)"
+        },
+        {
+          "competitor": "Audi A6 e-tron",
+          "segment": "Executive Sportback / Avant",
+          "powertrain": "PPE 800V Architecture (100 kWh battery, 750 km WLTP)",
+          "key_features": [
+            "Virtual exterior mirrors and second-generation digital OLED taillights",
+            "Panoramic glass roof with switchable liquid crystal transparency",
+            "Bang & Olufsen 3D sound with headrest speakers"
+          ],
+          "threat_level": "HIGH (Direct German rival launching in 2024/2025)"
+        }
+      ],
+      "USA": [
+        {
+          "competitor": "Tesla Model S Plaid / Long Range",
+          "segment": "Premium Executive Sedan",
+          "powertrain": "Tri-Motor / Dual-Motor BEV (402 miles EPA)",
+          "key_features": [
+            "Full Supercharger network integration with native NACS port",
+            "17-inch cinematic display with 10 teraflops gaming computer",
+            "Yoke/round wheel with pure steer-by-wire and minimalist cabin storage",
+            "Full Self-Driving (Supervised) city streets navigation"
+          ],
+          "threat_level": "VERY HIGH (Sets the EV usability and charging benchmark for US consumers)"
+        },
+        {
+          "competitor": "Lucid Air Grand Touring",
+          "segment": "Full-Size Executive EV",
+          "powertrain": "900V+ Architecture (516 miles EPA range)",
+          "key_features": [
+            "300 kW peak fast-charging (adds 200 miles in 12 minutes)",
+            "Cavernous spatial packaging (280L frunk + bi-level trunk)",
+            "34-inch curved Glass Cockpit 5K display",
+            "Executive 20-way massaging seats with heating and ventilation"
+          ],
+          "threat_level": "HIGH (Benchmark for ultra-luxury range and volumetric efficiency)"
+        }
+      ]
+    },
+    "1 Series": {
+      "Europe": [
+        {
+          "competitor": "Volkswagen Golf Mk8.5 (eTSI / GTE)",
+          "segment": "Compact C-Segment Benchmark",
+          "powertrain": "Mild-Hybrid / PHEV (100 km EV range)",
+          "key_features": [
+            "Updated 12.9-inch MIB4 infotainment with illuminated physical sliders",
+            "IDA natural voice assistant with ChatGPT AI integration",
+            "Park Assist Plus with 50m reverse trajectory memory function"
+          ],
+          "threat_level": "VERY HIGH (Europe's volume benchmark in corporate and compact fleets)"
+        },
+        {
+          "competitor": "Mercedes-Benz A-Class (W177)",
+          "segment": "Premium Compact",
+          "powertrain": "ICE / 48V Mild-Hybrid",
+          "key_features": [
+            "MBUX dual 10.25-inch panoramic screens with augmented reality navigation",
+            "64-color ambient lighting with illuminated air vents",
+            "Active lane keeping and urban blind spot exit warning"
+          ],
+          "threat_level": "HIGH (Direct German entry rival for young European professionals)"
+        },
+        {
+          "competitor": "Audi A3 Sportback",
+          "segment": "Premium Compact",
+          "powertrain": "TFSI / e-hybrid",
+          "key_features": [
+            "Audi Virtual Cockpit Plus with intuitive physical multifunction wheel",
+            "Bang & Olufsen 3D Premium Sound system with front headrest audio",
+            "Matrix LED headlights with customizable daytime running signatures"
+          ],
+          "threat_level": "HIGH (Strong competitor in corporate leasing and private purchases)"
+        }
+      ],
+      "China": [
+        {
+          "competitor": "Audi A3L Limousine (China LWB)",
+          "segment": "Compact Executive Sedan",
+          "powertrain": "1.4 TFSI / 1.5 TFSI EVO",
+          "key_features": [
+            "Extended rear legroom engineered specifically for Chinese market demands",
+            "Localized MMI with Asterix app store and Baidu CarLife integration",
+            "Aggressive localized dealership pricing (RMB 150k - 200k)"
+          ],
+          "threat_level": "HIGH (Dominates entry-level German luxury sedan sales in China)"
+        },
+        {
+          "competitor": "Smart #1 / BYD Seal",
+          "segment": "Urban Compact EV",
+          "powertrain": "66 kWh BEV (535 km CLTC)",
+          "key_features": [
+            "Qualcomm Snapdragon 8155 digital cockpit with 3D avatar assistant",
+            "Fast DC charging 10-80% in 30 minutes with smartphone digital key",
+            "Frameless doors and panoramic glass roof tailored for young tech buyers"
+          ],
+          "threat_level": "VERY HIGH (Rapidly displacing European ICE entry models among Gen-Z Chinese)"
+        }
+      ],
+      "USA": [
+        {
+          "competitor": "Market Note: 1 Series Not Marketed in USA",
+          "segment": "North American Market Segmentation",
+          "powertrain": "N/A",
+          "key_features": [
+            "BMW 1 Series hatchback (F70) is not sold in the USA (BMW US lineup begins at 2 Series Gran Coupe / 3 Series)",
+            "sales_volumes.xlsx verifies 0 registration volume in North America",
+            "US compact luxury buyers migrate upward to BMW 3 Series / X1 / X3"
+          ],
+          "threat_level": "LOW (Zero direct sales cannibalization in US)"
+        }
+      ]
+    },
+    "7 Series": {
+      "China": [
+        {
+          "competitor": "Mercedes-Maybach S-Class",
+          "segment": "Ultra-Luxury Flagship Limousine",
+          "powertrain": "V8 / V12 Biturbo / PHEV",
+          "key_features": [
+            "First-class executive rear lounge with continuous center console and calf massage",
+            "Active in-cabin road noise compensation via Burmester 4D high-end sound",
+            "Electric comfort rear doors with gesture control"
+          ],
+          "threat_level": "VERY HIGH (The undisputed prestige benchmark for Chinese VIPs and dignitaries)"
+        },
+        {
+          "competitor": "Yangwang U7 / U9 (BYD)",
+          "segment": "Ultra-Luxury High-Tech Flagship",
+          "powertrain": "Quad-Motor e4 Platform (1,287 hp, 800V)",
+          "key_features": [
+            "DiSus-Z electromagnetic active suspension with zero body roll during high-speed lane changes",
+            "135.5 kWh Blade battery with 720 km CLTC range and dual satellite communication",
+            "50-inch AR-HUD and 23-speaker Dynaudio Evidence Platinum audio"
+          ],
+          "threat_level": "HIGH (Capturing patriotic tech billionaires and Chinese entrepreneurs)"
+        },
+        {
+          "competitor": "NIO ET9",
+          "segment": "Executive Flagship EV",
+          "powertrain": "900V Architecture (3-minute battery swap)",
+          "key_features": [
+            "SkyRide fully active hydraulic chassis capable of shaking heavy snow off body",
+            "Executive bridge center table with 360° motorized rotation",
+            "Dual Shenji 5nm autonomous driving super-computing chips"
+          ],
+          "threat_level": "HIGH (Direct challenge to German flagship sedans in Shanghai/Beijing)"
+        }
+      ],
+      "Europe": [
+        {
+          "competitor": "Mercedes-Benz S-Class / EQS 580",
+          "segment": "Flagship Luxury Sedan",
+          "powertrain": "PHEV / Dual-Motor BEV (108 kWh)",
+          "key_features": [
+            "Drive Pilot UNECE-approved Level 3 conditionally automated driving up to 95 km/h on Autobahn",
+            "Digital Light projection headlamps with 1.3 million micro-mirrors per lamp",
+            "E-Active Body Control scanning road bumps with stereo camera"
+          ],
+          "threat_level": "VERY HIGH (Dominant European corporate board and diplomatic transport)"
+        },
+        {
+          "competitor": "Porsche Panamera Executive",
+          "segment": "High-Performance Luxury Flagship",
+          "powertrain": "Turbo E-Hybrid (729 hp)",
+          "key_features": [
+            "Porsche Active Ride suspension actively counteracts pitch and roll",
+            "Driver-centric cockpit with separate passenger streaming touchscreen",
+            "Unrivaled high-speed Autobahn composure and sports car dynamics"
+          ],
+          "threat_level": "HIGH (Benchmark for owner-driven luxury sedans)"
+        }
+      ],
+      "USA": [
+        {
+          "competitor": "Mercedes-Benz S-Class / EQS",
+          "segment": "Full-Size Luxury Sedan",
+          "powertrain": "Twin-Turbo V8 / Dual-Motor Electric",
+          "key_features": [
+            "56-inch curved MBUX Hyperscreen with zero-layer UI",
+            "Rear-seat executive comfort package with heated neck cushions",
+            "Burmester 4D High-End 31-speaker 1,750W surround sound"
+          ],
+          "threat_level": "VERY HIGH (Core luxury benchmark across coastal metropolitan centers)"
+        },
+        {
+          "competitor": "Lucid Air Sapphire",
+          "segment": "Ultra-Luxury Electric Flagship",
+          "powertrain": "Tri-Motor BEV (1,234 hp, 1.89s 0-60 mph)",
+          "key_features": [
+            "Carbon-ceramic brakes and track-tuned adaptive dampers standard",
+            "Sub-2 second 0-60 mph with full 5-passenger luxury cabin",
+            "Cavernous bi-level storage with 280L front trunk"
+          ],
+          "threat_level": "HIGH (Direct EV prestige threat in Silicon Valley and Southern California)"
+        }
+      ]
+    }
   },
   "regional_signals": {
     "China": {
