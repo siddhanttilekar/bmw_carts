@@ -1,0 +1,9 @@
+# BMW PM Co-Pilot Requirements
+fastapi>=0.110.0
+uvicorn>=0.28.0
+pydantic>=2.6.0
+openpyxl>=3.1.2
+pandas>=2.2.0
+pypdf>=4.0.0
+requests>=2.31.0
+python-multipart>=0.0.9
