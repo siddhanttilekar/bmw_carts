@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMW PM Intelligence Co-Pilot | Next-Gen 5 Series / i5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #080c14;
+      --bg-secondary: #0f172a;
+      --bg-card: rgba(17, 24, 39, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(0, 163, 224, 0.35);
+      --bmw-blue: #0066b1;
+      --bmw-cyan: #00a3e0;
+      --bmw-cyan-glow: rgba(0, 163, 224, 0.25);
+      --accent-m-red: #e7222e;
+      --accent-m-violet: #6b21a8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #132238 0%, var(--bg-primary) 70%);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Glow Behind Header */
+    .ambient-glow {
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 350px;
+      background: radial-gradient(ellipse at center, rgba(0, 163, 224, 0.18), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 24px 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header Bar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .bmw-roundel {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: conic-gradient(#fff 0deg 90deg, #0066b1 90deg 180deg, #fff 180deg 270deg, #0066b1 270deg 360deg);
+      border: 3px solid #fff;
+      box-shadow: 0 0 20px rgba(0, 163, 224, 0.4);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .bmw-roundel::after {
+      content: '';
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid #000;
+    }
+
+    .brand-text h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-pilot {
+      background: linear-gradient(135deg, rgba(0, 163, 224, 0.2), rgba(0, 102, 177, 0.4));
+      border: 1px solid var(--bmw-cyan);
+      color: var(--bmw-cyan);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .brand-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Regional Strategy Switcher */
+    .region-control {
+      display: flex;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-subtle);
+      padding: 5px;
+      border-radius: 30px;
+      gap: 4px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .region-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      padding: 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .region-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .region-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .region-btn.active {
+      background: linear-gradient(135deg, #0066b1, #00a3e0);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(0, 163, 224, 0.35);
+    }
+
+    /* Key Metrics Header Bar */
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-tile {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .metric-tile:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-highlight);
+    }
+
+    .metric-tile span {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .metric-tile strong {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .metric-tile small {
+      display: block;
+      font-size: 12px;
+      color: var(--bmw-cyan);
+      margin-top: 2px;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 28px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 22px;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tab-btn.active {
+      color: var(--bmw-cyan);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--bmw-cyan);
+      border-radius: 3px 3px 0 0;
+      box-shadow: 0 0 10px var(--bmw-cyan);
+    }
+
+    /* Main Tab Content View */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tab 1: Situation Analysis Layout */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .grid-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+    }
+
+    .card-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-header .badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-blue { background: rgba(0, 163, 224, 0.15); color: var(--bmw-cyan); border: 1px solid rgba(0, 163, 224, 0.3); }
+    .badge-red { background: rgba(231, 34, 46, 0.15); color: #ff6b75; border: 1px solid rgba(231, 34, 46, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    /* Competitor Cards */
+    .comp-item {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .comp-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .comp-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .comp-threat {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-rose);
+      background: rgba(244, 63, 94, 0.1);
+      padding: 2px 8px;
+      border-radius: 8px;
+    }
+
+    .comp-features {
+      list-style: none;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .comp-features li {
+      position: relative;
+      padding-left: 16px;
+      margin-bottom: 4px;
+    }
+
+    .comp-features li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--bmw-cyan);
+    }
+
+    /* Honest AI Radar Cards */
+    .conflict-card {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(15, 23, 42, 0.8));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .conflict-title {
+      font-weight: 700;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .conflict-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .conflict-reso {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      border-left: 3px solid var(--accent-emerald);
+      color: #e2e8f0;
+    }
+
+    /* Filter Strip for Requirements Tab */
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      margin-bottom: 24px;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-chip:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-chip.active {
+      background: var(--bmw-cyan);
+      color: #000;
+      border-color: var(--bmw-cyan);
+    }
+
+    .search-input {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: var(--font-main);
+      width: 260px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--bmw-cyan);
+    }
+
+    /* Requirements Grid & Cards */
+    .req-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .req-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .req-card:hover {
+      border-color: var(--border-highlight);
+      box-shadow: 0 12px 35px -8px rgba(0, 163, 224, 0.15);
+    }
+
+    .req-card.status-APPROVED {
+      border-left: 4px solid var(--accent-emerald);
+    }
+    .req-card.status-DRAFT {
+      border-left: 4px solid var(--accent-amber);
+    }
+    .req-card.status-CHALLENGED {
+      border-left: 4px solid #a855f7;
+    }
+    .req-card.status-REJECTED {
+      border-left: 4px solid var(--accent-rose);
+      opacity: 0.65;
+    }
+
+    .req-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .req-id-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--bmw-cyan);
+      background: rgba(0, 163, 224, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .req-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .req-badges {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .score-badge {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      background: linear-gradient(135deg, rgba(0, 102, 177, 0.3), rgba(0, 163, 224, 0.3));
+      border: 1px solid var(--bmw-cyan);
+      padding: 6px 14px;
+      border-radius: 12px;
+    }
+
+    .score-badge .score-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--bmw-cyan);
+    }
+
+    .score-badge .score-max {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .req-spec {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    .req-spec strong {
+      color: var(--bmw-cyan);
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .criteria-box {
+      margin-bottom: 16px;
+    }
+
+    .criteria-box h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+
+    .criteria-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 8px;
+    }
+
+    .criteria-list li {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .criteria-list li::before {
+      content: '✓';
+      color: var(--accent-emerald);
+      font-weight: bold;
+    }
+
+    /* Evidence Drawer */
+    .evidence-summary {
+      font-size: 13px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 14px;
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .evidence-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ev-tag {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+
+    .action-btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-approve {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+    .btn-approve:hover {
+      background: var(--accent-emerald);
+      color: #000;
+    }
+
+    .btn-challenge {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border-color: rgba(168, 85, 247, 0.4);
+    }
+    .btn-challenge:hover {
+      background: #a855f7;
+      color: #fff;
+    }
+
+    .btn-reject {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+    .btn-reject:hover {
+      background: var(--accent-rose);
+      color: #fff;
+    }
+
+    .btn-export {
+      background: linear-gradient(135deg, var(--bmw-blue), var(--bmw-cyan));
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 163, 224, 0.35);
+      transition: all 0.2s;
+    }
+    .btn-export:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 163, 224, 0.5);
+    }
+
+    /* Sandbox Sliders */
+    .slider-box {
+      margin-bottom: 20px;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .slider-input {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #1e293b;
+      outline: none;
+      accent-color: var(--bmw-cyan);
+      cursor: pointer;
+    }
+
+    /* Audit Trail Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border-subtle);
+    }
+
+    .timeline-node {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .timeline-node::before {
+      content: '';
+      position: absolute;
+      left: -22px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--bmw-cyan);
+      box-shadow: 0 0 10px var(--bmw-cyan);
+    }
+
+    .timeline-node.action-APPROVED::before { background: var(--accent-emerald); box-shadow: 0 0 10px var(--accent-emerald); }
+    .timeline-node.action-REJECTED::before { background: var(--accent-rose); box-shadow: 0 0 10px var(--accent-rose); }
+    .timeline-node.action-CHALLENGED::before { background: #a855f7; box-shadow: 0 0 10px #a855f7; }
+
+    .tl-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .tl-actor {
+      font-weight: 700;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .tl-time {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+    }
+
+    .tl-content {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-subtle);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+
+    .tl-rationale {
+      color: #cbd5e1;
+      margin-top: 4px;
+    }
+
+    /* Modal dialog */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      place-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: grid;
+    }
+
+    .modal-card {
+      background: #0f172a;
+      border: 1px solid var(--border-highlight);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 650px;
+      padding: 28px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+
+    .modal-card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: #080c14;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-family: var(--font-main);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--bmw-cyan);
+    }
+
+    textarea.form-control {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand-section">
+        <div class="bmw-roundel"></div>
+        <div class="brand-text">
+          <h1>BMW PM Intelligence Co-Pilot <span class="badge-pilot">Neue Klasse G0/G1</span></h1>
+          <p>Product Planning Cockpit &bull; Next-Gen BMW 5 Series / i5 (G60 / G68 Successor) &bull; 800V Architecture</p>
+        </div>
+      </div>
+
+      <!-- Regional Strategy Switcher -->
+      <div class="region-control">
+        <span class="region-label">Market:</span>
+        <button class="region-btn active" data-region="China" onclick="setRegion('China')">🇨🇳 China</button>
+        <button class="region-btn" data-region="Europe" onclick="setRegion('Europe')">🇪🇺 Europe</button>
+        <button class="region-btn" data-region="USA" onclick="setRegion('USA')">🇺🇸 USA</button>
+        <button class="region-btn" data-region="Global" onclick="setRegion('Global')">🌐 Global</button>
+      </div>
+    </header>
+
+    <!-- Key Metrics Strip -->
+    <div class="metric-strip">
+      <div class="metric-tile">
+        <span>Active Market Focus</span>
+        <strong id="metric-market">China (CN)</strong>
+        <small id="metric-market-sub">Tier 1/2 Executive Luxury</small>
+      </div>
+      <div class="metric-tile">
+        <span>Customer Verbatims Parsed</span>
+        <strong>12,000+ entries</strong>
+        <small>G60 (5k) &bull; G70 (4k) &bull; F70 (3k)</small>
+      </div>
+      <div class="metric-tile">
+        <span>BMW 5-Series Deliveries</span>
+        <strong>299,582 units</strong>
+        <small>+19.5% YoY (13.8% of BMW Group)</small>
+      </div>
+      <div class="metric-tile">
+        <span>R&D Capital Allocation</span>
+        <strong>€8,319 Million</strong>
+        <small>Neue Klasse & In-Market Software</small>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs (Aligned with "THE PROCESS" Slide) -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('analysis')">📊 1. Situation Analysis & Baseline</button>
+      <button class="tab-btn" onclick="switchTab('context')">🔀 2. Structure & Honest AI Radar</button>
+      <button class="tab-btn" onclick="switchTab('requirements')">📋 3. SMART Requirements Matrix</button>
+      <button class="tab-btn" onclick="switchTab('prioritize')">⚖️ 4. Prioritization Sandbox</button>
+      <button class="tab-btn" onclick="switchTab('audit')">📜 5. PM Audit Trail & Gate G0 Export</button>
+    </div>
+
+    <!-- TAB 1: Situation Analysis -->
+    <div id="tab-analysis" class="tab-pane active">
+      <div class="grid-2col">
+        <!-- Market Context Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📈 Regional Market & Delivery Context</h3>
+            <span class="badge badge-blue" id="analysis-region-badge">China Focus</span>
+          </div>
+          <div id="market-context-content">
+            <p style="color: var(--text-muted); margin-bottom: 14px;" id="analysis-summary-text">
+              Loading market context...
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.7); padding: 14px; border-radius: var(--radius-sm); font-size: 13px;">
+              <strong style="color: var(--bmw-cyan); display: block; margin-bottom: 4px;">BMW 2025 Annual Report Anchor:</strong>
+              <p id="analysis-annual-report-anchor" style="color: #cbd5e1;">Loading citation...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Competitor Benchmarks Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3>⚔️ Direct Competitor Spec Deltas</h3>
+            <span class="badge badge-red">Market Threat</span>
+          </div>
+          <div id="competitor-list">
+            Loading competitors...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Structure & Honest AI Radar -->
+    <div id="tab-context" class="tab-pane">
+      <div class="grid-2col">
+        <!-- Honest AI Radar: Conflicts -->
+        <div class="card">
+          <div class="card-header">
+            <h3>⚠️ "Honest AI" Conflict & Uncertainty Radar</h3>
+            <span class="badge badge-amber">Reward Honesty</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+            In alignment with the challenge evaluation criteria, the AI explicitly surfaces regional contradictions, sample size limitations, and engineering trade-offs rather than presenting false certainty.
+          </p>
+          <div id="conflicts-container">
+            Loading conflicts & trade-offs...
+          </div>
+        </div>
+
+        <!-- Candidate Feature List (0/1) -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🧩 Candidate Feature Pipeline (0 / 1)</h3>
+            <span class="badge badge-blue">Stage 2 Clusters</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+            AI standardized 12,000+ verbatims and filtered deduplicated candidate features before SMART specification:
+          </p>
+          <div id="candidate-features-list">
+            <div class="comp-item">
+              <div class="comp-head"><span class="comp-name">Rear Center Console Active Cooler</span><span class="badge badge-green">Candidate: 1</span></div>
+              <p style="font-size: 13px; color: var(--text-muted);">Cluster: 382 customer complaints on warm beverages during executive trips in G68.</p>
+            </div>
+            <div class="comp-item">
+              <div class="comp-head"><span class="comp-name">DeepSeek/Alibaba Local LLM Voice Engine</span><span class="badge badge-green">Candidate: 1</span></div>
+              <p style="font-size: 13px; color: var(--text-muted);">Cluster: 514 complaints regarding 2-3s Mandarin voice latency in BMW OS 8.5/9.</p>
+            </div>
+            <div class="comp-item">
+              <div class="comp-head"><span class="comp-name">Neue Klasse 800V SiC Battery Pack</span><span class="badge badge-green">Candidate: 1</span></div>
+              <p style="font-size: 13px; color: var(--text-muted);">Cluster: 215 winter charging speed throttle verbatims on public 400V chargers.</p>
+            </div>
+            <div class="comp-item">
+              <div class="comp-head"><span class="comp-name">Acoustic Laminated Double Glazing</span><span class="badge badge-green">Candidate: 1</span></div>
+              <p style="font-size: 13px; color: var(--text-muted);">Cluster: 340 high-speed Autobahn wind flutter complaints above 130 km/h.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: SMART Requirements Matrix -->
+    <div id="tab-requirements" class="tab-pane">
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span style="font-size: 12px; font-weight: 600; color: var(--text-dim); text-transform: uppercase;">Domain:</span>
+          <button class="filter-chip active" onclick="filterDomain('')">All</button>
+          <button class="filter-chip" onclick="filterDomain('Interior')">Interior</button>
+          <button class="filter-chip" onclick="filterDomain('Digital_ADAS')">Digital & ADAS</button>
+          <button class="filter-chip" onclick="filterDomain('Powertrain')">Powertrain</button>
+          <button class="filter-chip" onclick="filterDomain('Exterior')">Exterior</button>
+        </div>
+
+        <div class="filter-group">
+          <span style="font-size: 12px; font-weight: 600; color: var(--text-dim); text-transform: uppercase;">Status:</span>
+          <button class="filter-chip active" onclick="filterStatus('')">All</button>
+          <button class="filter-chip" onclick="filterStatus('APPROVED')">Approved</button>
+          <button class="filter-chip" onclick="filterStatus('DRAFT')">Draft</button>
+          <button class="filter-chip" onclick="filterStatus('CHALLENGED')">Challenged</button>
+        </div>
+
+        <input type="text" id="req-search" class="search-input" placeholder="🔍 Search requirements..." oninput="handleSearch()">
+      </div>
+
+      <!-- Requirements Card List -->
+      <div id="requirements-container" class="req-list">
+        Loading SMART requirements...
+      </div>
+    </div>
+
+    <!-- TAB 4: Prioritization Sandbox -->
+    <div id="tab-prioritize" class="tab-pane">
+      <div class="grid-2col">
+        <!-- Sliders Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🎛️ Sensitivity Weights Sandbox</h3>
+            <span class="badge badge-blue">Live Model</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+            Adjust prioritization factors in real time to simulate different strategic postures (e.g., Aggressive China Defense vs. European Driving Dynamics):
+          </p>
+
+          <div class="slider-box">
+            <div class="slider-header">
+              <span>Customer Value Weight (W1)</span>
+              <span id="val-demand" style="color: var(--bmw-cyan);">35%</span>
+            </div>
+            <input type="range" id="slider-demand" class="slider-input" min="0" max="100" value="35" oninput="updateSliders()">
+          </div>
+
+          <div class="slider-box">
+            <div class="slider-header">
+              <span>Competitive Urgency Weight (W2)</span>
+              <span id="val-urgency" style="color: var(--accent-rose);">35%</span>
+            </div>
+            <input type="range" id="slider-urgency" class="slider-input" min="0" max="100" value="35" oninput="updateSliders()">
+          </div>
+
+          <div class="slider-box">
+            <div class="slider-header">
+              <span>BMW Brand DNA Alignment (W3)</span>
+              <span id="val-brand" style="color: #a855f7;">20%</span>
+            </div>
+            <input type="range" id="slider-brand" class="slider-input" min="0" max="100" value="20" oninput="updateSliders()">
+          </div>
+
+          <div class="slider-box">
+            <div class="slider-header">
+              <span>Technical Complexity Penalty (W4)</span>
+              <span id="val-effort" style="color: var(--accent-amber);">10%</span>
+            </div>
+            <input type="range" id="slider-effort" class="slider-input" min="0" max="50" value="10" oninput="updateSliders()">
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 24px;">
+            <button class="btn btn-approve" style="flex: 1;" onclick="applyCustomWeights()">⚡ Recalculate Scores</button>
+            <button class="btn btn-challenge" onclick="resetDefaultWeights()">🔄 Reset Regional Defaults</button>
+          </div>
+        </div>
+
+        <!-- Prioritized Ranks Preview -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🏆 Live Prioritization Ranking</h3>
+            <span class="badge badge-green" id="rank-count">Ranked Output</span>
+          </div>
+          <div id="ranked-preview-list">
+            Loading rankings...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: PM Audit Trail & Export -->
+    <div id="tab-audit" class="tab-pane">
+      <div class="grid-2col">
+        <!-- Audit Timeline Card -->
+        <div class="card" style="grid-column: 1 / -1;">
+          <div class="card-header">
+            <h3>📜 Immutable PM Audit Trail & Traceability</h3>
+            <button class="btn-export" onclick="exportConceptBrief()">📥 Export Gate G0 Concept Brief</button>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+            Complete chronological record of all AI generations, PM reviews, challenged assumptions, and specification modifications with documented rationales:
+          </p>
+
+          <div id="timeline-container" class="timeline">
+            Loading audit trail...
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Interactive PM Decision Modal -->
+  <div id="decision-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3 id="modal-req-title">Review Requirement</h3>
+      <p id="modal-req-id" style="font-family: var(--font-mono); font-size: 13px; color: var(--bmw-cyan); margin-bottom: 16px;"></p>
+
+      <div class="form-group">
+        <label>Decision Action</label>
+        <select id="modal-action-select" class="form-control">
+          <option value="APPROVED">APPROVE — Accept for Concept Freeze (Gate G1)</option>
+          <option value="CHALLENGED">CHALLENGE — Request Further Evidence / Clinic Study</option>
+          <option value="MODIFIED">MODIFY — Adjust Acceptance Metrics</option>
+          <option value="REJECTED">REJECT — Out of Scope or High Cost Penalty</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Reviewer / Actor</label>
+        <input type="text" id="modal-actor-input" class="form-control" value="Product_Manager_Munich">
+      </div>
+
+      <div class="form-group">
+        <label>Documented Business Rationale (Mandatory for Audit Trail)</label>
+        <textarea id="modal-rationale-input" class="form-control" placeholder="Provide clear business justification for this decision..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-challenge" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-approve" onclick="submitDecision()">Confirm Decision</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side Logic & API Bridge -->
+  <script>
+    const API_BASE = "http://127.0.0.1:8000/api";
+    let currentRegion = "China";
+    let activeDomain = "";
+    let activeStatus = "";
+    let allRequirements = [];
+    let currentModalReqId = "";
+
+    async function initApp() {
+      await loadSignals();
+      await loadRequirements();
+      await loadAuditTrail();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    async function setRegion(region) {
+      currentRegion = region;
+      document.querySelectorAll('.region-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.region === region);
+      });
+      document.getElementById('metric-market').innerText = `${region} (${region === 'China' ? 'CN' : region === 'Europe' ? 'EU' : region === 'USA' ? 'US' : 'GL'})`;
+      document.getElementById('metric-market-sub').innerText = region === 'China' ? 'Tier 1/2 Executive Luxury' : region === 'Europe' ? 'Autobahn Dynamics & Fleet' : region === 'USA' ? 'Highway Range & NACS' : 'Global Harmonization';
+      
+      await loadSignals();
+      await loadRequirements();
+    }
+
+    async function loadSignals() {
+      try {
+        const res = await fetch(`${API_BASE}/signals?region=${currentRegion}`);
+        const data = await res.json();
+        
+        const cluster = data.signal_cluster || {};
+        const competitors = data.competitors || [];
+        const annualReport = data.annual_report || {};
+
+        document.getElementById('analysis-region-badge').innerText = `${currentRegion} Context`;
+        document.getElementById('analysis-summary-text').innerText = cluster.annual_report_context || "Global market overview balancing European driving dynamics and Chinese digital expectations.";
+        
+        // Annual report anchor
+        const arText = currentRegion === 'China' 
+          ? annualReport.china_specific_strategy ? `${annualReport.china_specific_strategy.philosophy}: ${annualReport.china_specific_strategy.lwb_model}. Local software: ${annualReport.china_specific_strategy.local_software_share} with DeepSeek & Alibaba LLMs.` : "Annual Report strategic focus on China."
+          : `BMW 5 Series Deliveries: ${annualReport.deliveries_2025 ? annualReport.deliveries_2025['5_series_deliveries'] : '299k units'}. R&D Investment: ${annualReport.financial_rd ? annualReport.financial_rd.rd_expenditure_2025 : '€8.3B'}.`;
+        document.getElementById('analysis-annual-report-anchor').innerText = arText;
+
+        // Render Competitors
+        const compList = document.getElementById('competitor-list');
+        if (competitors.length > 0) {
+          compList.innerHTML = competitors.map(c => `
+            <div class="comp-item">
+              <div class="comp-head">
+                <span class="comp-name">${c.competitor} <small style="color: var(--text-dim); font-weight: normal;">(${c.powertrain})</small></span>
+                <span class="comp-threat">${c.threat_level || 'HIGH THREAT'}</span>
+              </div>
+              <ul class="comp-features">
+                ${c.key_features.map(f => `<li>${f}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('');
+        } else {
+          compList.innerHTML = `<p style="color: var(--text-dim);">Select a specific region (China, Europe, USA) to view direct competitor spec deltas.</p>`;
+        }
+
+        // Render Conflicts
+        const conflictBox = document.getElementById('conflicts-container');
+        const conflicts = cluster.conflicts_and_uncertainties || [];
+        if (conflicts.length > 0) {
+          conflictBox.innerHTML = conflicts.map(cf => `
+            <div class="conflict-card">
+              <div class="conflict-title">⚡ ${cf.type}: ${cf.type === 'CONFLICT' ? 'Regional Cultural Contradiction' : 'Market Uncertainty'}</div>
+              <p class="conflict-desc">${cf.description}</p>
+              <div class="conflict-reso"><strong>AI Recommendation:</strong> ${cf.resolution_strategy || cf.mitigation}</div>
+            </div>
+          `).join('');
+        } else {
+          conflictBox.innerHTML = `<p style="color: var(--text-dim);">Global view incorporates balanced regional conflict mitigations.</p>`;
+        }
+
+      } catch (err) {
+        console.error("Failed to load signals:", err);
+      }
+    }
+
+    async function loadRequirements() {
+      try {
+        let url = `${API_BASE}/requirements?region=${currentRegion}`;
+        if (activeDomain) url += `&domain=${activeDomain}`;
+        if (activeStatus) url += `&status=${activeStatus}`;
+        const searchVal = document.getElementById('req-search')?.value;
+        if (searchVal) url += `&search=${encodeURIComponent(searchVal)}`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+        allRequirements = data.requirements || [];
+        renderRequirements(allRequirements);
+        renderRankedPreview(allRequirements);
+      } catch (err) {
+        console.error("Failed to load requirements:", err);
+      }
+    }
+
+    function renderRequirements(reqs) {
+      const container = document.getElementById('requirements-container');
+      if (reqs.length === 0) {
+        container.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--text-dim);">No requirements match the selected filters.</div>`;
+        return;
+      }
+
+      container.innerHTML = reqs.map(r => {
+        const score = r.prioritization_score || {};
+        const ev = r.evidence || {};
+        const sources = ev.sources || [];
+
+        return `
+          <div class="req-card status-${r.decision_status}">
+            <div class="req-top">
+              <div>
+                <span class="req-id-tag">${r.requirement_id}</span>
+                <span style="font-size: 11px; margin-left: 8px; color: var(--text-dim);">Region: <strong>${r.target_region}</strong> &bull; Domain: <strong>${r.domain}</strong></span>
+                <h3 class="req-title">${r.title}</h3>
+              </div>
+              <div class="req-badges">
+                <span class="badge ${r.decision_status === 'APPROVED' ? 'badge-green' : r.decision_status === 'REJECTED' ? 'badge-red' : r.decision_status === 'CHALLENGED' ? 'badge-blue' : 'badge-amber'}">${r.decision_status}</span>
+                <div class="score-badge">
+                  <span class="score-val">${score.composite_score || 'N/A'}</span>
+                  <span class="score-max">/10</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="req-spec">
+              <strong>Measurable SMART Specification:</strong>
+              ${r.smart_specification}
+            </div>
+
+            <div class="criteria-box">
+              <h4>Engineering Acceptance Criteria:</h4>
+              <ul class="criteria-list">
+                ${(r.acceptance_criteria || []).map(c => `<li>${c}</li>`).join('')}
+              </ul>
+            </div>
+
+            <div class="evidence-summary">
+              <div class="evidence-tags">
+                <span class="ev-tag" style="border: 1px solid var(--bmw-cyan); color: var(--bmw-cyan);">Confidence: ${ev.level || 'HIGH'}</span>
+                ${sources.map(s => `<span class="ev-tag">[${s.source_type}] ${s.citation.substring(0, 50)}...</span>`).join('')}
+              </div>
+
+              <div class="action-btn-group">
+                <button class="btn btn-approve" onclick="openModal('${r.requirement_id}', 'APPROVED', '${r.title.replace(/'/g, "\\'")}')">Approve</button>
+                <button class="btn btn-challenge" onclick="openModal('${r.requirement_id}', 'CHALLENGED', '${r.title.replace(/'/g, "\\'")}')">Challenge</button>
+                <button class="btn btn-reject" onclick="openModal('${r.requirement_id}', 'REJECTED', '${r.title.replace(/'/g, "\\'")}')">Reject</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderRankedPreview(reqs) {
+      const container = document.getElementById('ranked-preview-list');
+      container.innerHTML = reqs.map((r, idx) => `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(15, 23, 42, 0.5); border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.04);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <strong style="color: var(--bmw-cyan); font-size: 16px; width: 24px;">#${idx+1}</strong>
+            <div>
+              <div style="font-weight: 700; font-size: 14px; color: #fff;">${r.title}</div>
+              <small style="color: var(--text-dim);">${r.requirement_id} &bull; ${r.target_region} &bull; Effort: ${r.prioritization_score?.effort_proxy || 'MED'}</small>
+            </div>
+          </div>
+          <strong style="font-size: 18px; color: var(--bmw-cyan);">${r.prioritization_score?.composite_score || 'N/A'}</strong>
+        </div>
+      `).join('');
+    }
+
+    async function loadAuditTrail() {
+      try {
+        const res = await fetch(`${API_BASE}/audit-trail`);
+        const data = await res.json();
+        const trail = data.audit_trail || [];
+
+        const container = document.getElementById('timeline-container');
+        container.innerHTML = trail.map(item => `
+          <div class="timeline-node action-${item.action}">
+            <div class="tl-header">
+              <span class="tl-actor">${item.actor || 'AI_AGENT'}</span>
+              <span class="badge ${item.action === 'APPROVED' ? 'badge-green' : item.action === 'REJECTED' ? 'badge-red' : item.action === 'CHALLENGED' ? 'badge-blue' : 'badge-amber'}">${item.action}</span>
+              <span class="tl-time">${new Date(item.timestamp).toLocaleString()}</span>
+            </div>
+            <div class="tl-content">
+              <strong>${item.requirement_id}: ${item.requirement_title}</strong>
+              <div class="tl-rationale"><em>"${item.rationale || 'Decision logged'}"</em></div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error("Failed to load audit trail:", err);
+      }
+    }
+
+    // Modal Interactions
+    function openModal(reqId, defaultAction, title) {
+      currentModalReqId = reqId;
+      document.getElementById('modal-req-id').innerText = reqId;
+      document.getElementById('modal-req-title').innerText = title;
+      document.getElementById('modal-action-select').value = defaultAction;
+      document.getElementById('modal-rationale-input').value = defaultAction === 'APPROVED' ? "Approved for Concept Freeze G1: Critical feature to defend market share against regional competitor deltas." : "";
+      document.getElementById('decision-modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('decision-modal').classList.remove('active');
+    }
+
+    async function submitDecision() {
+      const action = document.getElementById('modal-action-select').value;
+      const actor = document.getElementById('modal-actor-input').value || "Product_Manager";
+      const rationale = document.getElementById('modal-rationale-input').value;
+
+      if (!rationale || rationale.trim().length < 5) {
+        alert("Please provide a business rationale (minimum 5 characters) for the audit trail.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/decisions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            requirement_id: currentModalReqId,
+            actor: actor,
+            action: action,
+            rationale: rationale
+          })
+        });
+
+        if (res.ok) {
+          closeModal();
+          await loadRequirements();
+          await loadAuditTrail();
+        } else {
+          const err = await res.json();
+          alert("Error saving decision: " + (err.detail || "Unknown error"));
+        }
+      } catch (e) {
+        alert("Network error saving decision.");
+      }
+    }
+
+    // Sliders
+    function updateSliders() {
+      document.getElementById('val-demand').innerText = document.getElementById('slider-demand').value + '%';
+      document.getElementById('val-urgency').innerText = document.getElementById('slider-urgency').value + '%';
+      document.getElementById('val-brand').innerText = document.getElementById('slider-brand').value + '%';
+      document.getElementById('val-effort').innerText = document.getElementById('slider-effort').value + '%';
+    }
+
+    async function applyCustomWeights() {
+      const d = parseFloat(document.getElementById('slider-demand').value) / 100;
+      const u = parseFloat(document.getElementById('slider-urgency').value) / 100;
+      const b = parseFloat(document.getElementById('slider-brand').value) / 100;
+      const e = parseFloat(document.getElementById('slider-effort').value) / 100;
+
+      try {
+        const res = await fetch(`${API_BASE}/prioritize`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            region: currentRegion,
+            weight_demand: d,
+            weight_urgency: u,
+            weight_brand: b,
+            weight_effort: e
+          })
+        });
+        const data = await res.json();
+        allRequirements = data.requirements || [];
+        renderRequirements(allRequirements);
+        renderRankedPreview(allRequirements);
+      } catch (err) {
+        console.error("Failed to recalculate:", err);
+      }
+    }
+
+    function resetDefaultWeights() {
+      document.getElementById('slider-demand').value = 35;
+      document.getElementById('slider-urgency').value = 35;
+      document.getElementById('slider-brand').value = 20;
+      document.getElementById('slider-effort').value = 10;
+      updateSliders();
+      loadRequirements();
+    }
+
+    // Filtering
+    function filterDomain(dom) {
+      activeDomain = dom;
+      document.querySelectorAll('.filter-group:nth-child(1) .filter-chip').forEach(c => {
+        c.classList.toggle('active', c.innerText.toLowerCase() === (dom.toLowerCase() || 'all'));
+      });
+      loadRequirements();
+    }
+
+    function filterStatus(st) {
+      activeStatus = st;
+      document.querySelectorAll('.filter-group:nth-child(2) .filter-chip').forEach(c => {
+        c.classList.toggle('active', c.innerText.toUpperCase() === (st || 'ALL'));
+      });
+      loadRequirements();
+    }
+
+    function handleSearch() {
+      loadRequirements();
+    }
+
+    // Export Concept Brief
+    async function exportConceptBrief() {
+      try {
+        const res = await fetch(`${API_BASE}/export?format=markdown`);
+        const data = await res.json();
+        const blob = new Blob([data.content], { type: 'text/markdown' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `BMW_5Series_NextGen_Gate_G0_Concept_Brief_${currentRegion}.md`;
+        a.click();
+      } catch (err) {
+        alert("Failed to export Concept Brief.");
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>

@@ -14,6 +14,8 @@ import datetime
 from typing import Dict, List, Any, Optional
 from fastapi import FastAPI, HTTPException, Query, Body
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 import backend.requirements_engine as req_engine
@@ -23,6 +25,16 @@ app = FastAPI(
     description="Automated signal extraction, SMART requirement definition, regional prioritization, and PM audit trail for Next-Gen BMW 5 Series / i5",
     version="1.0.0"
 )
+
+FRONTEND_DIR = r"C:\EHL Munich\frontend"
+
+@app.get("/")
+def serve_index():
+    index_file = os.path.join(FRONTEND_DIR, "index.html")
+    if os.path.exists(index_file):
+        return FileResponse(index_file)
+    return {"message": "BMW PM Co-Pilot API is running. Access /docs for API documentation."}
+
 
 # Enable CORS for frontend interaction
 app.add_middleware(
