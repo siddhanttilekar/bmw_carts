@@ -173,7 +173,8 @@ def test_known_limitations_are_computed(s):
 # --- Streamlit pages --------------------------------------------------------------------
 
 
-PAGES = ["ui/pages/customer_intelligence.py", "ui/pages/evidence_explorer.py",
+PAGES = ["ui/pages/discover.py", "ui/pages/define.py", "ui/pages/prioritize.py", "ui/pages/decide.py",
+         "ui/pages/customer_intelligence.py", "ui/pages/evidence_explorer.py",
          "ui/pages/customer_insights.py", "ui/pages/data_quality.py"]
 
 
@@ -207,12 +208,13 @@ def test_every_page_loads_without_errors(app):
 def test_overview_page_shows_database_counts(app):
     app.run()
     html = " ".join(m.value for m in app.markdown)
-    assert "4,000" in html and "5,005" in html and "18 / 18" in html and "222 / 222" in html
-    assert "sentiment" not in " ".join(m.value for m in app.markdown if "pm-kpi" in m.value).lower()
+    assert "BMW ProductMind AI" in html and "4,000" in html and "Customer comments analyzed" in html
+    assert "Customer needs identified" in html and "Requirements created" in html
+    assert "Classification records" not in html
 
 
 def test_overview_filters_update_counts(app, raw):
-    app.run()
+    app.switch_page("ui/pages/customer_intelligence.py").run()
     app.multiselect(key="ci_market").set_value(["KR"]).run()
     expected = raw[raw["Country"] == "KR"]["ID"].nunique()
     assert f'class="v">{expected:,}<' in " ".join(m.value for m in app.markdown)
@@ -245,6 +247,10 @@ def test_explorer_marks_review_items_and_tiers(app):
 
 
 def test_dashboard_code_never_references_llm_pipeline():
+    """2.0: the UI may START approval-gated paid actions only through
+    services.evidence_extraction / ai_evidence_selector (which enforce
+    authorisation, approval and budget); it never builds a client or calls the
+    extraction pipeline directly."""
     sources = [p.read_text() for p in (ROOT / "ui").rglob("*.py")] + [(ROOT / "app.py").read_text(),
                                                                        (ROOT / "services/dashboard_queries.py").read_text()]
     for src in sources:

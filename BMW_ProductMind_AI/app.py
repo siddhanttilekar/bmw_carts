@@ -1,4 +1,4 @@
-"""BMW ProductMind AI - Customer Intelligence Dashboard (Part 3).
+"""BMW ProductMind AI - guided product-management workflow.
 
     streamlit run app.py
 
@@ -18,25 +18,30 @@ if str(ROOT) not in sys.path:
 
 from ui.theme import apply_theme  # noqa: E402
 
-st.set_page_config(page_title="ProductMind AI · G60 Customer Intelligence", layout="wide",
+st.set_page_config(page_title="ProductMind AI · G60 Workflow", layout="wide",
                    initial_sidebar_state="expanded")
 apply_theme()
 
 PAGES = {
-    "intelligence": st.Page("ui/pages/customer_intelligence.py", title="Customer Intelligence", default=True),
+    "discover": st.Page("ui/pages/discover.py", title="DISCOVER", default=True),
+    "define": st.Page("ui/pages/define.py", title="DEFINE"),
+    "prioritize": st.Page("ui/pages/prioritize.py", title="PRIORITIZE"),
+    "decide": st.Page("ui/pages/decide.py", title="DECIDE"),
+    "intelligence": st.Page("ui/pages/customer_intelligence.py", title="Customer Intelligence"),
     "explorer": st.Page("ui/pages/evidence_explorer.py", title="Evidence Explorer"),
     "insights": st.Page("ui/pages/customer_insights.py", title="Customer Insights"),
     "requirements": st.Page("ui/pages/vehicle_requirements.py", title="Vehicle Requirements"),
     "prioritization": st.Page("ui/pages/agent_prioritization.py", title="Agent Prioritization"),
+    "decision": st.Page("ui/pages/decision_intelligence.py", title="Decision Intelligence"),
     "quality": st.Page("ui/pages/data_quality.py", title="Data Quality"),
+    "sources": st.Page("ui/pages/source_management.py", title="Source Management"),
+    "settings": st.Page("ui/pages/application_settings.py", title="Application Settings"),
 }
 with st.sidebar:
-    st.markdown("**ProductMind AI**  \n<span style='color:#B6C2D9;font-size:0.85rem'>5 Series (G60) customer intelligence</span>",
+    st.markdown("**ProductMind AI**  \n<span style='color:#B6C2D9;font-size:0.85rem'>DISCOVER → DEFINE → PRIORITIZE → DECIDE</span>",
                 unsafe_allow_html=True)
-PAGES["decision"] = st.Page("ui/pages/decision_intelligence.py", title="Decision Intelligence")
 st.navigation({
-    "Customer Intelligence": [PAGES["intelligence"], PAGES["explorer"], PAGES["insights"]],
-    "Requirements & Prioritization": [PAGES["requirements"], PAGES["prioritization"]],
-    "Decision Intelligence": [PAGES["decision"]],
-    "Transparency": [PAGES["quality"]],
+    "Workflow": [PAGES["discover"], PAGES["define"], PAGES["prioritize"], PAGES["decide"]],
+    "Advanced": [PAGES["quality"], PAGES["sources"], PAGES["explorer"], PAGES["intelligence"], PAGES["insights"],
+                 PAGES["requirements"], PAGES["prioritization"], PAGES["decision"], PAGES["settings"]],
 }).run()

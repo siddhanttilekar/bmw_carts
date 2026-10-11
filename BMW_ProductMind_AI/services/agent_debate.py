@@ -26,6 +26,7 @@ from sqlalchemy.orm import Session
 from core.decision_models import AgentDebateSession
 from core.prioritization_models import PriorityAssessment, RequirementPriorityScore
 from services.decision_grounding import bind_run, historical_notices, run_agents
+from services.agent_explanations import calculation_lines, evidence_lines
 from services.dynamic_prioritization import agent_results
 
 SENSITIVE_PP = 10  # a flip within +/-10 weight points counts as weight-sensitive
@@ -46,6 +47,19 @@ class AgentPosition(BaseModel):
     evidence_a: int
     evidence_b: int
     limitations: list[str]
+    # 2.0: evidence-first detail from the saved snapshot (no new scores are produced in a debate)
+    execution_method: str = ""
+    resources: list[str] = []
+    abstains: bool = False
+    abstain_reason: str | None = None
+    evidence_counts_a: dict | None = None
+    evidence_counts_b: dict | None = None
+    counter_evidence_a: int | None = None
+    counter_evidence_b: int | None = None
+    calculation_a: list[str] = []
+    calculation_b: list[str] = []
+    evidence_summary_a: list[str] = []
+    evidence_summary_b: list[str] = []
 
 
 class DebateResult(BaseModel):
@@ -117,7 +131,17 @@ def run_debate(session: Session, run_id: str, requirement_a: str, requirement_b:
             weight_percent=agent["weight_bp"] / 100, score_a=ra["score"], score_b=rb["score"],
             contribution_a=ra["weighted_contribution"], contribution_b=rb["weighted_contribution"], position=pos,
             basis_a=_basis(session, ra), basis_b=_basis(session, rb), evidence_a=len(ra["source_refs"]),
-            evidence_b=len(rb["source_refs"]), limitations=sorted(set(ra["limitations"]) | set(rb["limitations"]))))
+            evidence_b=len(rb["source_refs"]), limitations=sorted(set(ra["limitations"]) | set(rb["limitations"])),
+            execution_method=agent.get("execution_method", ""), resources=list(agent.get("resources", [])),
+            abstains=pos == "UNABLE_TO_CONCLUDE",
+            abstain_reason=("Insufficient evidence: " + "; ".join(
+                f"{side}: {r['rationale']}" for side, r in (("A", ra), ("B", rb)) if r["status"] != "SCORED"))
+            if pos == "UNABLE_TO_CONCLUDE" else None,
+            evidence_counts_a=ra["inputs"].get("evidence_counts"), evidence_counts_b=rb["inputs"].get("evidence_counts"),
+            counter_evidence_a=len(ra["inputs"]["counter_evidence_ids"]) if "counter_evidence_ids" in ra["inputs"] else None,
+            counter_evidence_b=len(rb["inputs"]["counter_evidence_ids"]) if "counter_evidence_ids" in rb["inputs"] else None,
+            calculation_a=calculation_lines(ra), calculation_b=calculation_lines(rb),
+            evidence_summary_a=evidence_lines(ra), evidence_summary_b=evidence_lines(rb)))
 
     favours = {k: [p.agent_name for p in positions if p.position == k]
                for k in ("FAVOURS_A", "FAVOURS_B", "NO_DIFFERENCE", "UNABLE_TO_CONCLUDE")}

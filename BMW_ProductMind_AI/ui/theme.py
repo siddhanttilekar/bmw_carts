@@ -36,7 +36,7 @@ CSS = f"""
   .block-container {{ padding-top: 2rem; max-width: 1400px; }}
   h1, h2, h3 {{ letter-spacing: -0.01em; }}
   .pm-sub {{ color: {TEXT_2}; margin-top: -0.6rem; margin-bottom: 1.2rem; }}
-  .pm-kpi {{ background: {SURFACE}; border: 1px solid {BORDER}; border-radius: 12px; padding: 16px 18px; height: 100%; }}
+  .pm-kpi {{ background: {SURFACE}; border: 1px solid {BORDER}; border-radius: 8px; padding: 16px 18px; height: 100%; }}
   .pm-kpi .v {{ font-size: 2rem; font-weight: 650; color: {TEXT}; line-height: 1.1; }}
   .pm-kpi .l {{ color: {TEXT_2}; font-size: 0.86rem; margin-top: 4px; }}
   .pm-kpi .n {{ color: {MUTED}; font-size: 0.75rem; margin-top: 6px; }}
@@ -47,6 +47,14 @@ CSS = f"""
   .pm-src {{ color: {MUTED}; font-size: 0.76rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
   .pm-text {{ color: {TEXT}; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; }}
   .pm-note {{ color: {TEXT_2}; font-size: 0.82rem; }}
+  .pm-card {{ background: {SURFACE}; border: 1px solid {BORDER}; border-radius: 8px; padding: 16px 18px; height: 100%; }}
+  .pm-card h3 {{ margin: 0 0 6px 0; font-size: 1.02rem; }}
+  .pm-card .pm-card-title {{ color: {TEXT}; font-weight: 650; font-size: 1.02rem; margin-bottom: 4px; }}
+  .pm-card .pm-card-body {{ color: {TEXT_2}; line-height: 1.45; font-size: 0.9rem; }}
+  .pm-workflow {{ display: flex; gap: 8px; flex-wrap: wrap; margin: 0.4rem 0 1.2rem 0; }}
+  .pm-step {{ border: 1px solid {BORDER}; border-radius: 8px; padding: 6px 10px; color: {TEXT_2}; background: {SURFACE};
+              font-size: 0.78rem; letter-spacing: 0; }}
+  .pm-step-active {{ border-color: {ACCENT}; color: {TEXT}; box-shadow: inset 0 0 0 1px {ACCENT}; }}
 </style>
 """
 
@@ -76,6 +84,21 @@ def header(title: str, subtitle: str) -> None:
 def kpi(col, value, label: str, note: str = "") -> None:
     col.markdown(f'<div class="pm-kpi"><div class="v">{esc(value)}</div><div class="l">{esc(label)}</div>'
                  f'<div class="n">{esc(note)}</div></div>', unsafe_allow_html=True)
+
+
+def card(title: str, body: str, *chips: str) -> str:
+    chip_html = "".join(chip(c) for c in chips if c)
+    return (f'<div class="pm-card"><div class="pm-card-title">{esc(title)}</div>'
+            f'<div class="pm-card-body">{esc(body)}</div><div style="margin-top:10px">{chip_html}</div></div>')
+
+
+def workflow(active: str) -> None:
+    labels = ["DISCOVER", "DEFINE", "PRIORITIZE", "DECIDE"]
+    html_steps = []
+    for label in labels:
+        klass = "pm-step pm-step-active" if label == active else "pm-step"
+        html_steps.append(f'<span class="{klass}">{label}</span>')
+    st.markdown(f'<div class="pm-workflow">{"".join(html_steps)}</div>', unsafe_allow_html=True)
 
 
 def bar_chart(labels: list[str], values: list[int], *, value_name: str, extra: list[str] | None = None,

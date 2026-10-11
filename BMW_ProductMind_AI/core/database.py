@@ -10,7 +10,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from core.ai_models import AIBase
-from core import decision_models, prioritization_models, requirement_models  # noqa: F401  (register Part 4-6 tables)
+from core import decision_models, evidence_models, prioritization_models, requirement_models  # noqa: F401
 from core.models import Base
 
 

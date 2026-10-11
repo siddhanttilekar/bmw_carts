@@ -20,7 +20,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from core.prioritization_models import PriorityAssessment, PrioritizationRun, RequirementPriorityScore
-from services.agent_explanations import summarize
+from services.agent_explanations import calculation_lines, evidence_lines, summarize
 from services.agent_weights import WeightEntry, percent_to_bp, validate_weights, weighted_contribution
 from services.critical_issues import flags_for
 from services.dynamic_prioritization import agent_results, latest_run_for
@@ -52,7 +52,8 @@ def get_decision_context(session: Session, requirement_id: str, run_id: str | No
         ({"agent_id": r["agent_id"], "agent_name": r["agent_name"], "agent_version": r["agent_version"],
           "scoring_method": r["scoring_method"], "scoring_version": r["scoring_version"], "status": r["status"],
           "score": r["score"], "weight_percent": r["weight_percent"], "weighted_contribution": r["weighted_contribution"],
-          "rationale": r["rationale"], "explanation": r["explanation"]} for r in results),
+          "rationale": r["rationale"], "explanation": r["explanation"], "inputs": r["inputs"],
+          "calculation": calculation_lines(r), "evidence": evidence_lines(r)} for r in results),
         key=lambda c: -(c["weighted_contribution"] or -1))
     refs = []
     for r in results:
@@ -68,6 +69,7 @@ def get_decision_context(session: Session, requirement_id: str, run_id: str | No
                                  if contributions and c["weighted_contribution"] is not None
                                  and c["weighted_contribution"] == contributions[0]["weighted_contribution"]],
             "evidence_references": refs,
+            "ai_evidence": json.loads(run.evidence_snapshot_json or "{}").get(requirement_id),
             "human_assessments": _assessments(session, results),
             "missing_assessments": json.loads(row.missing_agents_json),
             "assumptions": base["assumptions"] + grouped["ASSUMPTION"],

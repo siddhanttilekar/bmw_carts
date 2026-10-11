@@ -12,6 +12,13 @@ Each run stores a snapshot of the profile version, agent configuration
 versions, weights and method versions, plus every agent-level result, so it
 remains reproducible after agents or profiles change. A priority score never
 changes a requirement's review status.
+
+2.0: the run also freezes the evidence used by AI_ANALYSIS agents
+(``evidence_snapshot_json``: selection ID, observation version with model /
+prompt / taxonomy versions, validated feedback-ID lists, normalisation). The
+same snapshot always yields the same score (``verify_reproducibility``);
+``reanalyze_with_new_evidence`` creates a NEW run and a comparison - the old
+run is never modified.
 """
 from __future__ import annotations
 
@@ -33,7 +40,7 @@ from core.prioritization_models import (
 from core.requirement_models import VehicleRequirement
 from services.agent_configuration import get_agent, version_snapshot
 from services.agent_explanations import build_explanation
-from services.agent_scoring import METHODS, UNSCORED, ScoreResult, run_method
+from services.agent_scoring import METHODS, NORMALIZATION, UNSCORED, ScoreResult, recompute_score, run_method, sync_method_versions
 from services.agent_weights import weighted_contribution
 from services.critical_issues import flags_for
 from services.prioritization_profiles import get_profile, validate_profile, weights_for
@@ -107,13 +114,28 @@ def _profile_snapshot(session: Session, profile_id: str) -> tuple[dict, list[dic
     agents = []
     for w in weights_for(session, profile_id):
         snap = version_snapshot(session, w.agent_id, w.agent_version)
+        snap.setdefault("context", None)
+        snap.setdefault("custom_metric_id", None)
+        if "RES_UPLOADED_DOCUMENTS" in snap.get("resources", []):  # uploads present at run time are frozen here
+            from services.agent_documents import agent_documents
+
+            snap["documents"] = [{"document_id": d["document_id"], "sha256": d["sha256"], "file_name": d["file_name"]}
+                                 for d in agent_documents(session, w.agent_id)]
         agents.append({**snap, "weight_bp": w.weight_bp, "configuration_version": w.agent_version})
     return {"profile_id": p.profile_id, "profile_name": p.profile_name, "profile_version": p.current_version,
             "illustrative": p.is_illustrative, "agents": agents}, agents
 
 
+def _observation_version_info(session: Session, version_id: str | None) -> dict | None:
+    from core.evidence_models import ObservationVersion
+
+    v = session.get(ObservationVersion, version_id) if version_id else None
+    return None if v is None else {"version_id": v.version_id, "model": v.model, "model_version": v.model_version,
+                                   "prompt_version": v.prompt_version, "taxonomy_version": v.taxonomy_version}
+
+
 def run_prioritization(session: Session, profile_id: str, created_by: str,
-                       requirement_ids: list[str] | None = None) -> PrioritizationRun:
+                       requirement_ids: list[str] | None = None, based_on_run_id: str | None = None) -> PrioritizationRun:
     if not (created_by or "").strip():
         raise PrioritizationError("A user identifier is required.")
     check = validate_profile(session, profile_id)
@@ -128,22 +150,30 @@ def run_prioritization(session: Session, profile_id: str, created_by: str,
     if not requirements:
         raise NoSavedRequirements("No saved requirements yet. Create a requirement in the Vehicle Requirements page.")
 
+    sync_method_versions(session)
     snapshot, agents = _profile_snapshot(session, profile_id)
+    snapshot["normalization"] = NORMALIZATION
     run = PrioritizationRun(
         run_id=f"RUN-{_now():%Y%m%d%H%M%S}-{uuid.uuid4().hex[:6].upper()}", profile_id=profile_id,
         profile_version=snapshot["profile_version"], profile_snapshot_json=json.dumps(snapshot, default=str),
         method_versions_json=json.dumps({a["scoring_method"]: METHODS[a["scoring_method"]].version for a in agents}),
         requirement_ids_json=json.dumps([r.requirement_id for r in requirements]), created_by=created_by.strip(),
-        created_at=_now())
+        created_at=_now(), based_on_run_id=based_on_run_id)
     session.add(run)
     session.flush()
 
     finals: list[tuple[str, Decimal | None]] = []
+    evidence: dict[str, dict] = {}
     for req in requirements:
         rd = requirement_as_dict(session, req)
         total, missing = Decimal("0"), []
         for agent in agents:
             result: ScoreResult = run_method(session, rd, agent)
+            frozen = result.inputs.pop("evidence_snapshot", None)
+            if frozen is not None:
+                evidence[req.requirement_id] = {
+                    **frozen, "requirement_version": req.current_version,
+                    "observation_version": _observation_version_info(session, frozen.get("observation_version_id"))}
             if result.status != UNSCORED and not result.source_refs:  # provenance is mandatory
                 result = result.model_copy(update={"status": UNSCORED, "score": None,
                                                    "rationale": "Score discarded: no source references (provenance)."})
@@ -181,8 +211,117 @@ def run_prioritization(session: Session, profile_id: str, created_by: str,
         rows[rid].rank = rank
     run.complete_count = len(ranks)
     run.incomplete_count = len(finals) - len(ranks)
+    run.evidence_snapshot_json = json.dumps(evidence, default=str)
     session.flush()
     return run
+
+
+# ---------------------------------------------------------------------------
+# Reproducibility and reanalysis (2.0)
+# ---------------------------------------------------------------------------
+
+
+def evidence_snapshot(session: Session, run_id: str) -> dict:
+    run = session.get(PrioritizationRun, run_id)
+    if run is None:
+        raise PrioritizationError(f"Unknown run {run_id!r}")
+    return json.loads(run.evidence_snapshot_json or "{}")
+
+
+def verify_reproducibility(session: Session, run_id: str) -> dict:
+    """Recompute every agent score from its stored inputs only, and every final
+    score / rank from the stored scores and weights. No live data is read."""
+    if session.get(PrioritizationRun, run_id) is None:
+        raise PrioritizationError(f"Unknown run {run_id!r}")
+    mismatches, checked = [], 0
+    totals: dict[str, tuple[Decimal, bool]] = {}
+    for r in session.scalars(select(AgentExecutionResult).where(AgentExecutionResult.run_id == run_id)):
+        inputs = json.loads(r.inputs_json)
+        if r.status != UNSCORED:
+            expected = recompute_score(r.scoring_method, inputs)
+            if expected is not None:
+                checked += 1
+                if abs(expected - (r.score or 0)) > 1e-9:
+                    mismatches.append({"requirement_id": r.requirement_id, "agent": r.agent_name,
+                                       "stored": r.score, "recomputed": expected})
+        total, complete = totals.get(r.requirement_id, (Decimal("0"), True))
+        if r.status == UNSCORED or r.score is None:
+            totals[r.requirement_id] = (total, False)
+        else:
+            totals[r.requirement_id] = (total + weighted_contribution(r.score, r.weight_bp), complete)
+    finals = []
+    for row in session.scalars(select(RequirementPriorityScore).where(RequirementPriorityScore.run_id == run_id)):
+        total, complete = totals.get(row.requirement_id, (Decimal("0"), False))
+        final = total.quantize(Decimal("0.01"), ROUND_HALF_UP) if complete else None
+        finals.append((row.requirement_id, final))
+        stored = Decimal(str(row.final_score)).quantize(Decimal("0.01")) if row.final_score is not None else None
+        if stored != final:
+            mismatches.append({"requirement_id": row.requirement_id, "agent": "FINAL", "stored": row.final_score,
+                               "recomputed": float(final) if final is not None else None})
+    ranks = competition_ranks(finals)
+    for row in session.scalars(select(RequirementPriorityScore).where(RequirementPriorityScore.run_id == run_id)):
+        if ranks.get(row.requirement_id) != row.rank:
+            mismatches.append({"requirement_id": row.requirement_id, "agent": "RANK", "stored": row.rank,
+                               "recomputed": ranks.get(row.requirement_id)})
+    return {"run_id": run_id, "reproducible": not mismatches, "agent_scores_checked": checked,
+            "requirements_checked": len(finals), "mismatches": mismatches}
+
+
+def compare_runs(session: Session, old_run_id: str, new_run_id: str) -> dict:
+    def collect(run_id):
+        scores = {r.requirement_id: r for r in session.scalars(
+            select(RequirementPriorityScore).where(RequirementPriorityScore.run_id == run_id))}
+        agents = {}
+        for a in session.scalars(select(AgentExecutionResult).where(AgentExecutionResult.run_id == run_id)):
+            agents[(a.requirement_id, a.agent_id)] = a
+        return scores, agents, evidence_snapshot(session, run_id)
+
+    old_s, old_a, old_e = collect(old_run_id)
+    new_s, new_a, new_e = collect(new_run_id)
+    rows = []
+    for rid in sorted(set(old_s) | set(new_s)):
+        o, n = old_s.get(rid), new_s.get(rid)
+        agent_rows = []
+        for key in sorted({k for k in set(old_a) | set(new_a) if k[0] == rid}, key=lambda k: k[1]):
+            oa, na = old_a.get(key), new_a.get(key)
+            oi = json.loads(oa.inputs_json) if oa else {}
+            ni = json.loads(na.inputs_json) if na else {}
+            agent_rows.append({"agent": (na or oa).agent_name, "old_status": oa.status if oa else None,
+                               "new_status": na.status if na else None, "old_score": oa.score if oa else None,
+                               "new_score": na.score if na else None, "old_n": oi.get("n"), "new_n": ni.get("n")})
+        oe, ne = old_e.get(rid, {}), new_e.get(rid, {})
+        rows.append({
+            "requirement_id": rid, "title": (n or o).requirement_title,
+            "old_status": o.priority_status if o else None, "new_status": n.priority_status if n else None,
+            "old_score": o.final_score if o else None, "new_score": n.final_score if n else None,
+            "old_rank": o.rank if o else None, "new_rank": n.rank if n else None,
+            "old_selection_id": oe.get("selection_id"), "new_selection_id": ne.get("selection_id"),
+            "old_evidence_counts": oe.get("counts"), "new_evidence_counts": ne.get("counts"),
+            "evidence_changed": oe.get("selection_id") != ne.get("selection_id")
+                                or oe.get("counts") != ne.get("counts"),
+            "agents": agent_rows})
+    return {"old_run_id": old_run_id, "new_run_id": new_run_id, "requirements": rows}
+
+
+def reanalyze_with_new_evidence(session: Session, run_id: str, actor: str) -> tuple[PrioritizationRun, dict]:
+    """Refresh deterministic evidence selections from the latest validated
+    observations, then score the same requirements with the same profile in a
+    NEW run. Returns (new run, comparison with the old run)."""
+    from core.config import get_llm_settings
+    from services.ai_evidence_selector import run_selection
+    from services.ai_feedback_analysis import current_observation_version_id
+
+    old = session.get(PrioritizationRun, run_id)
+    if old is None:
+        raise PrioritizationError(f"Unknown run {run_id!r}")
+    rids = json.loads(old.requirement_ids_json)
+    version_id = current_observation_version_id(get_llm_settings())
+    for rid in rids:
+        if session.get(VehicleRequirement, rid) is not None:
+            run_selection(session, rid, version_id, actor)
+    new = run_prioritization(session, old.profile_id, actor,
+                             [r for r in rids if session.get(VehicleRequirement, r) is not None], based_on_run_id=run_id)
+    return new, compare_runs(session, run_id, new.run_id)
 
 
 def competition_ranks(finals) -> dict[str, int]:

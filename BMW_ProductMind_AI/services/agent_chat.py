@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from core.prioritization_models import PriorityAssessment
 from services.agent_resources import RESOURCES, list_resources
+from services.agent_explanations import calculation_lines, evidence_lines
 from services.agent_scoring import METHODS
 from services.decision_grounding import AssistantResponse, bind_run, finalize, historical_notices, run_agents
 from services.dynamic_prioritization import agent_results
@@ -64,6 +65,13 @@ def discuss_agent(session: Session, run_id: str, requirement_id: str, agent_id: 
                 resp.add("FACT", f"{inputs['unique_g60_feedback_ids']} distinct G60 comments linked as direct evidence; "
                                  f"reference population {inputs['reference_population']} distinct G60 comments; formula "
                                  f"{inputs['formula']}.")
+            for line in calculation_lines(result):
+                resp.add("FACT", f"Calculation - {line}")
+            for line in evidence_lines(result):
+                resp.add("FACT", line)
+            if inputs.get("counter_evidence_ids"):
+                resp.add("FACT", f"Counter-evidence considered: {len(inputs['counter_evidence_ids'])} comments.",
+                         refs=inputs["counter_evidence_ids"][:10])
             if "covered_evidence_types" in inputs:
                 per = "; ".join(f"{v['label']}: {v['valid_links']}" for v in inputs["per_type"].values())
                 resp.add("FACT", f"Evidence coverage {inputs['covered_evidence_types']} of {inputs['assigned_evidence_types']} "
@@ -86,6 +94,9 @@ def discuss_agent(session: Session, run_id: str, requirement_id: str, agent_id: 
                                        "requirement. Enter it in Agent Prioritization → Execution, then re-run.")
             elif result["inputs"].get("invalid_ids") or result["inputs"].get("non_g60_ids"):
                 resp.add("LIMITATION", "Missing: valid G60 evidence. The requirement's evidence contains invalid or non-G60 IDs.")
+            elif "coverage" in result["inputs"] or "No AI evidence selection" in result["rationale"]:
+                resp.add("LIMITATION", "Missing: validated AI observations for every direct comment of the requirement "
+                                       "and an evidence selection. The agent abstains instead of guessing.")
             elif "prerequisites" in result["inputs"]:
                 resp.add("LIMITATION", "Missing: validated market prerequisites "
                                        + ", ".join(k for k, ok in result["inputs"]["prerequisites"].items() if not ok) + ".")

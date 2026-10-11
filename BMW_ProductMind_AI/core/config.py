@@ -114,30 +114,62 @@ def get_settings() -> Settings:
 # ---------------------------------------------------------------------------
 
 
-class LLMSettings(BaseModel):
-    """LLM configuration. Credentials are resolved by the Anthropic SDK
-    (ANTHROPIC_API_KEY / ANTHROPIC_AUTH_TOKEN / `ant auth login` profile)."""
+LLM_PROVIDERS = ("openai", "anthropic")
+# Default model per provider. OpenAI: gpt-5.6-luna (structured outputs, $0.20 / $1.20 per 1M tokens,
+# OpenAI's recommended replacement for the retiring small models; see README "LLM provider").
+DEFAULT_MODELS = {"openai": "gpt-5.6-luna", "anthropic": "claude-opus-5-5"}
+DEFAULT_EFFORT = {"openai": "low", "anthropic": "medium"}  # OpenAI reasoning effort / Anthropic effort
+CREDENTIAL_ENV = {"openai": ("OPENAI_API_KEY",), "anthropic": ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
 
-    model: str = Field(default_factory=lambda: os.getenv("PRODUCTMIND_LLM_MODEL", "claude-opus-5-5"))
-    effort: str = Field(default_factory=lambda: os.getenv("PRODUCTMIND_LLM_EFFORT", "medium"))
+
+def _provider() -> str:
+    return (os.getenv("PRODUCTMIND_LLM_PROVIDER") or "openai").strip().lower()
+
+
+def _model() -> str:
+    return os.getenv("PRODUCTMIND_LLM_MODEL") or DEFAULT_MODELS.get(_provider(), DEFAULT_MODELS["openai"])
+
+
+class LLMSettings(BaseModel):
+    """LLM configuration. ``provider`` selects ONE provider (default openai);
+    there is never an automatic fallback to the other provider. Credentials
+    come from the environment (OPENAI_API_KEY, or ANTHROPIC_API_KEY when
+    anthropic is explicitly selected) and are never stored or displayed."""
+
+    provider: str = Field(default_factory=_provider)
+    model: str = Field(default_factory=_model)
+    effort: str = Field(default_factory=lambda: os.getenv("PRODUCTMIND_LLM_EFFORT")
+                        or DEFAULT_EFFORT.get(_provider(), "low"))
     batch_size: int = Field(default_factory=lambda: int(os.getenv("PRODUCTMIND_LLM_BATCH_SIZE", "10")))
     max_tokens: int = Field(default_factory=lambda: int(os.getenv("PRODUCTMIND_LLM_MAX_TOKENS", "16000")))
     max_attempts: int = Field(default_factory=lambda: int(os.getenv("PRODUCTMIND_LLM_MAX_ATTEMPTS", "4")))
     max_rate_limit_wait_s: float = 120.0
     # Server-side refusal fallback to another model is OFF by default (project policy: never fall back
-    # silently to another paid model). Opt in with PRODUCTMIND_LLM_FALLBACKS=1.
+    # silently to another paid model). Opt in with PRODUCTMIND_LLM_FALLBACKS=1 (Anthropic only).
     use_fallbacks: bool = Field(default_factory=lambda: os.getenv("PRODUCTMIND_LLM_FALLBACKS", "0") == "1")
+    # Version label of the model weights (part of the extraction cache key and observation version).
+    model_version: str = Field(default_factory=lambda: os.getenv("PRODUCTMIND_LLM_MODEL_VERSION", "") or _model())
+    # Application budget for all LLM work (not a provider billing cap).
+    budget_usd: float = Field(default_factory=lambda: float(os.getenv("PRODUCTMIND_MAX_API_SPEND_USD")
+                                                            or os.getenv("PRODUCTMIND_LLM_BUDGET_USD") or "26"))
     # External API use must be explicitly authorised (internal BMW data leaves the machine).
     external_calls_authorized: bool = Field(
         default_factory=lambda: os.getenv("PRODUCTMIND_ALLOW_EXTERNAL_LLM", "").lower() in ("1", "true", "yes"))
 
 
-# USD per million tokens (Anthropic first-party list prices; used for cost estimates only).
+# USD per million tokens, list prices used for ESTIMATES only (not provider billing).
+# OpenAI: standard tier from developers.openai.com/api/docs/pricing (checked 2026-10-11); OpenAI has no
+# cache-write charge, so cache_write = input. Anthropic: first-party list prices.
 LLM_PRICING_PER_MTOK: dict[str, dict[str, float]] = {
+    "gpt-5.6-luna": {"input": 0.20, "output": 1.20, "cache_read": 0.02, "cache_write": 0.20},
+    "gpt-4.1-mini": {"input": 0.40, "output": 1.60, "cache_read": 0.10, "cache_write": 0.40},
+    "gpt-5.4-mini": {"input": 0.75, "output": 4.50, "cache_read": 0.075, "cache_write": 0.75},
     "claude-opus-5-5": {"input": 4.00, "output": 20.00, "cache_read": 0.20, "cache_write": 5.00},
     "claude-sonnet-5-5": {"input": 2.00, "output": 10.00, "cache_read": 0.20, "cache_write": 2.50},
     "claude-haiku-4-5": {"input": 1.00, "output": 5.00, "cache_read": 0.10, "cache_write": 1.25},
 }
+# Unknown models are priced at the most expensive row (conservative estimate).
+UNKNOWN_MODEL_PRICE = "claude-opus-5-5"
 
 # Analyses in Part 2 are scoped to this vehicle.
 ANALYSIS_VEHICLE = "G60"

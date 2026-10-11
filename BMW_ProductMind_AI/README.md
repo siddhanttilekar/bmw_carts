@@ -2,21 +2,108 @@
 
 AI-powered product decision support for the BMW 5 Series (G60). Hackathon prototype.
 
-**Status: Parts 1–6 are complete. Part 6 adds the Decision Intelligence layer: assistant, agent chat, debate, what-if simulation, scenarios, challenges and management reports.** Everything works offline. No real LLM extraction has been run, and external LLM use is disabled by default.
+**Status: Parts 1–6, Upgrade A (DISCOVER / DEFINE / PRIORITIZE / DECIDE), the 2.0 evidence-first upgrade and
+Stage 1 (OpenAI provider) are complete.** The OpenAI connection has been verified with one test request; the
+20-comment extraction sample has not been run yet. External LLM use is disabled unless explicitly enabled.
 
-## Quick start
+## Quick start (new teammate)
+
+The BMW datasets are confidential and are **not in this repository**. Get the source files from the project
+owner through a private channel and put them in a folder named `mydata/` inside `BMW_ProductMind_AI/`.
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
+cd BMW_ProductMind_AI
+python3 -m venv .venv && source .venv/bin/activate   # always use this env (conda "base" lacks the packages)
 pip install -r requirements.txt
 python -m scripts.sync_source_data mydata  # pick canonical copies by content, copy into data/
 python -m scripts.initialize_database   # builds database/productmind.db + reports/
-python -m scripts.status                # prints table counts and document status
-streamlit run app.py                    # dashboard (reads SQLite; makes no LLM calls)
 python -m scripts.customer_intelligence setup         # taxonomy, mappings, clusters, insights (no LLM)
-python -m scripts.customer_intelligence demo --category CONTROLS
-pytest                                  # 188 tests against the real datasets (LLM mocked)
+python -m scripts.status                # prints table counts and document status
+streamlit run app.py                    # dashboard on http://localhost:8501
+pytest                                  # 227 tests against the real datasets (LLM always mocked)
 ```
+
+Optional AI features (never put a key in a file that is committed):
+
+```bash
+export OPENAI_API_KEY=...  PRODUCTMIND_LLM_PROVIDER=openai  PRODUCTMIND_ALLOW_EXTERNAL_LLM=1  PRODUCTMIND_MAX_API_SPEND_USD=26
+python -m scripts.customer_intelligence test-openai            # one tiny paid request, asks first
+python -m scripts.customer_intelligence observe --sample 20    # cost estimate only; add --approve-usd 0.10 to run
+```
+
+Next step for the team: run and review the 20-comment sample (DISCOVER → "Run AI extraction" → "Review extraction
+quality") before any full extraction.
+
+## LLM provider (Stage 1: OpenAI)
+
+The default provider is **OpenAI** (`services/llm_client.py::OpenAILLMClient`, Responses API, strict JSON-schema
+structured outputs, `store=False`, SDK retries off so every attempt is logged and costed). The Anthropic client is
+kept and used **only** with `PRODUCTMIND_LLM_PROVIDER=anthropic`; `make_llm_client` never falls back to the other
+provider. All features use the same `complete_json` interface, so custom AI agents, requirement generation,
+the decision assistant and debate can adopt it later without changes to the client.
+
+| Setting | Default |
+|---|---|
+| `PRODUCTMIND_LLM_PROVIDER` | `openai` |
+| `PRODUCTMIND_LLM_MODEL` | `gpt-5.6-luna` |
+| `PRODUCTMIND_LLM_EFFORT` (OpenAI reasoning effort) | `low` |
+| `PRODUCTMIND_MAX_API_SPEND_USD` (application budget, estimate-based) | `26` |
+| `PRODUCTMIND_ALLOW_EXTERNAL_LLM` | off |
+| `OPENAI_API_KEY` | shell only - never committed, never displayed |
+
+Model choice (checked 2026-10-11 on developers.openai.com): `gpt-5.6-luna` - Structured Outputs supported,
+Responses + Chat Completions, $0.20 input / $0.02 cached input / $1.20 output per 1M tokens, no deprecation notice,
+and OpenAI's listed replacement for the retiring `gpt-5-nano` / `gpt-4.1-nano`. `gpt-5-mini` was rejected because
+its snapshot shuts down on 2026-12-11. Reasoning tokens are billed as output and are included in the cost estimate.
+Costs shown by the app are list-price estimates from token usage, not provider billing.
+
+Requirement generation (Part 4) and the decision-assistant rephrasing (Part 6) still have their own disabled,
+Anthropic-gated LLM modes; they were not changed in this stage.
+
+```bash
+export OPENAI_API_KEY=...  PRODUCTMIND_LLM_PROVIDER=openai  PRODUCTMIND_ALLOW_EXTERNAL_LLM=1  PRODUCTMIND_MAX_API_SPEND_USD=26
+python -m scripts.customer_intelligence test-openai      # config + model check, then ONE paid request after typing YES
+```
+
+## ProductMind AI 2.0 - Evidence-First Agentic Prioritization
+
+**AI identifies evidence. Python calculates scores. Humans make decisions.**
+
+| Layer | Module | What it does |
+|---|---|---|
+| Extraction (`observe-v1`) | `services/ai_feedback_analysis.py` | One pass per G60 comment → typed observations (COMPLAINT / IMPROVEMENT_REQUEST / POSITIVE / NEUTRAL / UNCLEAR) with customer need, system, confidence, taxonomy category and an evidence excerpt. Excerpts must be found verbatim (case-sensitive) or the observation is rejected and logged. Observation IDs are generated in Python. Cache key = feedback ID + text hash + model + model version + prompt version + taxonomy version; validated entries are never overwritten (new versions sit next to old ones in `observation_versions`). Shares batching, retries, checkpoint/resume and usage logging with Part 2. |
+| Cost control | `services/llm_budget.py`, `services/evidence_extraction.py` | $26 application budget (`PRODUCTMIND_LLM_BUDGET_USD`), spend = sum of logged calls incl. retries, pre-request estimate (measured from the sample once it ran), explicit `approved_max_usd`, per-batch ceiling guard (job stops resumably), 20-comment representative sample required before a confirmed full run. Fallback model off. |
+| Selection (`select-v1`) | `services/ai_evidence_selector.py` | Per requirement version: taxonomy matching on its direct comments → complaint / request / positive / counter-evidence / uncertain ID lists (distinct feedback IDs; combined demand = union). Optional paid LLM semantic matching re-judges only uncertain matches and creates a new immutable selection. Human reviews (accept / reject / uncertain + justification, append-only) override every AI run. |
+| Scoring | `services/agent_scoring.py`, `services/custom_metrics.py` | `COMPLAINT_FREQUENCY`, `CUSTOMER_REQUEST_FREQUENCY`, `COMBINED_CUSTOMER_DEMAND` (AI_ANALYSIS): score = 100·ln(1+n)/ln(1+N), N = 4000 fixed (`log-feedback-v1`) - a normalised frequency index, not a % of customers. UNSCORED without a selection or with incomplete extraction coverage. `EVIDENCE_COVERAGE` v1.1 also covers AI observations and uploads. `DOCUMENTED_CUSTOM_METRIC` runs only code-implemented, admin-approved metrics. All versions in `scoring_method_versions`. |
+| Agents | `services/agent_configuration.py`, `services/agent_documents.py` | Builder fields: Name, Objective, Custom Instructions, Resources (+ PDF/XLSX/CSV/TXT/MD uploads, parsed to text, scoped to the owning agent), Context, Weight, Execution Method + approved scoring rule. Instructions are never executed and never change a formula. |
+| Snapshots | `services/dynamic_prioritization.py` | Each run freezes evidence (selection, observation version with model/prompt/taxonomy, validated IDs, counts, normalisation). `verify_reproducibility` recomputes every score from stored inputs; `reanalyze_with_new_evidence` makes a new run plus a comparison - old runs never change. |
+| Decide | `decision_assistant`, `agent_chat`, `agent_debate` | Explanations quote frozen counts, counter-evidence, missing evidence and the Python calculation; agents abstain when evidence is insufficient. |
+
+UI: DISCOVER (extraction status, budget, sample run + quality review, AI counts per need), DEFINE (evidence selection, positive/negative observations, match review, history), PRIORITIZE (score calculation per agent, evidence readiness, custom agent builder), DECIDE (calculations, evidence-aware debate, history & reanalysis, reproducibility check, human approval, export).
+
+```bash
+python -m scripts.customer_intelligence observe --sample 20                      # estimate only - nothing is sent
+python -m scripts.customer_intelligence observe --sample 20 --approve-usd 0.50   # paid sample (needs PRODUCTMIND_ALLOW_EXTERNAL_LLM=1 + key)
+python -m scripts.customer_intelligence observe --all --confirm-full-run --approve-usd 20   # only after a completed sample
+python -m scripts.customer_intelligence budget
+python -m scripts.customer_intelligence select-evidence --user YOUR_ID
+python -m scripts.customer_intelligence approve-metric DOCUMENT_PASSAGE_SHARE --admin ID --note "..."
+```
+
+Security: comments and uploads are untrusted data (sent as JSON values, prompts say to ignore embedded instructions); no user text is executed as Python/SQL; agents cannot change requirement status; API keys are never shown or stored; API-call logs hold IDs and token counts, not comment text.
+
+## Simplified Workflow UI (Upgrade A)
+
+The default Streamlit experience is now organized for nontechnical product managers:
+
+| Stage | Purpose |
+|---|---|
+| `DISCOVER` | Understand BMW G60 customer needs, inspect representative evidence on demand, and choose a need to work on. |
+| `DEFINE` | Generate an evidence-based requirement draft, edit it, save it, and submit it for review. |
+| `PRIORITIZE` | Review active analysis agents, validate weights, collect human assessments when needed, and run prioritization. |
+| `DECIDE` | Explain rankings, compare requirements, run debates and what-if simulations, and export reports. |
+
+Selections persist across stages using Streamlit session state: selected need → requirement → prioritization run. Advanced diagnostic and legacy technical pages are still registered in the app navigation and have not been deleted.
 
 `sync_source_data` identifies each file by its content (worksheets, header columns, PDF metadata), not only by name. Copies with identical SHA-256 collapse to one canonical file, and names such as `x(1).xlsx` are normalised. Originals are never moved or deleted, and a destination whose content differs is never overwritten. The original names and paths are recorded in `data/source_manifest.json` and stored in `source_documents.original_file_names` / `original_source_paths`.
 

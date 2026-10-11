@@ -5,6 +5,15 @@ resources - never by its name. Every method is deterministic, returns a score
 in [0, 100] or ``None`` with status UNSCORED, and records inputs, source
 references, rationale, limitations and its version. Missing evidence never
 becomes a neutral score.
+
+2.0 (evidence-first): AI_ANALYSIS methods never let a model choose a number.
+The LLM only identifies evidence (validated observations + requirement
+evidence selection); these Python methods count distinct validated feedback
+IDs and apply a fixed, versioned normalisation:
+
+    score = 100 * ln(1 + n) / ln(1 + N),  N = 4000 (fixed reference)
+
+The score is NOT a percentage of customers.
 """
 from __future__ import annotations
 
@@ -22,6 +31,18 @@ from core.prioritization_models import PriorityAssessment
 
 SCORED, UNSCORED = "SCORED", "UNSCORED"
 AI_UNAVAILABLE = "AI analysis unavailable. Use Data Analysis or Human Assessment."
+
+REFERENCE_POPULATION_N = 4000  # fixed: distinct G60 comments in the supplied export when the method was registered
+NORMALIZATION = {"version": "log-feedback-v1", "formula": "100 * ln(1 + n) / ln(1 + N)", "N": REFERENCE_POPULATION_N,
+                 "N_definition": "fixed reference population: 4,000 distinct G60 comments in the supplied export",
+                 "interpretation": "relative evidence strength on a logarithmic scale - not a percentage of customers"}
+
+
+def log_normalize(n: int, population: int = REFERENCE_POPULATION_N) -> float:
+    """Deterministic log normalisation; n is capped at N."""
+    if n < 0 or population < 1:
+        raise ValueError("n must be >= 0 and N >= 1")
+    return round(100 * math.log1p(min(n, population)) / math.log1p(population), 2)
 
 # Market-relevance prerequisites. These are facts about the current data and
 # can only be changed by a documented human validation (not from the UI).
@@ -50,13 +71,19 @@ class ScoringMethod:
     method_id: str
     version: str
     label: str
-    execution_method: str
+    execution_methods: tuple[str, ...]
     description: str
     required_resources: frozenset[str]
     any_of_resources: frozenset[str] = frozenset()  # at least one of these
     score_label: str = "score"
     limitations: tuple[str, ...] = ()
     fn: Callable | None = field(default=None, compare=False)
+    formula: str = ""
+    selectable: bool = True  # False for legacy/disabled methods kept only for historical runs
+
+    @property
+    def execution_method(self) -> str:  # primary execution method (backwards compatible)
+        return self.execution_methods[0]
 
 
 def _unscored(method: ScoringMethod, reason: str, **kw) -> ScoreResult:
@@ -151,16 +178,38 @@ COVERAGE_TYPES = {  # resource -> (label, predicate on evidence-link dict)
 }
 
 
+EXTRA_COVERAGE_TYPES = {"RES_AI_OBSERVATIONS": "AI-validated observations in the evidence selection",
+                        "RES_UPLOADED_DOCUMENTS": "passages in this agent's uploaded documents"}
+
+
+def _extra_coverage(session: Session, r: str, req: dict, agent: dict) -> tuple[int, list[dict]]:
+    if r == "RES_AI_OBSERVATIONS":
+        sel = current_evidence(session, req)
+        if sel is None:
+            return 0, []
+        ids = sorted(set(sel.combined_demand_ids) | set(sel.positive_feedback_ids))
+        return len(ids), [{"table": "evidence_selection_runs", "key": sel.selection_id, "record_id": sel.selection_id}]
+    from services.agent_documents import keywords, search_agent_documents
+
+    _, hits = search_agent_documents(session, agent["agent_id"], keywords(req["title"], req["customer_need"]))
+    return len(hits), [{"table": "agent_document_chunks", "key": h["chunk_id"], "record_id": h["document_id"]} for h in hits]
+
+
 def _coverage(session: Session, method: ScoringMethod, req: dict, agent: dict) -> ScoreResult:
     from services.requirement_validator import _resolve
 
-    types = [r for r in agent["resources"] if r in COVERAGE_TYPES]
+    types = [r for r in agent["resources"] if r in COVERAGE_TYPES or r in EXTRA_COVERAGE_TYPES]
     if not types:
         return _unscored(method, "No evidence resource is assigned to this agent.")
     members = set(session.scalars(select(ClusterFeedbackLink.original_feedback_id)
                                   .where(ClusterFeedbackLink.cluster_id == req["source_cluster_id"])))
     per_type, refs, invalid = {}, [], []
     for r in types:
+        if r in EXTRA_COVERAGE_TYPES:
+            n, extra_refs = _extra_coverage(session, r, req, agent)
+            per_type[r] = {"label": EXTRA_COVERAGE_TYPES[r], "valid_links": n}
+            refs += extra_refs if n else []
+            continue
         label, pred = COVERAGE_TYPES[r]
         links = [e for e in req["evidence"] if pred(e)]
         valid = []
@@ -204,6 +253,82 @@ def _market(session: Session, method: ScoringMethod, req: dict, agent: dict) -> 
 
 
 # ---------------------------------------------------------------------------
+# 2.0 AI_ANALYSIS methods - AI identifies evidence, Python counts
+# ---------------------------------------------------------------------------
+
+FREQUENCY_KINDS = {  # method -> (selection attribute, label of what is counted)
+    "COMPLAINT_FREQUENCY": ("supporting_complaint_ids", "validated complaints"),
+    "CUSTOMER_REQUEST_FREQUENCY": ("improvement_request_ids", "validated improvement requests"),
+    "COMBINED_CUSTOMER_DEMAND": ("combined_demand_ids", "comments with a validated complaint or improvement request "
+                                                        "(union - a comment with both counts once)"),
+}
+
+
+def current_evidence(session: Session, req: dict):
+    """Latest evidence selection for the requirement's current version and the
+    configured observation version (None if none exists)."""
+    from core.config import get_llm_settings
+    from services.ai_evidence_selector import latest_selection
+    from services.ai_feedback_analysis import current_observation_version_id
+
+    return latest_selection(session, req["requirement_id"], current_observation_version_id(get_llm_settings()),
+                            requirement_version=req.get("current_version"))
+
+
+def _ai_frequency(session: Session, method: ScoringMethod, req: dict, agent: dict) -> ScoreResult:
+    attr, what = FREQUENCY_KINDS[method.method_id]
+    sel = current_evidence(session, req)
+    if sel is None:
+        return _unscored(method, "No AI evidence selection exists for this requirement version. Extract observations "
+                                 "and run evidence selection first.")
+    cov = sel.coverage
+    if not sel.coverage_complete:
+        return _unscored(method, f"Extraction coverage is incomplete: {cov.get('extracted_comments', 0)} of "
+                                 f"{cov.get('direct_comments', 0)} direct comments have validated observations.",
+                         inputs={"selection_id": sel.selection_id, "coverage": cov},
+                         limitations=["A partial count would understate demand, so no score is produced."])
+    ids = list(getattr(sel, attr))
+    n = len(ids)
+    score = log_normalize(n)
+    snap = sel.snapshot()
+    return ScoreResult(
+        status=SCORED, score=score, method=method.method_id, method_version=method.version,
+        inputs={"n": n, "N": REFERENCE_POPULATION_N, "counted": what, "normalization": NORMALIZATION,
+                "calculation": f"100 * ln(1 + {n}) / ln(1 + {REFERENCE_POPULATION_N}) = {score}",
+                "selection_id": sel.selection_id, "observation_version_id": sel.observation_version_id,
+                "selector_version": sel.selector_version, "selection_method": sel.method, "coverage": cov,
+                "evidence_counts": sel.counts(), "counter_evidence_ids": sel.counter_evidence_ids,
+                "uncertain_evidence_ids": sel.uncertain_evidence_ids, "counted_feedback_ids": ids,
+                "human_reviewed_matches": sel.human_reviewed, "machine_validated_matches": sel.machine_validated,
+                "evidence_snapshot": snap},
+        source_refs=[{"table": "evidence_selection_runs", "key": sel.selection_id, "record_id": sel.selection_id}]
+                    + [{"table": "feedback", "key": k, "record_id": None} for k in ids],
+        rationale=f"{n} distinct G60 comments with {what}; log-normalised against the fixed reference N = "
+                  f"{REFERENCE_POPULATION_N}. Counter-evidence: {len(sel.counter_evidence_ids)} comments; "
+                  f"uncertain: {len(sel.uncertain_evidence_ids)}.",
+        facts=[f"{n} distinct G60 feedback IDs counted ({what}).",
+               f"{len(sel.counter_evidence_ids)} comments are counter-evidence; "
+               f"{len(sel.uncertain_evidence_ids)} are uncertain and not counted.",
+               f"Coverage: {cov['extracted_comments']} of {cov['direct_comments']} direct comments extracted."],
+        assumptions=["Observations are AI-identified and validated (feedback ID exists, excerpt is verbatim); "
+                     f"{sel.human_reviewed} matches are human-reviewed, {sel.machine_validated} machine-validated only.",
+                     "Logarithmic normalisation is a prototype methodology, not a validated BMW standard."],
+        limitations=list(method.limitations),
+    )
+
+
+# ---------------------------------------------------------------------------
+# DOCUMENTED_CUSTOM_METRIC - admin-approved, code-implemented metrics only
+# ---------------------------------------------------------------------------
+
+
+def _custom(session: Session, method: ScoringMethod, req: dict, agent: dict) -> ScoreResult:
+    from services.custom_metrics import evaluate_custom_metric
+
+    return evaluate_custom_metric(session, method, req, agent)
+
+
+# ---------------------------------------------------------------------------
 # AI (disabled interface)
 # ---------------------------------------------------------------------------
 
@@ -213,33 +338,55 @@ def _ai(session: Session, method: ScoringMethod, req: dict, agent: dict) -> Scor
 
 
 METHODS: dict[str, ScoringMethod] = {m.method_id: m for m in [
-    ScoringMethod("LOG_NORMALIZED_FEEDBACK_COUNT", "1.0", "Log-normalised unique feedback count", "DATA_ANALYSIS",
+    ScoringMethod("LOG_NORMALIZED_FEEDBACK_COUNT", "1.0", "Log-normalised unique feedback count", ("DATA_ANALYSIS",),
                   "Customer demand: distinct G60 feedback IDs linked to the requirement, log-normalised against all "
                   "distinct G60 comments.",
                   frozenset({"RES_G60_FEEDBACK", "RES_REQUIREMENTS"}), score_label="customer demand",
                   limitations=("Frequency is not severity or business impact.",
                                "Counts are from the supplied export (about 90% US), not market prevalence."),
-                  fn=_log_feedback),
-    ScoringMethod("HUMAN_SCORE", "1.0", "Human assessment score", "HUMAN_ASSESSMENT",
+                  fn=_log_feedback, formula="100 * ln(1 + n) / ln(1 + N), N = live distinct G60 comments"),
+    ScoringMethod("HUMAN_SCORE", "1.0", "Human assessment score", ("HUMAN_ASSESSMENT",),
                   "A product manager scores the requirement 0-100 with a documented rationale.",
                   frozenset({"RES_HUMAN_ASSESSMENTS", "RES_REQUIREMENTS"}), score_label="human assessment",
-                  limitations=("Subjective; review the rationale.",), fn=_human),
-    ScoringMethod("EVIDENCE_COVERAGE", "1.0", "Evidence coverage", "DATA_ANALYSIS",
+                  limitations=("Subjective; review the rationale.",), fn=_human,
+                  formula="score entered by a person (integer 0-100) with rationale"),
+    ScoringMethod("EVIDENCE_COVERAGE", "1.1", "Evidence coverage", ("DATA_ANALYSIS", "AI_ANALYSIS"),
                   "Share of assigned evidence types that have at least one valid, traceable link for the requirement.",
-                  frozenset({"RES_REQUIREMENTS"}), any_of_resources=frozenset(COVERAGE_TYPES),
+                  frozenset({"RES_REQUIREMENTS"}), any_of_resources=frozenset(COVERAGE_TYPES) | frozenset(EXTRA_COVERAGE_TYPES),
                   score_label="evidence coverage (not impact)",
                   limitations=("Evidence coverage is not customer impact or business importance.",
                                "Supporting/contextual evidence is linked at need-category level."),
-                  fn=_coverage),
-    ScoringMethod("VALIDATED_MARKET_RELEVANCE", "1.0", "Validated market relevance", "DATA_ANALYSIS",
+                  fn=_coverage, formula="100 * covered evidence types / assigned evidence types"),
+    ScoringMethod("VALIDATED_MARKET_RELEVANCE", "1.0", "Validated market relevance", ("DATA_ANALYSIS",),
                   "Market-derived relevance - only when market mappings and data are validated; otherwise UNSCORED.",
                   frozenset({"RES_G60_FEEDBACK", "RES_SALES", "RES_REQUIREMENTS"}), score_label="market relevance",
                   limitations=("G60/G68 sales are combined.", "Country-to-sales-region mappings are not validated."),
-                  fn=_market),
-    ScoringMethod("AI_ASSESSMENT", "0.1", "AI assessment (disabled)", "AI_ANALYSIS",
+                  fn=_market, formula="not implemented - always UNSCORED until prerequisites are validated"),
+    *[ScoringMethod(mid, "1.0", label, ("AI_ANALYSIS",), desc, frozenset({"RES_AI_OBSERVATIONS", "RES_REQUIREMENTS"}),
+                    score_label=label.lower(), fn=_ai_frequency, formula=NORMALIZATION["formula"] + " with N = 4000",
+                    limitations=("Frequency is not severity or business impact.",
+                                 "Counts come from AI observations validated against the database; review uncertain "
+                                 "and counter-evidence before deciding.",
+                                 "Counts are from the supplied export (about 90% US), not market prevalence."))
+      for mid, label, desc in [
+          ("COMPLAINT_FREQUENCY", "Complaint frequency",
+           "Distinct G60 comments with a validated complaint matched to the requirement, log-normalised (N = 4000)."),
+          ("CUSTOMER_REQUEST_FREQUENCY", "Customer request frequency",
+           "Distinct G60 comments with a validated improvement request matched to the requirement, log-normalised."),
+          ("COMBINED_CUSTOMER_DEMAND", "Combined customer demand",
+           "Distinct G60 comments with a validated complaint OR improvement request (union, no double counting), "
+           "log-normalised."),
+      ]],
+    ScoringMethod("DOCUMENTED_CUSTOM_METRIC", "1.0", "Documented custom metric", ("DATA_ANALYSIS",),
+                  "A code-implemented metric that an administrator has documented and approved. Unapproved -> UNSCORED.",
+                  frozenset({"RES_REQUIREMENTS"}), score_label="custom metric", fn=_custom,
+                  formula="defined by the approved metric (see scoring_method_versions)",
+                  limitations=("Only administrator-approved metrics are computed; free-form formulas are never executed.",)),
+    ScoringMethod("AI_ASSESSMENT", "0.1", "AI assessment (disabled)", ("AI_ANALYSIS",),
                   "Future LLM-based assessment. Disabled: requires explicit authorisation, API key, cost estimate, "
                   "confirmation and evidence validation.",
-                  frozenset({"RES_REQUIREMENTS"}), score_label="AI assessment", limitations=(AI_UNAVAILABLE,), fn=_ai),
+                  frozenset({"RES_REQUIREMENTS"}), score_label="AI assessment", limitations=(AI_UNAVAILABLE,), fn=_ai,
+                  selectable=False, formula="disabled - a model never chooses a numerical score"),
 ]}
 
 
@@ -257,8 +404,9 @@ def check_compatibility(execution_method: str, scoring_method: str, resources: l
     if scoring_method not in METHODS:
         return [f"Unsupported scoring method '{scoring_method}'."], warnings
     m = METHODS[scoring_method]
-    if execution_method != m.execution_method:
-        errors.append(f"Scoring method '{m.label}' requires execution method {m.execution_method}, not {execution_method}.")
+    if execution_method not in m.execution_methods:
+        errors.append(f"Scoring method '{m.label}' requires execution method "
+                      f"{' or '.join(m.execution_methods)}, not {execution_method}.")
     unknown = [r for r in resources if r not in RESOURCES]
     errors += [f"Unknown resource '{r}'." for r in unknown]
     missing = sorted(m.required_resources - set(resources))
@@ -270,13 +418,53 @@ def check_compatibility(execution_method: str, scoring_method: str, resources: l
     for r in resources:
         if r in RESOURCES and scoring_method not in RESOURCES[r].supported_analysis_methods:
             errors.append(f"Resource '{RESOURCES[r].name}' cannot be used by '{m.label}'.")
-    if execution_method == "AI_ANALYSIS":
+    if scoring_method == "AI_ASSESSMENT":
         warnings.append(AI_UNAVAILABLE)
+    if scoring_method in FREQUENCY_KINDS:
+        warnings.append("The AI identifies evidence only; the score is calculated in Python from validated counts.")
     if scoring_method == "VALIDATED_MARKET_RELEVANCE" and not all(MARKET_VALIDATION.values()):
         warnings.append("Market prerequisites are not validated - this agent will return UNSCORED.")
     if scoring_method == "EVIDENCE_COVERAGE":
         warnings.append("This agent measures evidence coverage, not customer impact or business importance.")
     return errors, warnings
+
+
+def methods_for(execution_method: str) -> list[str]:
+    return [mid for mid, m in METHODS.items() if execution_method in m.execution_methods and m.selectable]
+
+
+def recompute_score(method_id: str, inputs: dict) -> float | None:
+    """Recalculate a stored score from its stored inputs only (reproducibility
+    check). Returns None for methods whose score is a stored human value."""
+    if method_id in FREQUENCY_KINDS:
+        return log_normalize(int(inputs["n"]), int(inputs["N"]))
+    if method_id == "LOG_NORMALIZED_FEEDBACK_COUNT":
+        n, pop = int(inputs["unique_g60_feedback_ids"]), int(inputs["reference_population"])
+        return min(round(100 * math.log1p(n) / math.log1p(pop), 2), 100.0)
+    if method_id == "EVIDENCE_COVERAGE":
+        return round(100 * inputs["covered_evidence_types"] / inputs["assigned_evidence_types"], 2)
+    return None
+
+
+def sync_method_versions(session: Session) -> int:
+    """Register every method version in ``scoring_method_versions`` (insert
+    only; existing rows are never modified)."""
+    import json
+    from datetime import datetime, timezone
+
+    from core.evidence_models import ScoringMethodVersion
+
+    added = 0
+    for m in METHODS.values():
+        if session.get(ScoringMethodVersion, (m.method_id, m.version)) is None:
+            session.add(ScoringMethodVersion(
+                method_id=m.method_id, version=m.version, label=m.label, execution_methods=",".join(m.execution_methods),
+                formula=m.formula or m.description,
+                normalization_json=json.dumps(NORMALIZATION if m.method_id in FREQUENCY_KINDS else {}),
+                registered_at=datetime.now(timezone.utc).replace(tzinfo=None)))
+            added += 1
+    session.flush()
+    return added
 
 
 def run_method(session: Session, req: dict, agent: dict) -> ScoreResult:

@@ -5,6 +5,12 @@ An agent's behaviour comes only from its (execution method, scoring method,
 resources); its name is a label. Every create/edit writes a new immutable
 configuration version; removal is a soft delete, so historical runs keep
 their references.
+
+2.0 builder fields: Agent Name, Objective, Custom Instructions, Resources
+(including uploads), Context, Weight, Execution Method (with an approved
+scoring rule). Custom Instructions and Context are plain text: they are shown
+to people and, for AI_ANALYSIS, passed to the LLM as quoted scope notes for
+evidence selection. They are never executed and never change a formula.
 """
 from __future__ import annotations
 
@@ -37,6 +43,12 @@ class AgentSpec(BaseModel):
     instructions: str | None = None
     evaluation_questions: list[str] = Field(default_factory=list)
     limitations: list[str] = Field(default_factory=list)
+    context: str | None = None
+    custom_metric_id: str | None = None
+
+
+MAX_INSTRUCTIONS = 4000
+MAX_CONTEXT = 1000
 
 
 def _now() -> datetime:
@@ -52,6 +64,17 @@ def _validate(spec: AgentSpec) -> list[str]:
         raise AgentConfigError(f"Execution method must be one of {', '.join(EXECUTION_METHODS)}.")
     if len(set(spec.resources)) != len(spec.resources):
         raise AgentConfigError("A resource is assigned twice.")
+    if spec.instructions and len(spec.instructions) > MAX_INSTRUCTIONS:
+        raise AgentConfigError(f"Custom instructions are limited to {MAX_INSTRUCTIONS} characters.")
+    if spec.context and len(spec.context) > MAX_CONTEXT:
+        raise AgentConfigError(f"Context is limited to {MAX_CONTEXT} characters.")
+    if spec.scoring_method == "DOCUMENTED_CUSTOM_METRIC":
+        from services.custom_metrics import CUSTOM_METRICS
+
+        if spec.custom_metric_id not in CUSTOM_METRICS:
+            raise AgentConfigError("Select a documented custom metric.")
+    elif spec.custom_metric_id:
+        raise AgentConfigError("A custom metric can only be used with the Documented custom metric scoring rule.")
     errors, warnings = check_compatibility(spec.execution_method, spec.scoring_method, spec.resources)
     if errors:
         raise AgentConfigError(" ".join(errors))
@@ -59,8 +82,15 @@ def _validate(spec: AgentSpec) -> list[str]:
     return warnings
 
 
-def agent_snapshot(agent: PrioritizationAgent, resources: list[str]) -> dict:
+def agent_snapshot(agent: PrioritizationAgent, resources: list[str], session: Session | None = None) -> dict:
+    documents = []
+    if session is not None and "RES_UPLOADED_DOCUMENTS" in resources:
+        from services.agent_documents import agent_documents
+
+        documents = [{"document_id": d["document_id"], "sha256": d["sha256"], "file_name": d["file_name"]}
+                     for d in agent_documents(session, agent.agent_id)]
     return {"agent_id": agent.agent_id, "name": agent.name, "description": agent.description,
+            "context": agent.context, "custom_metric_id": agent.custom_metric_id, "documents": documents,
             "objective": agent.objective, "execution_method": agent.execution_method,
             "scoring_method": agent.scoring_method, "resources": sorted(resources),
             "default_weight_bp": agent.default_weight_bp, "enabled": agent.enabled, "deleted": agent.deleted,
@@ -72,7 +102,8 @@ def _write_version(session: Session, agent: PrioritizationAgent, resources: list
     session.execute(delete(AgentResourceAssignment).where(AgentResourceAssignment.agent_id == agent.agent_id))
     session.add_all(AgentResourceAssignment(agent_id=agent.agent_id, resource_id=r) for r in sorted(resources))
     session.add(AgentConfigVersion(agent_id=agent.agent_id, version_number=agent.configuration_version,
-                                   snapshot_json=json.dumps(agent_snapshot(agent, resources)), change_note=note,
+                                   snapshot_json=json.dumps(agent_snapshot(agent, resources, session), default=str),
+                                   change_note=note,
                                    created_by=actor, created_at=_now()))
     session.flush()
 
@@ -91,7 +122,8 @@ def create_agent(session: Session, spec: AgentSpec, created_by: str) -> tuple[Pr
         agent_id=f"AGT-{uuid.uuid4().hex[:10].upper()}", name=spec.name.strip(), description=spec.description.strip(),
         objective=spec.objective.strip(), execution_method=spec.execution_method, scoring_method=spec.scoring_method,
         default_weight_bp=percent_to_bp(spec.weight_percent), enabled=spec.enabled, deleted=False,
-        configuration_version=1, instructions=spec.instructions, evaluation_questions_json=json.dumps(spec.evaluation_questions),
+        configuration_version=1, instructions=spec.instructions, context=(spec.context or "").strip() or None,
+        custom_metric_id=spec.custom_metric_id, evaluation_questions_json=json.dumps(spec.evaluation_questions),
         limitations_json=json.dumps(spec.limitations), created_by=actor, created_at=now, updated_at=now)
     session.add(agent)
     session.flush()
@@ -117,6 +149,7 @@ def current_spec(session: Session, agent_id: str) -> AgentSpec:
     return AgentSpec(name=a.name, description=a.description, objective=a.objective, execution_method=a.execution_method,
                      scoring_method=a.scoring_method, resources=agent_resources(session, agent_id),
                      weight_percent=str(bp_to_percent(a.default_weight_bp)), enabled=a.enabled, instructions=a.instructions,
+                     context=a.context, custom_metric_id=a.custom_metric_id,
                      evaluation_questions=json.loads(a.evaluation_questions_json), limitations=json.loads(a.limitations_json))
 
 
@@ -133,6 +166,8 @@ def edit_agent(session: Session, agent_id: str, spec: AgentSpec, edited_by: str,
     agent.execution_method, agent.scoring_method = spec.execution_method, spec.scoring_method
     agent.default_weight_bp, agent.enabled = percent_to_bp(spec.weight_percent), spec.enabled
     agent.instructions = spec.instructions
+    agent.context = (spec.context or "").strip() or None
+    agent.custom_metric_id = spec.custom_metric_id
     agent.evaluation_questions_json = json.dumps(spec.evaluation_questions)
     agent.limitations_json = json.dumps(spec.limitations)
     agent.configuration_version += 1
@@ -187,7 +222,7 @@ def list_agents(session: Session, include_removed: bool = False) -> list[dict]:
     for a in session.scalars(stmt):
         res = agent_resources(session, a.agent_id)
         _, warnings = check_compatibility(a.execution_method, a.scoring_method, res)
-        out.append({**agent_snapshot(a, res), "default_weight_percent": bp_to_percent(a.default_weight_bp),
+        out.append({**agent_snapshot(a, res, session), "default_weight_percent": bp_to_percent(a.default_weight_bp),
                     "status": "REMOVED" if a.deleted else ("ACTIVE" if a.enabled else "INACTIVE"),
                     "warnings": warnings, "created_by": a.created_by, "updated_at": a.updated_at})
     return out

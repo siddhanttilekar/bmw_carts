@@ -74,13 +74,30 @@ RESOURCES: dict[str, Resource] = {r.resource_id: r for r in [
              ("requirement_id", "title", "review_status", "source_cluster_id", "evidence links"),
              ("Evidence links are a snapshot taken when the requirement was created.",),
              ("LOG_NORMALIZED_FEEDBACK_COUNT", "EVIDENCE_COVERAGE", "HUMAN_SCORE", "VALIDATED_MARKET_RELEVANCE",
-              "AI_ASSESSMENT")),
+              "AI_ASSESSMENT", "COMPLAINT_FREQUENCY", "CUSTOMER_REQUEST_FREQUENCY", "COMBINED_CUSTOMER_DEMAND",
+              "DOCUMENTED_CUSTOM_METRIC")),
     Resource("RES_HUMAN_ASSESSMENTS", "Human Assessments",
              "Scores (0-100) with rationale entered by product managers per requirement and agent.",
              "priority_assessments",
              ("score", "rationale", "assessor_id", "assessment_timestamp", "evidence_references"),
              ("Subjective judgment; quality depends on the documented rationale.",),
              ("HUMAN_SCORE",)),
+    Resource("RES_AI_OBSERVATIONS", "AI-Validated Customer Observations",
+             "Typed observations (complaint / improvement request / positive / neutral / unclear) extracted once from "
+             "G60 comments; each has a verbatim excerpt validated against the database.",
+             "ai_feedback_observations, evidence_selection_runs, requirement_evidence_matches, evidence_match_reviews",
+             ("observation_id", "original_feedback_id", "observation_type", "customer_need", "vehicle_system",
+              "evidence_excerpt", "confidence", "taxonomy_category"),
+             ("AI-identified evidence: validated for existence and verbatim excerpts, not automatically human-reviewed.",
+              "Scores are UNSCORED until every direct comment of the requirement has been extracted."),
+             ("COMPLAINT_FREQUENCY", "CUSTOMER_REQUEST_FREQUENCY", "COMBINED_CUSTOMER_DEMAND", "EVIDENCE_COVERAGE")),
+    Resource("RES_UPLOADED_DOCUMENTS", "Agent Uploaded Documents",
+             "PDF / XLSX / CSV / TXT / MD files uploaded to this agent only (parsed to text; never executed).",
+             "agent_documents, agent_document_chunks (scoped to the owning agent)",
+             ("document_id", "file_name", "passage location", "passage text"),
+             ("Untrusted content: only keyword matches are used; instructions inside documents are ignored.",
+              "Visible to the agent that owns the upload only."),
+             ("EVIDENCE_COVERAGE", "DOCUMENTED_CUSTOM_METRIC")),
 ]}
 
 
@@ -96,6 +113,7 @@ class ResourceView(BaseModel):
 
 
 def _count(session: Session, resource_id: str) -> int | None:
+    from core.evidence_models import AgentDocument, AIFeedbackObservation
     from core.prioritization_models import PriorityAssessment
     from core.requirement_models import VehicleRequirement
 
@@ -108,6 +126,8 @@ def _count(session: Session, resource_id: str) -> int | None:
         "RES_EQUIPMENT": select(func.count()).select_from(Equipment).where(Equipment.vehicle_code == "G60"),
         "RES_REQUIREMENTS": select(func.count()).select_from(VehicleRequirement),
         "RES_HUMAN_ASSESSMENTS": select(func.count()).select_from(PriorityAssessment).where(PriorityAssessment.superseded.is_(False)),
+        "RES_AI_OBSERVATIONS": select(func.count()).select_from(AIFeedbackObservation),
+        "RES_UPLOADED_DOCUMENTS": select(func.count()).select_from(AgentDocument).where(AgentDocument.active.is_(True)),
     }.get(resource_id)
     return session.scalar(stmt) if stmt is not None else None
 

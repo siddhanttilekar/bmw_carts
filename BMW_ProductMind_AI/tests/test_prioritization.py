@@ -182,9 +182,9 @@ def test_agent_name_does_not_determine_behaviour(s):
     assert "unique_g60_feedback_ids" in result["inputs"] and "cost" not in json.dumps(result["inputs"]).lower()
 
 
-def test_resource_registry_lists_eight_resources_with_live_counts(s):
+def test_resource_registry_lists_all_resources_with_live_counts(s):
     resources = {r.resource_id: r for r in list_resources(s)}
-    assert len(resources) == 8 and set(resources) == set(RESOURCES)
+    assert len(resources) == 10 and set(resources) == set(RESOURCES)  # 8 (Part 5) + 2 (2.0: AI observations, uploads)
     assert resources["RES_G60_FEEDBACK"].available_records == 4000
     assert resources["RES_REQUIREMENTS"].available_records == 3
     for r in resources.values():

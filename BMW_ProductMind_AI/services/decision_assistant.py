@@ -119,6 +119,9 @@ def explain_priority(session, requirement_id, run) -> AssistantResponse:
     for c in ctx["agent_contributions"]:
         resp.add("FACT", f"{c['agent_name']}: score {c['score']} × weight {c['weight_percent']}% = "
                          f"{c['weighted_contribution']} points ({c['scoring_method']} v{c['scoring_version']}).")
+        for line in c["evidence"][:2]:
+            resp.add("FACT", f"{c['agent_name']} evidence - {line}")
+    _ai_evidence_items(resp, ctx)
     tops = ctx.get("top_contributors") or []
     if len(tops) == 1:
         resp.add("FACT", f"Largest weighted contribution: {tops[0]}.")
@@ -141,9 +144,39 @@ def explain_priority(session, requirement_id, run) -> AssistantResponse:
     return finalize(session, resp)
 
 
+def _ai_evidence_items(resp: AssistantResponse, ctx: dict) -> None:
+    """Validated AI evidence frozen in the run (counts are Python counts of
+    distinct feedback IDs; nothing is re-selected when reopening a run)."""
+    ev = ctx.get("ai_evidence")
+    if not ev:
+        return
+    c = ev["counts"]
+    resp.add("FACT", f"Validated AI evidence (selection {ev['selection_id']}, frozen in this run): {c['complaints']} "
+                     f"complaint comments, {c['improvement_requests']} improvement-request comments, "
+                     f"{c['combined_demand']} unique supporting comments (union).",
+             refs=ev["combined_demand_ids"][:20])
+    if c["counter_evidence"]:
+        resp.add("FACT", f"Counter-evidence: {c['counter_evidence']} comments point the other way.",
+                 refs=ev["counter_evidence_ids"][:10])
+    if c["uncertain"]:
+        resp.add("LIMITATION", f"{c['uncertain']} comments have uncertain relevance and are not counted.")
+    cov = ev["coverage"]
+    if not cov.get("complete"):
+        resp.add("LIMITATION", f"Missing evidence: only {cov.get('extracted_comments')} of {cov.get('direct_comments')} "
+                               "direct comments were extracted when the run was executed.")
+    resp.add("ASSUMPTION", f"{ev.get('human_reviewed_matches', 0)} evidence matches were human-reviewed; "
+                           f"{ev.get('machine_validated_matches', 0)} are machine-validated (ID exists, verbatim excerpt) only.")
+
+
 def evidence(session, requirement_id, run) -> AssistantResponse:
     resp = _base(session, "evidence", "Supporting evidence", requirement_id, run)
     resp.data_basis = "requirement evidence links (saved with the requirement)"
+    ctx = get_decision_context(session, requirement_id, run_id=run.run_id)
+    _ai_evidence_items(resp, ctx)
+    if ctx.get("ai_evidence"):
+        resp.data_basis += " and the validated AI evidence selection frozen in the run"
+        resp.evidence_refs += [{"table": "evidence_selection_runs", "key": ctx["ai_evidence"]["selection_id"]}] + \
+            [{"table": "feedback", "key": k} for k in ctx["ai_evidence"]["combined_demand_ids"][:50]]
     groups = requirement_evidence(session, requirement_id)
     direct = groups["DIRECT"]
     resp.add("FACT", f"{len(direct)} distinct G60 customer comments are linked as direct evidence.",
@@ -161,7 +194,7 @@ def evidence(session, requirement_id, run) -> AssistantResponse:
     review = sum(g["requires_review"] for gs in groups.values() for g in gs)
     if review:
         resp.add("LIMITATION", f"{review} linked items have mappings marked requires_review.")
-    resp.evidence_refs = [{"table": g["table"], "key": g["key"]} for gs in groups.values() for g in gs]
+    resp.evidence_refs += [{"table": g["table"], "key": g["key"]} for gs in groups.values() for g in gs]
     return finalize(session, resp)
 
 
@@ -176,6 +209,9 @@ def missing(session, requirement_id, run) -> AssistantResponse:
         resp.add("LIMITATION", f"{c['agent_name']} ({c['scoring_method']}): {c['rationale']}")
     if unscored:
         resp.add("FACT", "Missing weight is not redistributed, so the requirement has no final score and no rank.")
+    ev = ctx.get("ai_evidence")
+    if ev and ev["counts"]["uncertain"]:
+        resp.add("LIMITATION", f"{ev['counts']['uncertain']} comments with uncertain relevance await human evidence review.")
     return finalize(session, resp)
 
 
@@ -238,6 +274,9 @@ def challenge(session, requirement_id, run) -> AssistantResponse:
                                    "no data agent in this run measures severity.")
         elif method == "EVIDENCE_COVERAGE":
             resp.add("LIMITATION", f"{c['agent_name']} measures evidence coverage, not customer impact.")
+        elif method in ("COMPLAINT_FREQUENCY", "CUSTOMER_REQUEST_FREQUENCY", "COMBINED_CUSTOMER_DEMAND"):
+            resp.add("LIMITATION", f"{c['agent_name']} counts AI-identified, validated comments - frequency, not severity. "
+                                   "Uncertain matches can be reviewed in Define; reviews change only future runs.")
     resp.add("FACT", "Scores change only through the existing workflow: record a new human assessment (or add evidence) "
                      "in Agent Prioritization and execute a new run. A challenge records the dispute and its review.")
     if ctx["critical_flags"]:
@@ -312,6 +351,13 @@ def answer(session: Session, requirement_id: str, run_id: str, *, intent: str | 
         resp.add("FACT", d.round4_synthesis["agreement"])
         for dr in d.round3_drivers[:4]:
             resp.add("FACT", f"{dr['agent']}: {dr['contribution_a']} vs {dr['contribution_b']} points ({dr['difference']:+}).")
+        for side, req_id in (("A", requirement_id), ("B", other_requirement_id)):
+            ev = get_decision_context(session, req_id, run_id=run_id).get("ai_evidence")
+            if ev:
+                c = ev["counts"]
+                resp.add("FACT", f"{side} ({req_id}): {c['complaints']} complaint comments, {c['improvement_requests']} "
+                                 f"request comments, {c['combined_demand']} unique supporting, {c['counter_evidence']} "
+                                 f"counter-evidence, {c['uncertain']} uncertain (validated, frozen in the run).")
         sens = d.round4_synthesis["sensitivity"]
         if sens["single_agent_shifts_to_tie"]:
             s0 = sens["single_agent_shifts_to_tie"][0]

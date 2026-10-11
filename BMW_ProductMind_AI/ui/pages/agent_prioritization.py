@@ -117,7 +117,7 @@ with tabs[0]:
     e1, e2 = st.columns(2)
     exe = e1.selectbox("Execution Method", list(EXECUTION_METHODS), index=list(EXECUTION_METHODS).index(spec.execution_method),
                        key=f"ab_exe_{fk}", format_func=lambda m: m.replace("_", " ").title())
-    method_ids = [m for m, d in METHODS.items() if d.execution_method == exe]
+    method_ids = [m for m, d in METHODS.items() if exe in d.execution_methods and (d.selectable or m == spec.scoring_method)]
     method = e2.selectbox("Scoring Method", method_ids, key=f"ab_m_{fk}", format_func=lambda m: METHODS[m].label,
                           index=method_ids.index(spec.scoring_method) if spec.scoring_method in method_ids else 0)
     st.caption(METHODS[method].description)

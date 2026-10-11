@@ -132,6 +132,12 @@ def ref_exists(session: Session, table: str, key: str) -> bool:
         return session.get(PriorityAssessment, key) is not None
     if table == "vehicle_requirements":
         return session.get(VehicleRequirement, key) is not None
+    if table in ("evidence_selection_runs", "ai_feedback_observations", "agent_document_chunks"):
+        from core.evidence_models import AgentDocumentChunk, AIFeedbackObservation, EvidenceSelectionRun
+
+        model = {"evidence_selection_runs": EvidenceSelectionRun, "ai_feedback_observations": AIFeedbackObservation,
+                 "agent_document_chunks": AgentDocumentChunk}[table]
+        return session.get(model, key) is not None
     return False
 
 

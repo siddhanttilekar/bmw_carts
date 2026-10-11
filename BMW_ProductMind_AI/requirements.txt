@@ -7,7 +7,8 @@ PyMuPDF>=1.24
 python-pptx>=1.0
 pydantic>=2.6,<3
 pytest>=8.0
-anthropic>=1.13
+openai>=3.28        # default LLM provider (Stage 1)
+anthropic>=1.13     # optional provider, used only when PRODUCTMIND_LLM_PROVIDER=anthropic
 streamlit>=1.40
 plotly>=5.24
 reportlab>=4.0

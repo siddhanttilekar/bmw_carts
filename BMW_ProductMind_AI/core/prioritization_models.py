@@ -32,7 +32,9 @@ class PrioritizationAgent(AIBase):
     enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)  # soft delete
     configuration_version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
-    instructions: Mapped[str | None] = mapped_column(Text)
+    instructions: Mapped[str | None] = mapped_column(Text)  # "Custom Instructions" (scope evidence selection only)
+    context: Mapped[str | None] = mapped_column(Text)  # 2.0: e.g. "Next-generation BMW 5 Series"
+    custom_metric_id: Mapped[str | None] = mapped_column(String(64))  # 2.0: approved DOCUMENTED_CUSTOM_METRIC
     evaluation_questions_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
     limitations_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
     created_by: Mapped[str] = mapped_column(String(128), nullable=False)
@@ -124,6 +126,9 @@ class PrioritizationRun(AIBase):
     incomplete_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_by: Mapped[str] = mapped_column(String(128), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    # 2.0: frozen evidence per requirement (selection, validated IDs, extraction versions, normalization)
+    evidence_snapshot_json: Mapped[str | None] = mapped_column(Text)
+    based_on_run_id: Mapped[str | None] = mapped_column(String(40))  # "Reanalyze With New Evidence"
 
 
 class AgentExecutionResult(AIBase):

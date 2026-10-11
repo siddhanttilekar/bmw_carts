@@ -124,6 +124,7 @@ class AIFeedbackExtraction(AIBase):
     error: Mapped[str | None] = mapped_column(Text)
     job_id: Mapped[str] = mapped_column(String(64), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    observation_version_id: Mapped[str | None] = mapped_column(String(40), index=True)  # 2.0 observe-v1 rows only
 
 
 class ExtractedCustomerNeed(AIBase):

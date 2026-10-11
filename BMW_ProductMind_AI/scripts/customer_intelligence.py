@@ -10,7 +10,16 @@
     python -m scripts.customer_intelligence insights [--llm] [--min-feedback 10]
     python -m scripts.customer_intelligence demo --category CONTROLS
 
-Commands that call the LLM: extract, resume, cluster --llm-grouping, insights --llm.
+2.0 evidence-first commands:
+    python -m scripts.customer_intelligence observe --sample 20                      # estimate only (no call)
+    python -m scripts.customer_intelligence observe --sample 20 --approve-usd 0.50   # run the representative sample
+    python -m scripts.customer_intelligence observe --all --confirm-full-run --approve-usd 20
+    python -m scripts.customer_intelligence budget
+    python -m scripts.customer_intelligence test-openai                              # ONE paid request, asks first
+    python -m scripts.customer_intelligence select-evidence --user NAME              # all requirements, no API cost
+    python -m scripts.customer_intelligence approve-metric DOCUMENT_PASSAGE_SHARE --admin ID --note TEXT
+
+Commands that call the LLM: extract, resume, observe (with --approve-usd), cluster --llm-grouping, insights --llm.
 """
 from __future__ import annotations
 
@@ -34,7 +43,7 @@ from services import ai_feedback_analysis as ai  # noqa: E402
 from services.cross_source_mapping import build_cross_source_links, comments_for_need, evidence_for_need  # noqa: E402
 from services.evidence_retrieval import get_feedback_by_ids  # noqa: E402
 from services.insight_generator import generate_insights, insights_for_need  # noqa: E402
-from services.llm_client import AnthropicLLMClient, LLMError, LLMUsage, estimate_cost_usd  # noqa: E402
+from services.llm_client import LLMError, LLMUsage, ProviderNotConfigured, estimate_cost_usd, make_llm_client  # noqa: E402
 from services.need_clustering import build_clusters, clusters_for_need  # noqa: E402
 from services.need_taxonomy import NEED_CODES, NEED_NAMES, TAXONOMY, sync_taxonomy  # noqa: E402
 
@@ -48,10 +57,10 @@ def _engine(args):
 
 
 def _llm(settings):
-    if not (os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN")
-            or (Path.home() / ".config" / "anthropic").exists()):
-        sys.exit("No Claude API credentials found. Set ANTHROPIC_API_KEY (or run `ant auth login`) and retry.")
-    return AnthropicLLMClient(settings)
+    try:
+        return make_llm_client(settings)  # configured provider only - never a fallback
+    except ProviderNotConfigured as exc:
+        sys.exit(str(exc))
 
 
 def _wrap(text: str, indent: str = "    ") -> str:
@@ -242,6 +251,138 @@ def cmd_demo(args) -> None:
                 print(_wrap(f"- {lim}", "      "))
 
 
+def cmd_observe(args) -> None:
+    from services import evidence_extraction as ee
+    from services import llm_budget as budget
+
+    settings = get_llm_settings()
+    if args.batch_size:
+        settings.batch_size = args.batch_size
+    with session_scope(_engine(args)) as s:
+        plan = ee.plan_full(s, settings) if args.all else ee.plan_sample(s, settings, args.sample)
+        e = plan.estimate
+        b = budget.budget_status(s, settings)
+        print(f"Plan: {plan.description} with {settings.model} (prompt {ai.OBSERVATION_PROMPT_VERSION}, "
+              f"taxonomy {ai.TAXONOMY_VERSION})")
+        print(f"  {e.to_send} to send, {e.cached} cached, {e.batches} batches; estimate ${e.estimated_usd:.2f} "
+              f"(up to ${e.upper_bound_usd:.2f} with retries) - {e.basis}")
+        print(f"  Budget ${b.budget_usd:.2f}: spent ${b.spent_usd:.4f}, remaining ${b.remaining_usd:.4f}")
+        if args.approve_usd is None:
+            print("No request sent. Re-run with --approve-usd AMOUNT to approve this paid batch.")
+            return
+    llm = _llm(settings)
+    with session_scope(_engine(args)) as s:
+        try:
+            job = ee.run_observation_extraction(s, llm, settings, plan, approved_max_usd=args.approve_usd,
+                                                confirm_full_run=args.confirm_full_run, progress=_progress)
+        except (budget.ApprovalRequired, budget.BudgetExceeded, ai.FullRunNotConfirmed) as exc:
+            sys.exit(f"Not run: {exc}")
+        except KeyboardInterrupt:
+            sys.exit("Interrupted. Completed batches are saved; resume with `resume <JOB_ID>`.")
+        except LLMError as exc:
+            sys.exit(f"Stopped: {exc.kind}: {exc}")
+        _print_job(job)
+        st = ee.extraction_status(s, settings)
+        print(f"Validated observations (this version): {st['validated_observations']} "
+              f"{st['observations_by_type']}; rejected {st['rejected_observations']}")
+
+
+def cmd_budget(args) -> None:
+    from services import evidence_extraction as ee
+    from services import llm_budget as budget
+
+    settings = get_llm_settings()
+    with session_scope(_engine(args)) as s:
+        b = budget.budget_status(s, settings)
+        st = ee.extraction_status(s, settings)
+    print(f"Budget ${b.budget_usd:.2f} | spent ${b.spent_usd:.4f} | remaining ${b.remaining_usd:.4f} | "
+          f"{b.api_calls} calls ({b.retry_or_failed_calls} retries/failed, ${b.retry_or_failed_cost_usd:.4f})")
+    print(f"Observation version {st['observation_version_id']}: {st['processed_comments']}/{st['g60_comments']} comments, "
+          f"{st['validated_observations']} observations {st['observations_by_type']}, comments by type "
+          f"{st['comments_by_type']}, rejected {st['rejected_observations']}, sample completed {st['sample_completed']}")
+
+
+def cmd_select_evidence(args) -> None:
+    from services import ai_evidence_selector as sel
+    from services.requirement_review import list_requirements
+
+    version_id = ai.current_observation_version_id(get_llm_settings())
+    with session_scope(_engine(args)) as s:
+        for r in list_requirements(s):
+            x = sel.run_selection(s, r["requirement_id"], version_id, args.user)
+            print(f"{r['requirement_id']} {x.selection_id} coverage {x.coverage['extracted_comments']}/"
+                  f"{x.coverage['direct_comments']} counts {x.counts()}")
+
+
+def cmd_approve_metric(args) -> None:
+    from services.custom_metrics import approve_custom_metric
+
+    with session_scope(_engine(args)) as s:
+        row = approve_custom_metric(s, args.metric_id, args.admin, args.note)
+        print(f"Approved {row.method_id} v{row.version} by {row.approved_by} at {row.approved_at}")
+
+
+def cmd_test_openai(args) -> None:
+    """Stage 1 connection check: configuration, model, then ONE paid request
+    (only after explicit confirmation). No BMW data is sent."""
+    from services import llm_connection as conn
+    from services.llm_budget import budget_status
+    from services.llm_client import OpenAILLMClient, credential_present, price_row, setup_instructions
+
+    settings = get_llm_settings()
+    ok = lambda flag: "OK" if flag else "MISSING"  # noqa: E731
+    print("OpenAI connection test")
+    print(f"  1. OPENAI_API_KEY present ........ {ok(bool(os.getenv('OPENAI_API_KEY')))} (value never printed)")
+    print(f"  2. PRODUCTMIND_LLM_PROVIDER ...... {settings.provider}")
+    print(f"     PRODUCTMIND_ALLOW_EXTERNAL_LLM  {settings.external_calls_authorized}")
+    print(f"     model / reasoning effort ...... {settings.model} / {settings.effort}")
+    from core.config import LLM_PRICING_PER_MTOK
+
+    priced = settings.model in LLM_PRICING_PER_MTOK
+    p = price_row(settings.model)
+    print(f"     price per 1M tokens ........... input ${p['input']}, cached ${p['cache_read']}, output ${p['output']}"
+          + ("" if priced else " (UNKNOWN MODEL - conservative fallback price)"))
+    with session_scope(_engine(args)) as s:
+        b = budget_status(s, settings)
+    print(f"     application budget ............ ${b.budget_usd:.2f}, spent ${b.spent_usd:.4f}, remaining ${b.remaining_usd:.4f}")
+    if settings.provider != "openai":
+        sys.exit("Provider is not 'openai'. Set PRODUCTMIND_LLM_PROVIDER=openai (no automatic provider fallback).")
+    if not credential_present(settings):
+        sys.exit("\n" + setup_instructions(settings))
+    if not settings.external_calls_authorized:
+        sys.exit("External LLM calls are not authorised. Set PRODUCTMIND_ALLOW_EXTERNAL_LLM=1.")
+    try:
+        llm = OpenAILLMClient(settings)
+    except ProviderNotConfigured as exc:
+        sys.exit(str(exc))
+    try:
+        model_id = llm.verify_model()
+    except LLMError as exc:
+        sys.exit(f"  3. Model verification FAILED: {exc}")
+    print(f"  3. Model available .............. {model_id}")
+    estimate = conn.estimated_test_cost(settings)
+    print(f"  4. ONE paid request (no BMW data), estimated at most ${estimate:.5f}.")
+    if not args.yes:
+        if not sys.stdin.isatty():
+            sys.exit("Not confirmed. Re-run interactively or add --yes to send the paid request.")
+        if input("     Type YES to send it: ").strip() != "YES":
+            sys.exit("Cancelled - no request sent.")
+    with session_scope(_engine(args)) as s:
+        result = conn.run_connection_test(s, settings, llm)
+        after = budget_status(s, settings)
+    u = result.usage
+    print(f"  5. Response validated ........... {'yes' if result.success else 'NO'}")
+    print(f"  6. Model reported by API ........ {result.model_reported}")
+    print(f"  7. Token usage .................. input {u.input_tokens} (+{u.cache_read_tokens} cached), "
+          f"output {u.output_tokens} (of which reasoning {u.reasoning_tokens})")
+    print(f"  8. Estimated cost ............... ${result.estimated_cost_usd:.6f} (estimate from list prices, "
+          "not provider billing)")
+    print(f"  9. Connection ................... {'SUCCESS' if result.success else 'FAILED: ' + str(result.error)}")
+    print(f"     Budget remaining ............. ${after.remaining_usd:.4f} of ${after.budget_usd:.2f} (job {result.job_id})")
+    if not result.success:
+        sys.exit(1)
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--db", default=str(get_settings().database_path))
@@ -282,6 +423,28 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--clusters", type=int, default=12)
     p.add_argument("--insights", type=int, default=2)
     p.set_defaults(func=cmd_demo)
+
+    p = sub.add_parser("observe")
+    g = p.add_mutually_exclusive_group(required=True)
+    g.add_argument("--sample", type=int)
+    g.add_argument("--all", action="store_true")
+    p.add_argument("--approve-usd", type=float)
+    p.add_argument("--confirm-full-run", action="store_true")
+    p.add_argument("--batch-size", type=int)
+    p.set_defaults(func=cmd_observe)
+    p = sub.add_parser("test-openai", help="verify OpenAI config and send ONE minimal paid request (asks first)")
+    p.add_argument("--yes", action="store_true", help="confirm the paid request non-interactively")
+    p.set_defaults(func=cmd_test_openai)
+    p = sub.add_parser("budget")
+    p.set_defaults(func=cmd_budget)
+    p = sub.add_parser("select-evidence")
+    p.add_argument("--user", required=True)
+    p.set_defaults(func=cmd_select_evidence)
+    p = sub.add_parser("approve-metric")
+    p.add_argument("metric_id")
+    p.add_argument("--admin", required=True)
+    p.add_argument("--note", required=True)
+    p.set_defaults(func=cmd_approve_metric)
 
     args = parser.parse_args(argv)
     args.func(args)
