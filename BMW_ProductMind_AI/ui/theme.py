@@ -55,6 +55,24 @@ CSS = f"""
   .pm-step {{ border: 1px solid {BORDER}; border-radius: 8px; padding: 6px 10px; color: {TEXT_2}; background: {SURFACE};
               font-size: 0.78rem; letter-spacing: 0; }}
   .pm-step-active {{ border-color: {ACCENT}; color: {TEXT}; box-shadow: inset 0 0 0 1px {ACCENT}; }}
+  .pm-hero h1 {{ margin-bottom: 0; font-size: 2.1rem; }}
+  .pm-hero .pm-tag {{ color: {TEXT_2}; font-size: 1.05rem; margin-top: 2px; }}
+  .pm-hero .pm-veh {{ color: {MUTED}; font-size: 0.85rem; margin-top: 6px; letter-spacing: 0.04em; text-transform: uppercase; }}
+  .pm-progress {{ display: flex; gap: 0; margin: 0.2rem 0 1.4rem 0; border: 1px solid {BORDER}; border-radius: 10px;
+                  overflow: hidden; background: {SURFACE}; }}
+  .pm-progress div {{ flex: 1; padding: 10px 14px; color: {MUTED}; font-size: 0.82rem; border-right: 1px solid {BORDER}; }}
+  .pm-progress div:last-child {{ border-right: none; }}
+  .pm-progress .done {{ color: {TEXT_2}; }}
+  .pm-progress .now {{ color: {TEXT}; background: rgba(57,135,229,0.16); box-shadow: inset 0 -2px 0 {ACCENT}; }}
+  .pm-progress b {{ display: block; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; }}
+  .pm-rank {{ display: flex; align-items: baseline; gap: 14px; }}
+  .pm-rank .r {{ color: {ACCENT}; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase;
+                white-space: nowrap; flex: none; }}
+  .pm-rank .t {{ color: {TEXT}; font-weight: 650; font-size: 1.12rem; }}
+  .pm-score {{ color: {TEXT}; font-size: 1.7rem; font-weight: 700; line-height: 1; }}
+  .pm-score span {{ color: {MUTED}; font-size: 0.9rem; font-weight: 400; }}
+  .pm-quote {{ border-left: 3px solid {ACCENT}; padding: 4px 0 4px 12px; color: {TEXT}; margin: 6px 0; font-size: 0.92rem; }}
+  .pm-quote small {{ color: {MUTED}; display: block; }}
 </style>
 """
 
@@ -120,5 +138,36 @@ def bar_chart(labels: list[str], values: list[int], *, value_name: str, extra: l
         xaxis=dict(gridcolor=GRID, zeroline=False, tickformat=",d", title=None),
         yaxis=dict(showgrid=False, title=None, automargin=True, tickfont=dict(color=TEXT)),
         hoverlabel=dict(bgcolor=SURFACE, bordercolor=BORDER, font=dict(color=TEXT)), bargap=0.3,
+    )
+    return fig
+
+
+SECOND = "#D95926"  # validated second categorical series on SURFACE (with ACCENT)
+
+
+def progress(steps: list[str], current: int) -> None:
+    """Simple step indicator; ``current`` is 1-based."""
+    parts = []
+    for i, label in enumerate(steps, start=1):
+        klass = "now" if i == current else "done" if i < current else ""
+        parts.append(f'<div class="{klass}"><b>Step {i}</b>{esc(label)}</div>')
+    st.markdown(f'<div class="pm-progress">{"".join(parts)}</div>', unsafe_allow_html=True)
+
+
+def grouped_bar(labels: list[str], a: list[int], b: list[int], *, a_name: str, b_name: str) -> go.Figure:
+    """Two-series horizontal bars (ACCENT / SECOND), legend on top, exact values on hover."""
+    labels, a, b = list(reversed(labels)), list(reversed(a)), list(reversed(b))
+    fig = go.Figure()
+    for values, name, color in ((b, b_name, SECOND), (a, a_name, ACCENT)):
+        fig.add_bar(x=values, y=labels, orientation="h", name=name, marker=dict(color=color, cornerradius=4,
+                    line=dict(color=SURFACE, width=2)),
+                    hovertemplate=f"<b>%{{y}}</b><br>{name}: %{{x:,}}<extra></extra>")
+    fig.update_layout(
+        barmode="group", height=max(260, 30 * len(labels) + 90), margin=dict(l=8, r=16, t=36, b=8),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=TEXT_2, size=12),
+        legend=dict(orientation="h", y=1.08, x=0, traceorder="reversed", font=dict(color=TEXT_2)),
+        xaxis=dict(gridcolor=GRID, zeroline=False, tickformat=",d", title="Distinct comments"),
+        yaxis=dict(showgrid=False, title=None, automargin=True, tickfont=dict(color=TEXT)),
+        hoverlabel=dict(bgcolor=SURFACE, bordercolor=BORDER, font=dict(color=TEXT)), bargap=0.25, bargroupgap=0.08,
     )
     return fig

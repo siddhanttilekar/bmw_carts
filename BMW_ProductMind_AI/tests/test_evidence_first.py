@@ -724,6 +724,7 @@ def test_workflow_pages_render_evidence_first(base_db, tmp_path, monkeypatch):
     monkeypatch.setattr("services.llm_client.AnthropicLLMClient.__init__", forbid)
     app = AppTest.from_file(str(Path(__file__).resolve().parent.parent / "app.py"), default_timeout=180)
     app.run()
+    app.switch_page("ui/pages/discover.py").run()
     assert not app.exception
     html = " ".join(m.value for m in app.markdown)
     assert "AI Evidence Extraction" in html and "AI: " in html

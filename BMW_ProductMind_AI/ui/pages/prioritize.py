@@ -358,61 +358,13 @@ with st.expander("Add or edit agents and weights"):
 
 
 # ---------------------------------------------------------------------------
-# 2.0 custom agent builder (seven fields)
+# 2.0 custom agent builder (seven fields) - shared component
 # ---------------------------------------------------------------------------
 with st.expander("Build a Custom Agent"):
-    with data.write_session() as s:
-        metrics = cmx.list_custom_metrics(s)
-    name = st.text_input("Agent Name", key="cab_name")
-    objective = st.text_area("Objective", height=70, key="cab_obj",
-                             placeholder="e.g. Evaluate how often customers complain about or request this capability.")
-    instructions = st.text_area(
-        "Custom Instructions", height=90, key="cab_instr", max_chars=ac.MAX_INSTRUCTIONS,
-        help="Scope notes for AI evidence selection (for example 'focus on touchscreen usability'). They are plain text: "
-             "never executed as code or SQL, and they never change a formula.")
-    res_ids = [r for r in RESOURCES]
-    resources_sel = st.multiselect("Add Resources", res_ids, format_func=lambda r: RESOURCES[r].name, key="cab_res")
-    uploads = st.file_uploader("Upload documents (PDF, XLSX, CSV, TXT, MD)", type=list(adocs.ALLOWED_TYPES),
-                               accept_multiple_files=True, key="cab_upl",
-                               help="Visible to this agent only. Treated as untrusted text; never executed.")
-    context = st.text_input("Context", key="cab_ctx", max_chars=ac.MAX_CONTEXT,
-                            placeholder="e.g. Next-generation BMW 5 Series")
-    weight = st.number_input("Weight (%)", 0.0, 100.0, 0.0, 0.5, key="cab_w")
-    execution = st.radio("Execution Method", list(EXECUTION_METHODS), horizontal=True, key="cab_exe",
-                         format_func=lambda m: m.replace("_", " ").title())
-    rule_ids = methods_for(execution)
-    rule = st.selectbox("Approved scoring rule", rule_ids, format_func=lambda m: METHODS[m].label, key="cab_rule")
-    st.caption(f"{METHODS[rule].description} Formula: {METHODS[rule].formula}")
-    metric_id = None
-    if rule == "DOCUMENTED_CUSTOM_METRIC":
-        metric_id = st.selectbox("Documented metric", [m["metric_id"] for m in metrics], key="cab_metric",
-                                 format_func=lambda m: next(f"{x['label']} ({'approved' if x['approved'] else 'NOT approved - UNSCORED'})"
-                                                            for x in metrics if x["metric_id"] == m))
-    final_resources = list(dict.fromkeys(resources_sel + (["RES_UPLOADED_DOCUMENTS"] if uploads else [])))
-    errors, warnings = check_compatibility(execution, rule, final_resources)
-    for e in errors:
-        st.error(e)
-    for w in warnings:
-        st.caption(w)
-    add_to_profile = st.checkbox("Add to the active profile (rebalance weights to 100% afterwards)", value=True,
-                                 key="cab_add", disabled=active_profile is None)
-    if st.button("Create Agent", type="primary", disabled=bool(errors) or not name.strip() or not objective.strip()):
-        def _create(s):
-            agent, _ = ac.create_agent(s, ac.AgentSpec(
-                name=name, objective=objective, instructions=instructions.strip() or None, resources=final_resources,
-                context=context, weight_percent=weight, execution_method=execution, scoring_method=rule,
-                custom_metric_id=metric_id), actor)
-            for f in uploads or []:
-                adocs.upload_document(s, agent.agent_id, f.name, f.getvalue(), actor)
-            if add_to_profile and active_profile is not None:
-                current = {a["agent_id"]: a["weight_percent"] for a in active_profile.agents}
-                pp.edit_profile(s, active_profile.profile_id, actor, weights={**current, agent.agent_id: weight})
-            return agent.agent_id
-        try:
-            with data.write_session() as s:
-                new_id = _create(s)
-            st.success(f"Agent {new_id} created." + (" Rebalance the profile weights to 100% before running."
-                                                     if add_to_profile else ""))
-            st.rerun()
-        except (ac.AgentConfigError, adocs.DocumentError, ValueError) as exc:
-            st.error(str(exc))
+    from ui import agent_builder
+
+    created = agent_builder.render("cab", actor, profile_to_extend=active_profile)
+    if created:
+        st.success("Agent created." + (" Rebalance the profile weights to 100% before running."
+                                        if active_profile is not None else ""))
+        st.rerun()

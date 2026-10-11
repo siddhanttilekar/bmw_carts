@@ -20,7 +20,7 @@ python -m scripts.initialize_database   # builds database/productmind.db + repor
 python -m scripts.customer_intelligence setup         # taxonomy, mappings, clusters, insights (no LLM)
 python -m scripts.status                # prints table counts and document status
 streamlit run app.py                    # dashboard on http://localhost:8501
-pytest                                  # 227 tests against the real datasets (LLM always mocked)
+pytest                                  # all tests against the real datasets (LLM always mocked)
 ```
 
 Optional AI features (never put a key in a file that is committed):
@@ -33,6 +33,32 @@ python -m scripts.customer_intelligence observe --sample 20    # cost estimate o
 
 Next step for the team: run and review the 20-comment sample (DISCOVER → "Run AI extraction" → "Review extraction
 quality") before any full extraction.
+
+## Product experience: Dashboard + Product Prioritization
+
+Top navigation has two destinations; every earlier screen (Discover/Define/Prioritize/Decide step views, Customer
+Intelligence, Evidence Explorer, Insights, Vehicle Requirements, agent configuration & history, Decision
+Intelligence, Data Quality, Source Management, Settings) is kept in the collapsed **Advanced** menu.
+
+* **Dashboard** (`ui/pages/dashboard.py`) - live counts (unique comments vs AI observations), top customer problems,
+  top improvement requests, most appreciated features (distinct customers per vehicle system, each with real
+  excerpts under "View evidence"), and customer needs by vehicle area. **START PRODUCT PRIORITIZATION** opens the wizard.
+* **Product Prioritization** (`ui/pages/product_prioritization.py`), one page, BACK / NEXT, selections kept in session:
+  1. *Vehicle Area* - taxonomy domains (one, several or all) and their original BMW feedback topics, with a
+     deduplicated evidence preview.
+  2. *Requirements* - saved requirements in scope first; customer needs without a requirement can be turned into a
+     rule-based draft and saved as a DRAFT (never auto-approved, no duplicates).
+  3. *AI Agents* - pick any agents, **+ CREATE AGENT** (the seven-field builder, `ui/agent_builder.py`), live weights
+     (must total 100%), inline human assessments, AI-analysis cost estimate and approval, **RUN PRIORITIZATION**
+     (creates a new versioned run profile; historical profiles and runs are untouched).
+  4. *Decision Results* - ranked complete requirements, incomplete ones separately; per requirement **WHY?**
+     (offline business explanation from the saved run, with "Advanced score breakdown") and **ARGUE** (OpenAI
+     conversation per run + requirement, `services/argue_chat.py`), what-if weights, Excel report, new run.
+
+Services: `services/product_workflow.py` (dashboard read models, scope, candidates, readiness, execution, WHY) and
+`services/argue_chat.py`. ARGUE uses the shared client, sends only the saved run's context, validates cited comment
+IDs, flags figures not found in the evidence, trims history to 6 exchanges, needs "Allow paid AI replies" plus a
+per-reply cost cap, never calls the API when a panel opens and never changes scores.
 
 ## Step 2 - OpenAI-powered custom agents
 
