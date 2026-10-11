@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4N474RXX7D2TWB9KJZ78G9B",
+  "strategy": "manual-commit",
+  "branch": "bmw-productmind-ai",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 982,
+    "cache_creation_tokens": 3164001,
+    "cache_read_tokens": 214625979,
+    "output_tokens": 984165,
+    "api_call_count": 492
+  }
+}

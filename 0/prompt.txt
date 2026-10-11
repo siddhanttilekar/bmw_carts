@@ -1,0 +1,12 @@
+<pasted_content id="85dd">
+Entire has been installed and enabled for this project.
+
+Please make one small, genuine improvement to the
+BMW_CAST README documentation.
+
+Do not modify application code, private data,
+database files, or API credentials.
+
+After completing the change, tell me which file changed.
+Do not commit or push anything yet.
+</pasted_content id="85dd">
