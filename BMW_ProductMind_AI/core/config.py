@@ -152,6 +152,11 @@ class LLMSettings(BaseModel):
     # Application budget for all LLM work (not a provider billing cap).
     budget_usd: float = Field(default_factory=lambda: float(os.getenv("PRODUCTMIND_MAX_API_SPEND_USD")
                                                             or os.getenv("PRODUCTMIND_LLM_BUDGET_USD") or "26"))
+    # BMW_CAST Bot debate allowance (USD), authorised by the deployment owner via the environment only.
+    # 0 = not authorised (each conversation then needs an explicit in-app approval). Spend still counts against
+    # budget_usd; the allowance can never exceed the remaining application budget.
+    debate_allowance_usd: float = Field(default_factory=lambda: float(os.getenv("PRODUCTMIND_DEBATE_ALLOWANCE_USD")
+                                                                      or "0"))
     # External API use must be explicitly authorised (internal BMW data leaves the machine).
     external_calls_authorized: bool = Field(
         default_factory=lambda: os.getenv("PRODUCTMIND_ALLOW_EXTERNAL_LLM", "").lower() in ("1", "true", "yes"))

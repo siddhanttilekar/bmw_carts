@@ -55,6 +55,14 @@ Intelligence, Data Quality, Source Management, Settings) is kept in the collapse
      (offline business explanation from the saved run, with "Advanced score breakdown") and **ARGUE** (OpenAI
      conversation per run + requirement, `services/argue_chat.py`), what-if weights, Excel report, new run.
 
+**BMW_CAST Bot** (team BMW_CAST's debate assistant; not an official BMW product) answers ARGUE questions inline under
+each ranked requirement. Opening the panel shows customer evidence and agent perspectives from the saved run with no
+API call; only SEND triggers live inference through the shared OpenAI client. The deployment owner can authorise a
+debate allowance (`PRODUCTMIND_DEBATE_ALLOWANCE_USD`, environment only): within it messages need no per-message
+approval, and the remaining allowance and the $26 application budget are checked before every call. Without an
+allowance a user approves paid replies once per session. Weight suggestions from the bot are validated in Python
+(every agent, total 100%), simulated, and only become a new run after explicit confirmation.
+
 Services: `services/product_workflow.py` (dashboard read models, scope, candidates, readiness, execution, WHY) and
 `services/argue_chat.py`. ARGUE uses the shared client, sends only the saved run's context, validates cited comment
 IDs, flags figures not found in the evidence, trims history to 6 exchanges, needs "Allow paid AI replies" plus a

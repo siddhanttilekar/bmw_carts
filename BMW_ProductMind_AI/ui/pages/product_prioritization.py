@@ -9,6 +9,7 @@ existing Python engine.
 """
 from __future__ import annotations
 
+import json
 import os
 
 import streamlit as st
@@ -25,7 +26,7 @@ from ui.theme import apply_theme, esc, progress
 
 STEPS = ["Vehicle Area", "Requirements", "AI Agents", "Decision Results"]
 AI_UNAVAILABLE = "AI unavailable — configure OpenAI API in application settings."
-EXEC_LABEL = {"AI_ANALYSIS": "AI Analysis", "DATA_ANALYSIS": "Data Analysis", "HUMAN_ASSESSMENT": "Human Assessment"}
+EXEC_LABEL = {"AI_ANALYSIS": "AI Analysis", "DATA_ANALYSIS": "Data Analysis"}
 
 apply_theme()
 ss = st.session_state
@@ -41,6 +42,13 @@ actor = who.text_input("Your user ID", value=ss.get("workflow_actor", os.getenv(
 ss["workflow_actor"] = actor
 progress(STEPS, ss.wiz_step)
 settings = llm_settings()
+
+
+def auto_cap() -> float:
+    """Automatic spending cap for a paid action: whatever is left of the
+    application budget (backend still checks estimates and logs usage)."""
+    with data.write_session() as s:
+        return max(budget.budget_status(s, settings).remaining_usd, 0.0)
 
 
 def go(step: int) -> None:
@@ -224,39 +232,10 @@ def step_agents() -> None:
     for e in ready.errors:
         if "100%" not in e:
             st.error(e)
-    if ready.missing_human:
-        st.markdown("#### Human assessments needed")
-        for m in ready.missing_human:
-            key = f"{m['agent_id']}_{m['requirement_id']}"
-            with st.container(border=True):
-                st.markdown(f"**{esc(m['agent_name'])}** on *{esc(m['title'])}*")
-                sc, rt = st.columns([1, 4])
-                score = sc.number_input("Score (0-100)", 0, 100, None, key=f"w_hs_{key}")
-                why_ = rt.text_input("Rationale (required)", key=f"w_hr_{key}")
-                if st.button("Save assessment", key=f"w_hb_{key}", disabled=score is None or not why_.strip()
-                             or not actor.strip()):
-                    try:
-                        with data.write_session() as s:
-                            dp.record_human_assessment(s, m["requirement_id"], m["agent_id"], score, why_, actor)
-                        st.rerun()
-                    except ValueError as exc:
-                        st.error(str(exc))
-    approve = None
     blocker = paid_call_blocker()
-    if ready.ai_plans:
-        st.markdown("#### AI analysis")
-        if ready.needs_paid_ai:
-            if blocker:
-                st.warning(AI_UNAVAILABLE)
-            st.write(f"{ready.ai_cached} saved analyses will be reused at no cost. New analyses: estimated "
-                     f"${ready.estimated_usd:.4f} (up to ${ready.upper_usd:.4f}).")
-            with data.write_session() as s:
-                remaining = budget.budget_status(s, settings).remaining_usd
-            st.caption(f"Application budget remaining: ${remaining:.2f} (estimate from logged token usage).")
-            approve = st.number_input("I approve spending up to (USD)", 0.0, 5.0, 0.0, 0.01, key="w_approve")
-        else:
-            st.caption(f"All {ready.ai_cached} AI analyses are saved and will be reused at no cost.")
-    paid_ok = not ready.needs_paid_ai or (not blocker and approve and approve >= ready.estimated_usd)
+    if ready.needs_paid_ai and blocker:
+        st.warning(AI_UNAVAILABLE)
+    paid_ok = not ready.needs_paid_ai or not blocker
     can_run = ready.ok and paid_ok and bool(actor.strip())
     st.write("")
     left, _, right = st.columns([1, 3, 2])
@@ -266,7 +245,8 @@ def step_agents() -> None:
         try:
             llm = paid_client() if ready.needs_paid_ai else None
             with st.spinner("Running agents and calculating scores"), data.write_session() as s:
-                run_id = pw.execute(s, settings, ss.wiz_reqs, weights, actor, llm=llm, approved_max_usd=approve)
+                run_id = pw.execute(s, settings, ss.wiz_reqs, weights, actor, llm=llm,
+                                    approved_max_usd=auto_cap() if ready.needs_paid_ai else None)
             ss.wiz_run_id = run_id
             go(4)
         except (ValueError, RuntimeError, budget.ApprovalRequired, budget.BudgetExceeded) as exc:
@@ -274,9 +254,9 @@ def step_agents() -> None:
         except Exception as exc:  # noqa: BLE001 - never show request content or keys
             st.error(f"The run stopped ({type(exc).__name__}). Saved analyses are kept; nothing was ranked.")
     if not can_run:
-        reasons = [e for e in ready.errors] + (["Save the human assessments above."] if ready.missing_human else [])
+        reasons = [e for e in ready.errors]
         if ready.needs_paid_ai and not paid_ok:
-            reasons.append(AI_UNAVAILABLE if blocker else "Approve the estimated AI cost above.")
+            reasons.append(AI_UNAVAILABLE)
         if not actor.strip():
             reasons.append("Enter your user ID at the top.")
         st.caption("To run: " + " ".join(dict.fromkeys(reasons)))
@@ -315,47 +295,118 @@ def why_panel(run_id: str, rid: str) -> None:
     st.markdown("##### What is still uncertain")
     for u in w["uncertain"][:6]:
         st.markdown(f"- {esc(u)}")
-    with st.expander("ADVANCED SCORE BREAKDOWN"):
+    with st.expander("Advanced details (score calculation)"):
         for b in w["breakdown"]:
             st.markdown(f"**{esc(b['agent'])}**")
             for line in b["lines"]:
                 st.caption(line)
 
 
-def argue_panel(run_id: str, rid: str, allow_paid: bool, cap: float, blocker: str | None) -> None:
+BOT = argue_chat.BOT_NAME
+BOT_UNAVAILABLE = f"{BOT} is unavailable — configure OpenAI API in application settings."
+WELCOME = (f"Welcome to {BOT}. Challenge this requirement's priority, explore customer evidence, or ask why the "
+           "selected agents recommended it.")
+
+
+def _scenario(run_id: str, key: str, idx: int, weights: dict) -> None:
+    """A bot-suggested weight scenario: Python simulation; new run only after confirmation."""
+    from services import what_if_simulator as wis
+    from services.decision_grounding import bind_run, run_agents
+
+    with data.write_session() as s:
+        run = bind_run(s, run_id)
+        names = {a["agent_id"]: a["name"] for a in run_agents(run)}
+        rids = json.loads(run.requirement_ids_json)
+        sim = wis.simulate(s, run_id, weights)
+        titles = {r.requirement_id: r.title for r in dp.ranking(s, run_id)}
+    with st.container(border=True):
+        st.markdown(f"**Scenario suggested by {BOT}** (not applied)")
+        st.caption("Weights: " + ", ".join(f"{names.get(a, a)} {w:g}%" for a, w in weights.items())
+                   + " · effect calculated in Python from the saved agent scores")
+        st.dataframe([{"Requirement": titles.get(r.requirement_id, ""), "Saved rank": r.original_rank,
+                       "Scenario rank": r.simulated_rank, "Saved score": r.original_final,
+                       "Scenario score": r.simulated_final} for r in sim.rows], hide_index=True, width="stretch")
+        ok = st.checkbox("I want a new prioritization run with these weights (the saved run stays unchanged)",
+                         key=f"sc_ok_{key}_{idx}")
+        if st.button("Create new prioritization run", key=f"sc_run_{key}_{idx}", disabled=not ok or not actor.strip()):
+            try:
+                with data.write_session() as s:
+                    new_id = pw.execute(s, settings, rids, weights, actor)
+                ss.wiz_run_id = new_id
+                ss.wiz_weights.update(weights)
+                go(4)
+            except (ValueError, RuntimeError, budget.ApprovalRequired) as exc:
+                st.error(str(exc))
+
+
+def argue_panel(run_id: str, rid: str, approved: float | None, can_send: bool, blocker: str | None) -> None:
     key = f"{run_id}|{rid}"
     history = ss.wiz_chats.setdefault(key, [])
-    for msg in history:
-        with st.chat_message("user" if msg["role"] == "user" else "assistant"):
-            st.write(msg["content"])
-            for n in msg.get("notes", []):
-                st.caption(n)
-            if msg.get("evidence_ids"):
-                st.caption("Evidence cited: comments " + ", ".join(msg["evidence_ids"]))
+    st.markdown(f"#### {BOT}")
+    st.info(WELCOME)
+    with data.write_session() as s:  # offline: from the saved run, no API call
+        w = pw.why(s, run_id, rid)
+    c = w["counts"] or {}
+    e1, e2 = st.columns(2)
+    with e1:
+        st.markdown("##### Customer evidence")
+        st.markdown(f"- **{c.get('complaints', 0)}** customers with a related complaint\n"
+                    f"- **{c.get('improvement_requests', 0)}** customers with an improvement request")
+        if w["top_needs"]:
+            st.markdown("- Specific needs: " + "; ".join(esc(n) for n in w["top_needs"]))
+        refs = [q["feedback_id"] for q in w["quotes"]]
+        st.caption("Sources: " + (("customer comments " + ", ".join(refs)) if refs else "no linked customer excerpts")
+                   + (f"; customer studies: {', '.join(w['studies'])}" if w["studies"] else "")
+                   + (f"; {len(w['competitor_refs'])} competitor observations" if w["competitor_refs"] else ""))
+    with e2:
+        st.markdown("##### Agent perspectives")
+        support = [p for p in w["perspectives"] if p["view"] != "could not assess"]
+        for p in support:
+            st.markdown(f"- **{esc(p['agent'])}** ({p['weight_percent']:g}%): {esc(p['view'])}")
+        counter = [u for u in w["uncertain"] if "counter-evidence" in u or "uncertain relevance" in u]
+        missing = [u for u in w["uncertain"] if u not in counter][:4]
+        st.markdown("- Counter-evidence: " + (esc(" ".join(counter)) if counter else "none recorded in this run"))
+        if missing:
+            st.markdown("- Missing information: " + esc(" ".join(missing)))
+    for i, msg in enumerate(history):
+        if msg["role"] == "user":
+            with st.chat_message("user"):
+                st.write(msg["content"])
+        else:
+            with st.chat_message("assistant", avatar=":material/directions_car:"):
+                st.markdown(f"**{BOT}**")
+                st.write(msg["content"])
+                if msg.get("stance") == "insufficient_evidence":
+                    st.caption(f"{BOT} could not find enough evidence to answer that question fully.")
+                for n in msg.get("notes", []):
+                    st.caption(n)
+                if msg.get("evidence_ids"):
+                    st.caption("Evidence cited: customer comments " + ", ".join(msg["evidence_ids"]))
+            if msg.get("scenario"):
+                _scenario(run_id, key, i, msg["scenario"])
     if blocker:
-        st.warning(AI_UNAVAILABLE)
+        st.warning(BOT_UNAVAILABLE)
         return
     with st.form(key=f"argue_form_{key}", clear_on_submit=True):
-        q = st.text_area("Challenge or question", key=f"argue_q_{key}", height=80,
-                         placeholder="e.g. I disagree with this priority - what evidence contradicts it?")
-        sent = st.form_submit_button("Send", disabled=not allow_paid)
-    if not allow_paid:
-        st.caption("Tick 'Allow paid AI replies' above to send questions.")
+        q = st.text_area(f"Ask {BOT}", key=f"argue_q_{key}", height=80, placeholder="Type your argument...")
+        sent = st.form_submit_button("SEND", disabled=not can_send)
     if sent and q.strip():
         try:
             llm = paid_client()
-            with st.spinner("Thinking"), data.write_session() as s:
-                out = argue_chat.ask(s, llm, settings, run_id, rid, history, q, actor, approved_max_usd=cap,
+            with st.spinner(f"{BOT} is analyzing your argument..."), data.write_session() as s:
+                out = argue_chat.ask(s, llm, settings, run_id, rid, history, q, actor, approved_max_usd=approved,
                                      conversation_id=ss.wiz_conv.get(key))
             ss.wiz_conv[key] = out["conversation_id"]
             history += [{"role": "user", "content": q.strip()},
-                        {"role": "assistant", "content": out["answer"], "notes": out["notes"],
-                         "evidence_ids": out["evidence_ids"]}]
+                        {"role": "assistant", "content": out["answer"], "notes": out["notes"], "stance": out["stance"],
+                         "evidence_ids": out["evidence_ids"], "scenario": out.get("scenario")}]
             st.rerun()
-        except (argue_chat.ChatError, budget.ApprovalRequired, budget.BudgetExceeded) as exc:
+        except budget.BudgetExceeded as exc:
+            st.warning(str(exc))
+        except (argue_chat.ChatError, budget.ApprovalRequired) as exc:
             st.error(str(exc))
-        except Exception as exc:  # noqa: BLE001
-            st.error(f"The AI could not answer ({type(exc).__name__}). Nothing was changed.")
+        except Exception as exc:  # noqa: BLE001 - never surface request content or keys
+            st.error(f"{BOT} could not answer ({type(exc).__name__}). Nothing was changed.")
 
 
 def step_results() -> None:
@@ -372,15 +423,12 @@ def step_results() -> None:
     st.caption("Scores are calculated in Python from validated evidence and your agent weights; each run is saved and "
                "never overwritten.")
     blocker = paid_call_blocker()
-    est = 0.0
-    with st.expander("ARGUE settings (OpenAI)"):
-        allow_paid = st.checkbox("Allow paid AI replies", key="w_allow_chat", disabled=bool(blocker))
-        if rows:
-            with data.write_session() as s:
-                est = argue_chat.estimate(settings, argue_chat.build_context(s, run_id, rows[0].requirement_id), [], "")
-        cap = st.number_input("Maximum cost per reply (USD)", 0.0, 0.5, round(max(est * 3, 0.01), 3), 0.005,
-                              key="w_chat_cap")
-        st.caption(f"Each reply is estimated at about ${est:.4f}. Opening a panel never calls the API.")
+    with data.write_session() as s:
+        allowance = argue_chat.allowance_status(s, settings)
+    # No approval prompts: an owner allowance (if set) limits the bot; otherwise each reply is capped by the
+    # remaining application budget. The backend checks and logs every call.
+    approved = None if allowance["authorized"] else auto_cap()
+    can_send = not blocker and (allowance["remaining_usd"] > 0 if allowance["authorized"] else approved > 0)
     for r in complete:
         with st.container(border=True):
             c1, c2, c3, c4 = st.columns([5, 2, 1, 1])
@@ -395,8 +443,7 @@ def step_results() -> None:
             if ss.get(wk):
                 why_panel(run_id, r.requirement_id)
             if ss.get(ak):
-                st.markdown("##### Discuss this priority")
-                argue_panel(run_id, r.requirement_id, allow_paid, cap, blocker)
+                argue_panel(run_id, r.requirement_id, approved, can_send, blocker)
     if not complete:
         st.info("No requirement could be fully assessed, so there is no formal ranking.")
     if incomplete:
@@ -416,7 +463,7 @@ def step_results() -> None:
 
         with data.write_session() as s:
             base = wis.current_weights(s, run_id)
-            names = {a["agent_id"]: a["name"] for a in pw.available_agents(s)}
+            names = {a["agent_id"]: a["name"] for a in pw.available_agents(s, include_human=True)}
         trial = {aid: st.number_input(names.get(aid, aid), 0.0, 100.0, float(w), 0.5, key=f"wi_{run_id}_{aid}")
                  for aid, w in base.items()}
         if st.button("Simulate", disabled=round(sum(trial.values()), 2) != 100):

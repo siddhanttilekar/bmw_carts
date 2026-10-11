@@ -37,13 +37,25 @@ st.caption("Set environment variables such as PRODUCTMIND_ALLOW_EXTERNAL_LLM onl
            "API keys are never displayed or stored by the application.")
 
 st.markdown("### LLM Budget")
+from services import argue_chat  # noqa: E402
+
 with data.write_session() as s:
     b = budget.budget_status(s, llm)
     metrics = cmx.list_custom_metrics(s)
+    allowance = argue_chat.allowance_status(s, llm)
+st.write(f"API provider: {llm.provider} · configured model: {llm.model}")
 st.write(f"Application budget ${b.budget_usd:,.2f} · estimated spend ${b.spent_usd:,.4f} · remaining "
          f"${b.remaining_usd:,.4f} · {b.api_calls} API calls ({b.retry_or_failed_calls} retries/failed, "
          f"${b.retry_or_failed_cost_usd:,.4f}).")
 st.caption("This is an application budget computed from logged token usage at list prices, not a provider billing cap.")
+st.markdown("#### BMW_CAST Bot debate allowance")
+if allowance["authorized"]:
+    st.write(f"Authorised by the deployment owner: ${allowance['allowance_usd']:,.2f} · used ${allowance['spent_usd']:,.4f}"
+             f" · available ${allowance['remaining_usd']:,.4f} (never more than the remaining application budget).")
+else:
+    st.write("Not authorised. Users must approve paid replies once per session.")
+st.caption("Only the deployment owner can set or change the allowance, through the PRODUCTMIND_DEBATE_ALLOWANCE_USD "
+           "environment variable before starting the app. It is not editable here.")
 
 st.markdown("### Documented Custom Metrics")
 st.dataframe(pd.DataFrame(metrics), hide_index=True, width="stretch")
@@ -60,6 +72,9 @@ with st.expander("Relevant environment variables"):
         "PRODUCTMIND_LLM_MODEL",
         "PRODUCTMIND_LLM_MODEL_VERSION",
         "PRODUCTMIND_LLM_BUDGET_USD",
+        "PRODUCTMIND_MAX_API_SPEND_USD",
+        "PRODUCTMIND_LLM_PROVIDER",
+        "PRODUCTMIND_DEBATE_ALLOWANCE_USD",
     ]
     for name in names:
         st.write(name, "=", os.getenv(name, ""))

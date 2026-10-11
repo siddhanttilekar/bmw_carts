@@ -68,6 +68,10 @@ def human(s):
     return agent(s, "Feasibility", "HUMAN_ASSESSMENT", "HUMAN_SCORE", ["RES_HUMAN_ASSESSMENTS", "RES_REQUIREMENTS"])
 
 
+def coverage_agent(s):
+    return agent(s, "Coverage data", "DATA_ANALYSIS", "EVIDENCE_COVERAGE", ["RES_REQUIREMENTS", "RES_G60_FEEDBACK"])
+
+
 def data_agent(s):
     return agent(s, "Demand data", "DATA_ANALYSIS", "LOG_NORMALIZED_FEEDBACK_COUNT", ["RES_G60_FEEDBACK", "RES_REQUIREMENTS"])
 
@@ -147,29 +151,34 @@ def test_06_07_08_requirements_and_candidate_drafts(s):
 # ---------------------------------------------------------------------------
 
 
-def test_12_13_14_selection_weights_and_human_assessments(s):
+def test_12_13_14_selection_weights_and_no_human_assessment(s):
     rids = [r["requirement_id"] for r in requirements(s)]
     h = human(s)
-    d = data_agent(s)
-    ready = pw.check_readiness(s, settings(), rids, {h: 40, d: 50}, USER)
+    d, c = data_agent(s), coverage_agent(s)
+    assert h not in {a["agent_id"] for a in pw.available_agents(s)}  # stored, but not selectable
+    assert h in {a["agent_id"] for a in pw.available_agents(s, include_human=True)}
+    ready = pw.check_readiness(s, settings(), rids, {d: 40, c: 50}, USER)
     assert "Please adjust the selected agent weights to 100%." in ready.errors
-    assert pw.check_readiness(s, settings(), [], {}, USER).errors[:2] == ["Select at least one requirement.",
-                                                                          "Select at least one agent."]
-    ready = pw.check_readiness(s, settings(), rids, {h: 50, d: 50}, USER)
-    assert not ready.errors and {m["requirement_id"] for m in ready.missing_human} == set(rids)
-    with pytest.raises(ValueError):
-        pw.execute(s, settings(), rids, {h: 50, d: 50}, USER)
-    for rid in rids:
-        dp.record_human_assessment(s, rid, h, 70, "Synthetic test rationale", USER)
-    assert pw.check_readiness(s, settings(), rids, {h: 50, d: 50}, USER).ok
+    assert pw.check_readiness(s, settings(), [], {}, USER).errors[:2] == [
+        "Select at least one requirement.", "Select at least one AI Analysis or Data Analysis agent."]
+    ready = pw.check_readiness(s, settings(), rids, {d: 50, c: 50}, USER)
+    assert ready.ok and not ready.errors  # no manual scores or rationales required
+    # regression: a Human Assessment agent never blocks the run and never enters the new profile
+    ready = pw.check_readiness(s, settings(), rids, {d: 50, c: 50, h: 0}, USER)
+    assert ready.ok and ready.excluded_human == ["Feasibility"]
+    run_id = pw.execute(s, settings(), rids, {d: 50, c: 50, h: 0}, USER)
+    from services.decision_grounding import bind_run, run_agents
+
+    assert {a["agent_id"] for a in run_agents(bind_run(s, run_id))} == {d, c}
+    assert all(r.priority_status == "COMPLETE" for r in dp.ranking(s, run_id))
+    only_human = pw.check_readiness(s, settings(), rids, {h: 100}, USER)
+    assert "Select at least one AI Analysis or Data Analysis agent." in only_human.errors
 
 
 def test_15_to_21_execution_caching_budget_scoring_snapshots(s):
     rids = [r["requirement_id"] for r in requirements(s)]
-    a, h = demand_ai(s), human(s)
-    for rid in rids:
-        dp.record_human_assessment(s, rid, h, 60, "Synthetic test rationale", USER)
-    weights = {a: 40, h: 60}
+    a, d = demand_ai(s), data_agent(s)
+    weights = {a: 40, d: 60}
     ready = pw.check_readiness(s, settings(), rids, weights, USER)
     assert ready.needs_paid_ai and len(ready.ai_plans) == 2 and ready.estimated_usd > 0
     with pytest.raises(budget.ApprovalRequired):  # OpenAI needed but not available
@@ -191,7 +200,7 @@ def test_15_to_21_execution_caching_budget_scoring_snapshots(s):
         res = {x["agent_id"]: x for x in dp.agent_results(s, run_id, r.requirement_id)}
         assert res[a]["inputs"]["evidence_basis"] == "agent_ai_analysis"
         assert res[a]["score"] == log_normalize(res[a]["inputs"]["n"]) and res[a]["weighted_contribution"] <= 40
-        assert r.final_score == round(res[a]["score"] * 0.4 + 60 * 0.6, 2)
+        assert r.final_score == round(res[a]["score"] * 0.4 + res[d]["score"] * 0.6, 2)
     snap = dp.evidence_snapshot(s, run_id)
     assert all(snap[rid]["agents"][a]["evidence_basis"] == "agent_ai_analysis" for rid in rids)
     # second run with the same inputs reuses cached analyses - no new calls, same scores
@@ -381,13 +390,18 @@ def test_ui_dashboard_and_full_wizard_flow(ui_db, monkeypatch):
     assert labels.count("WHY?") >= 1 and labels.count("ARGUE") >= 1
 
 
-def test_ui_inline_agent_creation_and_human_form(ui_db, monkeypatch):
+def test_ui_inline_agent_creation_without_human_assessment(ui_db, monkeypatch):
     app = _app(ui_db["path"], monkeypatch)
     app.session_state["wiz_step"] = 3
     app.session_state["wiz_reqs"] = ui_db["rids"]
     app.session_state["wiz_domains"] = ["RANGE_EFFICIENCY"]
+    app.session_state["wiz_agents"] = [ui_db["human"]]  # stale selection from an older session
     app.switch_page("ui/pages/product_prioritization.py").run()
+    assert not app.exception
+    assert f"w_ag_{ui_db['human']}" not in [c.key for c in app.checkbox]  # not selectable
+    assert app.session_state["wiz_agents"] == []
     assert "+ CREATE AGENT" in [e.label for e in app.expander]
+    assert list(app.radio(key="wab_exe").options) == ["AI Analysis", "Data Analysis"]
     app.text_input(key="wab_name").input("Inline Data Agent").run()
     app.text_area(key="wab_obj").input("Measure feedback frequency").run()
     app.multiselect(key="wab_res").set_value(["RES_G60_FEEDBACK", "RES_REQUIREMENTS"]).run()
@@ -395,10 +409,12 @@ def test_ui_inline_agent_creation_and_human_form(ui_db, monkeypatch):
     app.selectbox(key="wab_rule").set_value("LOG_NORMALIZED_FEEDBACK_COUNT").run()
     next(b for b in app.button if b.label == "Create Agent").click().run()
     assert not app.exception
-    new = [a for a in app.session_state["wiz_agents"]]
+    new = app.session_state["wiz_agents"]
     assert len(new) == 1  # created and immediately selected
-    app.checkbox(key=f"w_ag_{ui_db['human']}").check().run()
-    assert any(f"w_hs_{ui_db['human']}_" in (n.key or "") for n in app.number_input)  # inline assessment form
+    app.number_input(key=f"w_wt_{new[0]}").set_value(100).run()
+    assert not [n for n in app.number_input if "w_hs_" in (n.key or "")]  # no manual score fields
+    assert "Human assessments needed" not in " ".join(m.value for m in app.markdown)
+    assert not next(b for b in app.button if b.label == "RUN PRIORITIZATION").disabled
 
 
 def test_ui_why_and_argue_panels_are_independent(ui_db, monkeypatch):
@@ -419,4 +435,4 @@ def test_ui_why_and_argue_panels_are_independent(ui_db, monkeypatch):
     assert "Why this matters" in " ".join(m.value for m in app.markdown)
     next(b for b in app.button if b.label == "ARGUE").click().run()  # opening never calls the API (client forbidden)
     assert not app.exception
-    assert any("AI unavailable — configure OpenAI API in application settings." in w.value for w in app.warning)
+    assert any("BMW_CAST Bot is unavailable — configure OpenAI API in application settings." in w.value for w in app.warning)

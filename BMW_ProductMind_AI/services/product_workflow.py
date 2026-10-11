@@ -25,7 +25,6 @@ from core.ai_models import AIFeedbackExtraction, ClusterFeedbackLink, CustomerNe
 from core.config import LLMSettings
 from core.evidence_models import AIFeedbackObservation
 from core.models import Feedback
-from core.prioritization_models import PriorityAssessment
 from core.requirement_models import VehicleRequirement
 from services import ai_feedback_analysis as ai
 from services.agent_weights import BP_TOTAL, percent_to_bp
@@ -249,13 +248,20 @@ def save_draft(session: Session, draft, actor: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def available_agents(session: Session) -> list[dict]:
+WORKFLOW_EXECUTION_METHODS = ("AI_ANALYSIS", "DATA_ANALYSIS")  # Human Assessment is not part of this workflow
+
+
+def available_agents(session: Session, include_human: bool = False) -> list[dict]:
+    """Active agents for the workflow. Human Assessment agents stay stored (and
+    in historical runs) but are not selectable unless ``include_human``."""
     from services.agent_configuration import list_agents
     from services.agent_resources import RESOURCES
 
     out = []
     for a in list_agents(session):
         if a["status"] != "ACTIVE":
+            continue
+        if not include_human and a["execution_method"] not in WORKFLOW_EXECUTION_METHODS:
             continue
         out.append({**a, "resource_names": [RESOURCES[r].name for r in a["resources"] if r in RESOURCES]})
     return out
@@ -264,7 +270,7 @@ def available_agents(session: Session) -> list[dict]:
 @dataclass
 class Readiness:
     errors: list[str] = field(default_factory=list)
-    missing_human: list[dict] = field(default_factory=list)  # {agent_id, agent_name, requirement_id, title}
+    excluded_human: list[str] = field(default_factory=list)  # Human Assessment agents dropped from the selection
     ai_plans: list = field(default_factory=list)  # agent_analysis.AnalysisPlan (uncached ones need approval)
     ai_cached: int = 0
     estimated_usd: float = 0.0
@@ -277,26 +283,43 @@ class Readiness:
 
     @property
     def ok(self) -> bool:
-        return not self.errors and not self.missing_human
+        return not self.errors
 
 
 def weight_total_bp(weights: dict[str, object]) -> int:
     return sum(percent_to_bp(v) for v in weights.values())
 
 
+def workflow_weights(session: Session, weights: dict[str, object]) -> tuple[dict[str, object], list[str]]:
+    """Drop Human Assessment agents (not part of this workflow). Returns
+    (remaining weights, names of excluded agents)."""
+    from services.agent_configuration import get_agent
+
+    kept, excluded = {}, []
+    for agent_id, w in weights.items():
+        agent = get_agent(session, agent_id)
+        if agent.execution_method in WORKFLOW_EXECUTION_METHODS:
+            kept[agent_id] = w
+        else:
+            excluded.append(agent.name)
+    return kept, excluded
+
+
 def check_readiness(session: Session, settings: LLMSettings, requirement_ids: list[str], weights: dict[str, object],
                     actor: str) -> Readiness:
     """All Run-Prioritization validations, without side effects except the free,
-    deterministic evidence selections AI agents need."""
+    deterministic evidence selections AI agents need. No manual scores are
+    required: Human Assessment agents are excluded from this workflow."""
     from services import agent_analysis as aa
     from services.agent_configuration import agent_resources, get_agent
     from services.agent_scoring import check_compatibility
 
     r = Readiness()
+    weights, r.excluded_human = workflow_weights(session, weights)
     if not requirement_ids:
         r.errors.append("Select at least one requirement.")
     if not weights:
-        r.errors.append("Select at least one agent.")
+        r.errors.append("Select at least one AI Analysis or Data Analysis agent.")
     try:
         r.total_bp = weight_total_bp(weights)
     except ValueError as exc:
@@ -306,6 +329,8 @@ def check_readiness(session: Session, settings: LLMSettings, requirement_ids: li
         r.errors.append("Please adjust the selected agent weights to 100%.")
     reqs = {q.requirement_id: q for q in session.scalars(select(VehicleRequirement).where(
         VehicleRequirement.requirement_id.in_(requirement_ids or ["-"])))}
+    if requirement_ids and len(reqs) != len(set(requirement_ids)):
+        r.errors.append("Some selected requirements no longer exist.")
     for agent_id in weights:
         agent = get_agent(session, agent_id)
         res = agent_resources(session, agent_id)
@@ -313,14 +338,6 @@ def check_readiness(session: Session, settings: LLMSettings, requirement_ids: li
         if errs:
             r.errors.append(f"{agent.name}: " + " ".join(errs))
             continue
-        if agent.scoring_method == "HUMAN_SCORE":
-            for rid in requirement_ids:
-                has = session.scalar(select(PriorityAssessment.assessment_id).where(
-                    PriorityAssessment.requirement_id == rid, PriorityAssessment.agent_id == agent_id,
-                    PriorityAssessment.superseded.is_(False)).limit(1))
-                if not has and rid in reqs:
-                    r.missing_human.append({"agent_id": agent_id, "agent_name": agent.name, "requirement_id": rid,
-                                            "title": reqs[rid].title})
         if agent.execution_method == "AI_ANALYSIS" and set(res) & set(aa.ANALYSABLE_RESOURCES):
             for rid in requirement_ids:
                 plan = aa.plan_analysis(session, settings, agent_id, rid, actor or "system")
@@ -345,12 +362,10 @@ def execute(session: Session, settings: LLMSettings, requirement_ids: list[str],
 
     if not (actor or "").strip():
         raise ValueError("Enter your user ID first.")
+    weights, _ = workflow_weights(session, weights)  # Human Assessment agents never enter new profiles
     ready = check_readiness(session, settings, requirement_ids, weights, actor)
     if ready.errors:
         raise ValueError(" ".join(ready.errors))
-    if ready.missing_human:
-        raise ValueError("Human assessments are missing for: " + ", ".join(
-            f"{m['agent_name']} / {m['title']}" for m in ready.missing_human))
     if ready.needs_paid_ai:
         if llm is None:
             raise aa.ApprovalRequired("AI unavailable — configure OpenAI API in application settings.")

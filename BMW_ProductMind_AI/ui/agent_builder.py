@@ -2,13 +2,12 @@
 wizard and the advanced PRIORITIZE page).
 
 Fields: Agent Name, Objective, Custom Instructions, Add Resources (incl.
-uploads), Context, Weight, Execution Method. A compatible scoring rule is
+uploads), Context, Weight, Execution Method (AI Analysis or Data Analysis). A compatible scoring rule is
 shown only when the execution method offers more than one."""
 from __future__ import annotations
 
 import streamlit as st
 
-from core.prioritization_models import EXECUTION_METHODS
 from services import agent_configuration as ac
 from services import agent_documents as adocs
 from services import custom_metrics as cmx
@@ -16,7 +15,8 @@ from services.agent_resources import RESOURCES
 from services.agent_scoring import METHODS, check_compatibility, methods_for
 from ui import data
 
-EXECUTION_LABELS = {"AI_ANALYSIS": "AI Analysis", "DATA_ANALYSIS": "Data Analysis", "HUMAN_ASSESSMENT": "Human Assessment"}
+# Human Assessment is no longer offered for new agents (existing ones stay stored for history).
+EXECUTION_LABELS = {"AI_ANALYSIS": "AI Analysis", "DATA_ANALYSIS": "Data Analysis"}
 
 
 def render(prefix: str, actor: str, *, profile_to_extend=None) -> str | None:
@@ -38,7 +38,7 @@ def render(prefix: str, actor: str, *, profile_to_extend=None) -> str | None:
     context = st.text_input("Context", key=f"{prefix}_ctx", max_chars=ac.MAX_CONTEXT,
                             placeholder="e.g. Next-generation BMW 5 Series")
     weight = st.number_input("Weight (%)", 0.0, 100.0, 0.0, 0.5, key=f"{prefix}_w")
-    execution = st.radio("Execution Method", list(EXECUTION_METHODS), horizontal=True, key=f"{prefix}_exe",
+    execution = st.radio("Execution Method", list(EXECUTION_LABELS), horizontal=True, key=f"{prefix}_exe",
                          format_func=lambda m: EXECUTION_LABELS.get(m, m))
     rule_ids = methods_for(execution)
     if len(rule_ids) > 1:
