@@ -18,6 +18,20 @@ challenge any result in a conversation with **BMW_CAST Bot**.
 | AI provider | OpenAI (`gpt-5.6-luna`, structured outputs), via one shared client |
 | Automated tests | 255 (all external AI calls mocked) |
 
+### Quick start for judges
+
+```bash
+cd BMW_ProductMind_AI
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py          # then open http://localhost:8501
+```
+
+No API key is needed to explore the Dashboard, run a prioritization with Data Analysis agents, and read the **WHY?**
+explanations. AI Analysis agents and BMW_CAST Bot need an OpenAI key; see
+[Installation and Environment Setup](#11-installation-and-environment-setup). For a guided tour, follow the
+[Demo Walkthrough](#13-demo-walkthrough).
+
 ---
 
 ## Contents
