@@ -55,7 +55,8 @@ CSS = f"""
   .pm-step {{ border: 1px solid {BORDER}; border-radius: 8px; padding: 6px 10px; color: {TEXT_2}; background: {SURFACE};
               font-size: 0.78rem; letter-spacing: 0; }}
   .pm-step-active {{ border-color: {ACCENT}; color: {TEXT}; box-shadow: inset 0 0 0 1px {ACCENT}; }}
-  .pm-hero h1 {{ margin-bottom: 0; font-size: 2.1rem; }}
+  .pm-hero h1 {{ margin-bottom: 0; font-size: 2.1rem; padding-top: 0; }}
+  .pm-hero .pm-brand {{ color: {ACCENT}; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.06em; }}
   .pm-hero .pm-tag {{ color: {TEXT_2}; font-size: 1.05rem; margin-top: 2px; }}
   .pm-hero .pm-veh {{ color: {MUTED}; font-size: 0.85rem; margin-top: 6px; letter-spacing: 0.04em; text-transform: uppercase; }}
   .pm-progress {{ display: flex; gap: 0; margin: 0.2rem 0 1.4rem 0; border: 1px solid {BORDER}; border-radius: 10px;

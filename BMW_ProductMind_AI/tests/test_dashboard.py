@@ -208,7 +208,7 @@ def test_every_page_loads_without_errors(app):
 def test_overview_page_shows_database_counts(app):
     app.run()  # default page is now the main Dashboard
     html = " ".join(m.value for m in app.markdown)
-    assert "BMW ProductMind AI" in html and "4,000" in html and "Unique G60 customer comments" in html
+    assert "4,000" in html and "Unique G60 customer comments" in html
     assert "From Customer Feedback to Vehicle Decisions" in html
     app.switch_page("ui/pages/discover.py").run()  # the earlier step view stays available under Advanced
     html = " ".join(m.value for m in app.markdown)

@@ -9,8 +9,7 @@ from ui.evidence_ui import llm_settings
 from ui.theme import apply_theme, esc, grouped_bar, kpi
 
 apply_theme()
-st.markdown('<div class="pm-hero"><h1>BMW ProductMind AI</h1>'
-            '<div class="pm-tag">From Customer Feedback to Vehicle Decisions</div>'
+st.markdown('<div class="pm-hero"><div class="pm-tag">From Customer Feedback to Vehicle Decisions</div>'
             '<div class="pm-veh">Vehicle · BMW 5 Series G60</div></div>', unsafe_allow_html=True)
 st.write("")
 

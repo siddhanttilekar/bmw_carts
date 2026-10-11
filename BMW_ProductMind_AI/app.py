@@ -19,8 +19,12 @@ if str(ROOT) not in sys.path:
 
 from ui.theme import apply_theme  # noqa: E402
 
-st.set_page_config(page_title="BMW ProductMind AI", layout="wide", initial_sidebar_state="collapsed")
+BRAND = ROOT / "assets" / "branding"
+st.set_page_config(page_title="BMW_Cast · ProductMind AI", page_icon=str(BRAND / "bmw_cast_logo.png"), layout="wide",
+                   initial_sidebar_state="collapsed")
 apply_theme()
+# Project branding: shown top-left next to the navigation (and at the top of the sidebar when it is open).
+st.logo(str(BRAND / "bmw_cast_wordmark.png"), size="large", icon_image=str(BRAND / "bmw_cast_wordmark.png"))
 
 PAGES = {
     "dashboard": st.Page("ui/pages/dashboard.py", title="Dashboard", default=True),
