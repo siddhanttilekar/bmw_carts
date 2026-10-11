@@ -1,0 +1,192 @@
+{
+  "datasets": {
+    "BMW_5_Series_Public_Owner_Feedback.xlsx": {
+      "canonical_name": "BMW_5_Series_Public_Owner_Feedback.xlsx",
+      "dataset_type": "public_owner_feedback",
+      "destination": "external/BMW_5_Series_Public_Owner_Feedback.xlsx",
+      "sha256": "7d68b8bb84b477104a2f078d33362bca7aa6b72aee3099d253f8d39d5aa0beda",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/BMW_5_Series_Public_Owner_Feedback.xlsx",
+      "original_file_names": [
+        "BMW_5_Series_Public_Owner_Feedback.xlsx"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/BMW_5_Series_Public_Owner_Feedback.xlsx"
+      ],
+      "excluded_duplicates": [],
+      "note": "sheet 'Public G60 Feedback'"
+    },
+    "BMW_G60_Complete_Prototype_Data.xlsx": {
+      "canonical_name": "BMW_G60_Complete_Prototype_Data.xlsx",
+      "dataset_type": "consolidated_workbook",
+      "destination": "internal/BMW_G60_Complete_Prototype_Data.xlsx",
+      "sha256": "616d8c1c1f506aad39f9ede05d9b9ad1c13f819bc71910f1e7902a702ba3b85d",
+      "action": "already_present",
+      "imported": false,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/BMW_G60_Complete_Prototype_Data.xlsx",
+      "original_file_names": [
+        "BMW_G60_Complete_Prototype_Data.xlsx"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/BMW_G60_Complete_Prototype_Data.xlsx"
+      ],
+      "excluded_duplicates": [],
+      "note": "sheets 'START HERE' + 'G60 Feedback All'"
+    },
+    "BMW_G60_Public_Competitor_Evidence.xlsx": {
+      "canonical_name": "BMW_G60_Public_Competitor_Evidence.xlsx",
+      "dataset_type": "public_competitor_evidence",
+      "destination": "external/BMW_G60_Public_Competitor_Evidence.xlsx",
+      "sha256": "499521cf69f9013bdfac5c07d9f25db65fbeff837d23286713a5e601465374e5",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/BMW_G60_Public_Competitor_Evidence.xlsx",
+      "original_file_names": [
+        "BMW_G60_Public_Competitor_Evidence.xlsx"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/BMW_G60_Public_Competitor_Evidence.xlsx"
+      ],
+      "excluded_duplicates": [],
+      "note": "sheet 'Public Evidence'"
+    },
+    "F70_G60_G68_G70_customer_studies.xlsx": {
+      "canonical_name": "F70_G60_G68_G70_customer_studies.xlsx",
+      "dataset_type": "customer_studies",
+      "destination": "internal/F70_G60_G68_G70_customer_studies.xlsx",
+      "sha256": "652386b8ccea0bec0e9f9b4648e6a971f1dc19d32e26c50111614153701bff17",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/F70_G60_G68_G70_customer_studies.xlsx",
+      "original_file_names": [
+        "F70_G60_G68_G70_customer_studies.xlsx"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/F70_G60_G68_G70_customer_studies.xlsx"
+      ],
+      "excluded_duplicates": [],
+      "note": "sheets CN_EU_2025 + US_2025"
+    },
+    "F70_OptionList.PDF": {
+      "canonical_name": "F70_OptionList.PDF",
+      "dataset_type": "option_list",
+      "destination": "internal/F70_OptionList.PDF",
+      "sha256": "e7823aecbb4cc2b8b267ea65a0f128f464fc241719791082c30979dcb885635d",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/F70_OptionList.PDF",
+      "original_file_names": [
+        "F70_OptionList.PDF"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/F70_OptionList.PDF"
+      ],
+      "excluded_duplicates": [],
+      "note": "PDF title 'BMW 1er Katalog Juli 2026'"
+    },
+    "F70_feedback_hackathon.xlsx": {
+      "canonical_name": "F70_feedback_hackathon.xlsx",
+      "dataset_type": "bmw_feedback",
+      "destination": "internal/F70_feedback_hackathon.xlsx",
+      "sha256": "651f09e3d899eb6fd294ee89aee23cc41417030425ec19420fbf615ad798163e",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/F70_feedback_hackathon.xlsx",
+      "original_file_names": [
+        "F70_feedback_hackathon.xlsx"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/F70_feedback_hackathon.xlsx"
+      ],
+      "excluded_duplicates": [],
+      "note": "sheet Feedback_Explorer, e-code F70"
+    },
+    "G60_OptionList.PDF": {
+      "canonical_name": "G60_OptionList.PDF",
+      "dataset_type": "option_list",
+      "destination": "internal/G60_OptionList.PDF",
+      "sha256": "97ee14fae6239473f125d72518b710d72e3a7c5481c2e6b635d3c1f289a2669d",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/G60_OptionList.PDF",
+      "original_file_names": [
+        "G60_OptionList.PDF"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/G60_OptionList.PDF"
+      ],
+      "excluded_duplicates": [],
+      "note": "PDF title 'BMW 5er Limousine Katalog Juli 2026'"
+    },
+    "G60_feedback_hackathon.xlsx": {
+      "canonical_name": "G60_feedback_hackathon.xlsx",
+      "dataset_type": "bmw_feedback",
+      "destination": "internal/G60_feedback_hackathon.xlsx",
+      "sha256": "ffaeb3ab943d299380542c228b3d944ed749bc80af54c75aa30a5e84b221d34f",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/G60_feedback_hackathon.xlsx",
+      "original_file_names": [
+        "G60_feedback_hackathon.xlsx"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/G60_feedback_hackathon.xlsx"
+      ],
+      "excluded_duplicates": [],
+      "note": "sheet Feedback_Explorer, e-code G60"
+    },
+    "G70_OptionList.PDF": {
+      "canonical_name": "G70_OptionList.PDF",
+      "dataset_type": "option_list",
+      "destination": "internal/G70_OptionList.PDF",
+      "sha256": "77be9d9cb39db058928e8f6a1a02ae1ec4e2055afde1235751466b5c97b524f0",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/G70_OptionList.PDF",
+      "original_file_names": [
+        "G70_OptionList.PDF"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/G70_OptionList.PDF"
+      ],
+      "excluded_duplicates": [],
+      "note": "PDF title 'BMW 7er Katalog Juli 2026'"
+    },
+    "G70_feedback_hackathon.xlsx": {
+      "canonical_name": "G70_feedback_hackathon.xlsx",
+      "dataset_type": "bmw_feedback",
+      "destination": "internal/G70_feedback_hackathon.xlsx",
+      "sha256": "60d1c9932283bc244661ce9cd6c825099714d855bc4f3b9f1544d49a80821cf1",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/G70_feedback_hackathon.xlsx",
+      "original_file_names": [
+        "G70_feedback_hackathon.xlsx"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/G70_feedback_hackathon.xlsx"
+      ],
+      "excluded_duplicates": [],
+      "note": "sheet Feedback_Explorer, e-code G70"
+    },
+    "sales_volumes.xlsx": {
+      "canonical_name": "sales_volumes.xlsx",
+      "dataset_type": "sales_volumes",
+      "destination": "internal/sales_volumes.xlsx",
+      "sha256": "43db87dd0b52412a8912069a45c97b3b15900b5a00d3b79a5ec65ddcee1f49cf",
+      "action": "already_present",
+      "imported": true,
+      "selected_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/sales_volumes.xlsx",
+      "original_file_names": [
+        "sales_volumes.xlsx"
+      ],
+      "original_source_paths": [
+        "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata/sales_volumes.xlsx"
+      ],
+      "excluded_duplicates": [],
+      "note": "sheets F70/G60_G68/G70 with market + market_code"
+    }
+  },
+  "last_sync_source": "/Users/krishgaba/Desktop/Hacks/Hack_code/BMW_ProductMind_AI/mydata"
+}
