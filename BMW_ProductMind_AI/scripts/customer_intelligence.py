@@ -16,6 +16,7 @@
     python -m scripts.customer_intelligence observe --all --confirm-full-run --approve-usd 20
     python -m scripts.customer_intelligence budget
     python -m scripts.customer_intelligence test-openai                              # ONE paid request, asks first
+    python -m scripts.customer_intelligence agent-analysis --agent AGT-.. --requirement REQ-.. --user NAME [--approve-usd 0.05]
     python -m scripts.customer_intelligence select-evidence --user NAME              # all requirements, no API cost
     python -m scripts.customer_intelligence approve-metric DOCUMENT_PASSAGE_SHARE --admin ID --note TEXT
 
@@ -383,6 +384,57 @@ def cmd_test_openai(args) -> None:
         sys.exit(1)
 
 
+def cmd_agent_analysis(args) -> None:
+    """Step 2: OpenAI evidence analysis for one AI_ANALYSIS agent and one
+    requirement. Estimate only unless --approve-usd is given; cached results
+    are reused at no cost."""
+    from services import agent_analysis as aa
+    from services.agent_explanations import calculation_lines, evidence_lines
+    from services.agent_scoring import run_method
+    from services.llm_budget import budget_status
+    from services.requirement_review import get_requirement, requirement_as_dict
+
+    settings = get_llm_settings()
+    with session_scope(_engine(args)) as s:
+        try:
+            plan = aa.plan_analysis(s, settings, args.agent, args.requirement, args.user)
+        except aa.AnalysisError as exc:
+            sys.exit(str(exc))
+        b = budget_status(s, settings)
+        print(f"Agent '{plan.agent['name']}' on '{plan.requirement_title}' ({settings.provider}:{settings.model})")
+        if plan.cached:
+            print(f"  Saved analysis {plan.cached.analysis_id} matches the current inputs - reused, no API call.")
+        else:
+            e = plan.estimate
+            print(f"  {len(plan.candidates.observations)} observations + {len(plan.candidates.documents)} document passages "
+                  f"in {plan.requests} request(s); estimate ${e.estimated_usd:.4f} (up to ${e.upper_bound_usd:.4f})")
+        print(f"  Budget ${b.budget_usd:.2f}: spent ${b.spent_usd:.4f}, remaining ${b.remaining_usd:.4f}")
+        if not plan.cached and args.approve_usd is None:
+            print("No request sent. Re-run with --approve-usd AMOUNT to approve this paid analysis.")
+            return
+    llm = None if plan.cached else _llm(settings)
+    with session_scope(_engine(args)) as s:
+        plan = aa.plan_analysis(s, settings, args.agent, args.requirement, args.user)
+        try:
+            row = aa.run_analysis(s, llm, settings, plan, args.user, approved_max_usd=args.approve_usd)
+        except (aa.ApprovalRequired, aa.BudgetExceeded, aa.AnalysisError) as exc:
+            sys.exit(f"Not run: {exc}")
+        except LLMError as exc:
+            sys.exit(f"Stopped: {exc.kind}: {exc}")
+        print(f"  Analysis {row.analysis_id}: {row.status}, cost ${row.cost_usd:.6f} (estimate)")
+        if row.status != "completed":
+            sys.exit(f"  Failed: {row.error}")
+        req = requirement_as_dict(s, get_requirement(s, args.requirement))
+        result = run_method(s, req, plan.agent)
+        r = {"status": result.status, "score": result.score, "inputs": result.inputs, "rationale": result.rationale,
+             "weight_percent": None, "weighted_contribution": None}
+        for line in evidence_lines(r) + calculation_lines(r)[:2]:
+            print("  " + line)
+        for m in result.inputs.get("missing_information", []):
+            print("  Missing: " + m)
+        print(f"  Remaining budget ${budget_status(s, settings).remaining_usd:.4f}")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--db", default=str(get_settings().database_path))
@@ -435,6 +487,12 @@ def main(argv: list[str] | None = None) -> None:
     p = sub.add_parser("test-openai", help="verify OpenAI config and send ONE minimal paid request (asks first)")
     p.add_argument("--yes", action="store_true", help="confirm the paid request non-interactively")
     p.set_defaults(func=cmd_test_openai)
+    p = sub.add_parser("agent-analysis", help="OpenAI evidence analysis for one AI agent + requirement")
+    p.add_argument("--agent", required=True)
+    p.add_argument("--requirement", required=True)
+    p.add_argument("--user", required=True)
+    p.add_argument("--approve-usd", type=float)
+    p.set_defaults(func=cmd_agent_analysis)
     p = sub.add_parser("budget")
     p.set_defaults(func=cmd_budget)
     p = sub.add_parser("select-evidence")

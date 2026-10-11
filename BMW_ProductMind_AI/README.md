@@ -34,6 +34,26 @@ python -m scripts.customer_intelligence observe --sample 20    # cost estimate o
 Next step for the team: run and review the 20-comment sample (DISCOVER → "Run AI extraction" → "Review extraction
 quality") before any full extraction.
 
+## Step 2 - OpenAI-powered custom agents
+
+AI_ANALYSIS agents now run an OpenAI evidence analysis (`services/agent_analysis.py`) on their **assigned resources
+only**: the existing validated observations of the requirement's direct comments (nothing is re-extracted) and/or
+passages from the agent's own uploads (with page / sheet-row locations). The model judges relevance under the
+agent's objective, custom instructions and context, using positional item IDs that Python maps back - it never
+creates evidence IDs, counts or scores. Python deduplicates feedback IDs and the existing methods score them
+(100·ln(1+n)/ln(1+4000) for complaint / request / combined demand; documents feed Evidence Coverage only).
+
+Analyses are cached per agent content + requirement version + evidence version + model + prompt
+(`agent_evidence_analyses`, never overwritten; weight changes do not invalidate). Human evidence reviews override
+them at read time. Without a current analysis an agent scores on taxonomy evidence, clearly labelled. Runs store
+per-agent evidence snapshots. Paid runs need an estimate + explicit approval and count against the $26 budget.
+
+```bash
+python -m scripts.customer_intelligence agent-analysis --agent AGT-.. --requirement REQ-.. --user NAME   # estimate
+python -m scripts.customer_intelligence agent-analysis --agent AGT-.. --requirement REQ-.. --user NAME --approve-usd 0.03
+```
+UI: PRIORITIZE → "Run AI Analysis".
+
 ## LLM provider (Stage 1: OpenAI)
 
 The default provider is **OpenAI** (`services/llm_client.py::OpenAILLMClient`, Responses API, strict JSON-schema

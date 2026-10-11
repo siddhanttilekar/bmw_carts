@@ -20,7 +20,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from core.ai_models import AIBase
@@ -148,3 +148,32 @@ class AgentDocumentChunk(AIBase):
     chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
     location: Mapped[str] = mapped_column(String(128), nullable=False)  # page / sheet+row / line range
     text: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class AgentEvidenceAnalysis(AIBase):
+    """Step 2: one OpenAI-assisted evidence analysis for (agent content,
+    requirement version, evidence version, model, prompt). Rows are never
+    updated after completion; a changed instruction/resource/evidence input
+    produces a new cache key and a new row (version history)."""
+
+    __tablename__ = "agent_evidence_analyses"
+
+    analysis_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    cache_key: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    agent_id: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    agent_config_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    requirement_id: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    requirement_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    base_selection_id: Mapped[str | None] = mapped_column(String(40))
+    observation_version_id: Mapped[str] = mapped_column(String(40), nullable=False)
+    scoring_method: Mapped[str] = mapped_column(String(64), nullable=False)
+    model: Mapped[str] = mapped_column(String(64), nullable=False)
+    prompt_version: Mapped[str] = mapped_column(String(32), nullable=False)
+    fingerprint_json: Mapped[str] = mapped_column(Text, nullable=False)  # the inputs the cache key covers
+    status: Mapped[str] = mapped_column(String(16), nullable=False)  # completed | failed
+    result_json: Mapped[str | None] = mapped_column(Text)
+    error: Mapped[str | None] = mapped_column(Text)
+    job_id: Mapped[str | None] = mapped_column(String(64))
+    cost_usd: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    created_by: Mapped[str] = mapped_column(String(128), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)

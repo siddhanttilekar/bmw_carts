@@ -171,9 +171,10 @@ def run_prioritization(session: Session, profile_id: str, created_by: str,
             result: ScoreResult = run_method(session, rd, agent)
             frozen = result.inputs.pop("evidence_snapshot", None)
             if frozen is not None:
-                evidence[req.requirement_id] = {
-                    **frozen, "requirement_version": req.current_version,
-                    "observation_version": _observation_version_info(session, frozen.get("observation_version_id"))}
+                frozen = {**frozen, "requirement_version": req.current_version,
+                          "observation_version": _observation_version_info(session, frozen.get("observation_version_id"))}
+                entry = evidence.setdefault(req.requirement_id, {k: v for k, v in frozen.items()})
+                entry.setdefault("agents", {})[agent["agent_id"]] = frozen  # per-agent evidence (Step 2)
             if result.status != UNSCORED and not result.source_refs:  # provenance is mandatory
                 result = result.model_copy(update={"status": UNSCORED, "score": None,
                                                    "rationale": "Score discarded: no source references (provenance)."})

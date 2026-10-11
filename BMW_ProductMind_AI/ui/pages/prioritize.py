@@ -1,6 +1,7 @@
 """Guided workflow screen 3: Prioritize requirements."""
 from __future__ import annotations
 
+import json
 import os
 
 import pandas as pd
@@ -150,6 +151,108 @@ else:
                     st.caption("Custom instructions (scope notes, never executed): " + agent["instructions"][:300])
                 if agent.get("documents"):
                     st.caption("Uploaded documents: " + ", ".join(d["file_name"] for d in agent["documents"]))
+
+# ---------------------------------------------------------------------------
+# Step 2: OpenAI-powered evidence analysis for AI agents
+# ---------------------------------------------------------------------------
+ai_agents_all = [a for a in active_agents if a["execution_method"] == "AI_ANALYSIS"]
+if ai_agents_all:
+    from services import agent_analysis as aa
+    from services.agent_scoring import run_method
+    from ui.evidence_ui import paid_call_blocker, paid_client
+
+    st.markdown("### Run AI Analysis")
+    st.caption("AI agents read only their assigned resources. The AI identifies relevant evidence; "
+               "Python counts unique comments and calculates every score.")
+    blocker = paid_call_blocker()
+    if blocker:
+        st.warning("AI unavailable — configure OpenAI API in application settings.")
+    ai_req_ids = [r["requirement_id"] for r in requirements]
+    ai_rid = st.selectbox("Requirement to evaluate", ai_req_ids,
+                          format_func=lambda i: next(r["title"] for r in requirements if r["requirement_id"] == i),
+                          key="ai_req_select")
+    plans, plan_errors = [], {}
+    with data.write_session() as s:
+        for a in ai_agents_all:
+            try:
+                plans.append(aa.plan_analysis(s, llm_settings(), a["agent_id"], ai_rid, actor or "system"))
+            except aa.AnalysisError as exc:
+                plan_errors[a["name"]] = str(exc)
+    for name, err in plan_errors.items():
+        st.info(f"{name}: {err}")
+    to_run = [p for p in plans if p.cached is None and p.requests]
+    total = sum(p.estimate.estimated_usd for p in to_run)
+    upper = sum(p.estimate.upper_bound_usd for p in to_run)
+    if plans:
+        reused = [p.agent["name"] for p in plans if p.cached is not None]
+        st.write(f"Estimated cost: ${total:.4f} (up to ${upper:.4f}) for {len(to_run)} agent(s)"
+                 + (f" · saved analysis reused at no cost: {', '.join(reused)}" if reused else ""))
+        approve = st.number_input("Approve up to (USD)", 0.0, 5.0, float(round(upper + 0.005, 2)), 0.01,
+                                  key="ai_approve")
+        if st.button("Run AI Analysis", type="primary",
+                     disabled=bool(blocker) or not to_run or not actor.strip()):
+            try:
+                llm = paid_client()
+                with st.spinner("Analysing evidence"), data.write_session() as s:
+                    remaining = approve
+                    for p in to_run:
+                        p = aa.plan_analysis(s, llm_settings(), p.agent["agent_id"], ai_rid, actor)
+                        row = aa.run_analysis(s, llm, llm_settings(), p, actor, approved_max_usd=remaining)
+                        remaining -= row.cost_usd
+                        if row.status != "completed":
+                            st.error(f"{p.agent['name']}: {row.error}")
+                st.rerun()
+            except (aa.ApprovalRequired, aa.BudgetExceeded, aa.AnalysisError) as exc:
+                st.error(str(exc))
+            except Exception as exc:  # noqa: BLE001 - never surface request content or keys
+                st.error(f"AI analysis stopped: {type(exc).__name__}. Nothing was double-charged; retry later.")
+        weights_now = {a["agent_id"]: float(a["weight_percent"]) for a in active_profile.agents} if active_profile else {}
+        with data.write_session() as s:
+            req_dict = rr.requirement_as_dict(s, rr.get_requirement(s, ai_rid))
+            for p in plans:
+                agent = p.agent
+                res = run_method(s, req_dict, agent)
+                inp = res.inputs
+                counts = inp.get("evidence_counts") or {}
+                weight = weights_now.get(agent["agent_id"])
+                contribution = (round(res.score * weight / 100, 2)
+                                if res.score is not None and weight is not None else None)
+                with st.container(border=True):
+                    st.markdown(f"**{esc(agent['name'])}** · {esc(p.requirement_title)}", unsafe_allow_html=True)
+                    basis = inp.get("evidence_basis")
+                    used = ("This agent's AI analysis" if basis == "agent_ai_analysis" else
+                            "Taxonomy matching only - run AI Analysis for this agent" if basis else "No evidence yet")
+                    docs = inp.get("document_refs") or []
+                    c = st.columns(5)
+                    c[0].metric("Unique complaints", counts.get("complaints", "-"))
+                    c[1].metric("Unique improvement requests", counts.get("improvement_requests", "-"))
+                    c[2].metric("Agent score", res.score if res.score is not None else "UNSCORED")
+                    c[3].metric("Weight", f"{weight:g}%" if weight is not None else "not in profile")
+                    c[4].metric("Weighted contribution", contribution if contribution is not None else "-")
+                    st.caption(f"Evidence used: {used}" + (f" · {len(docs)} document passages" if docs else "")
+                               + f" · Scoring method: {METHODS[agent['scoring_method']].label}")
+                    if res.status != "SCORED":
+                        st.warning(res.rationale)
+                    for m in inp.get("missing_information", []):
+                        st.caption(f"Missing information: {m}")
+                    with st.expander("Evidence details and calculation"):
+                        show_calculation({"status": res.status, "score": res.score, "inputs": inp,
+                                          "rationale": res.rationale, "weight_percent": weight,
+                                          "weighted_contribution": contribution})
+                        row = aa.current_analysis(s, agent, req_dict)
+                        if row is not None:
+                            result = json.loads(row.result_json)
+                            st.dataframe(pd.DataFrame([{
+                                "Comment": o["feedback_id"], "Type": o["observation_type"].replace("_", " ").title(),
+                                "Excerpt": o["evidence_excerpt"], "AI judgement": o["relevance"],
+                                "Reason": o["reason"]} for o in result["observations"]]), hide_index=True, width="stretch")
+                            if result["documents"]:
+                                st.dataframe(pd.DataFrame([{"Location": d["location"], "Passage": d["excerpt"],
+                                                            "AI judgement": d["relevance"], "Reason": d["reason"]}
+                                                           for d in result["documents"]]),
+                                             hide_index=True, width="stretch")
+                            st.caption(f"Analysis {row.analysis_id} · {row.model} · cost ${row.cost_usd:.4f} (estimate) "
+                                       f"· {row.created_at:%Y-%m-%d %H:%M}")
 
 st.markdown("### Run Analysis")
 if not active_agents:

@@ -184,11 +184,19 @@ EXTRA_COVERAGE_TYPES = {"RES_AI_OBSERVATIONS": "AI-validated observations in the
 
 def _extra_coverage(session: Session, r: str, req: dict, agent: dict) -> tuple[int, list[dict]]:
     if r == "RES_AI_OBSERVATIONS":
-        sel = current_evidence(session, req)
+        sel = current_evidence(session, req, agent if agent.get("execution_method") == "AI_ANALYSIS" else None)
         if sel is None:
             return 0, []
         ids = sorted(set(sel.combined_demand_ids) | set(sel.positive_feedback_ids))
         return len(ids), [{"table": "evidence_selection_runs", "key": sel.selection_id, "record_id": sel.selection_id}]
+    if agent.get("execution_method") == "AI_ANALYSIS":  # passages the agent's AI analysis judged relevant
+        from services.agent_analysis import current_analysis, evidence_view
+
+        row = current_analysis(session, agent, req)
+        if row is not None:
+            refs = evidence_view(session, row).document_refs
+            return len(refs), [{"table": "agent_document_chunks", "key": d["chunk_id"], "record_id": d["document_id"]}
+                               for d in refs]
     from services.agent_documents import keywords, search_agent_documents
 
     _, hits = search_agent_documents(session, agent["agent_id"], keywords(req["title"], req["customer_need"]))
@@ -264,20 +272,29 @@ FREQUENCY_KINDS = {  # method -> (selection attribute, label of what is counted)
 }
 
 
-def current_evidence(session: Session, req: dict):
-    """Latest evidence selection for the requirement's current version and the
-    configured observation version (None if none exists)."""
+def current_evidence(session: Session, req: dict, agent: dict | None = None):
+    """Evidence for scoring. For an AI_ANALYSIS agent with a completed analysis
+    matching its CURRENT instructions / resources / evidence version, the
+    agent-specific validated lists (Step 2); otherwise the deterministic
+    taxonomy selection for the requirement version (None if none exists).
+    Never calls a model."""
     from core.config import get_llm_settings
     from services.ai_evidence_selector import latest_selection
     from services.ai_feedback_analysis import current_observation_version_id
 
+    if agent is not None:
+        from services.agent_analysis import current_analysis, evidence_view
+
+        row = current_analysis(session, agent, req)
+        if row is not None:
+            return evidence_view(session, row)
     return latest_selection(session, req["requirement_id"], current_observation_version_id(get_llm_settings()),
                             requirement_version=req.get("current_version"))
 
 
 def _ai_frequency(session: Session, method: ScoringMethod, req: dict, agent: dict) -> ScoreResult:
     attr, what = FREQUENCY_KINDS[method.method_id]
-    sel = current_evidence(session, req)
+    sel = current_evidence(session, req, agent)
     if sel is None:
         return _unscored(method, "No AI evidence selection exists for this requirement version. Extract observations "
                                  "and run evidence selection first.")
@@ -291,6 +308,12 @@ def _ai_frequency(session: Session, method: ScoringMethod, req: dict, agent: dic
     n = len(ids)
     score = log_normalize(n)
     snap = sel.snapshot()
+    basis = snap.get("evidence_basis", "taxonomy_selection")
+    extra_refs = []
+    if basis == "agent_ai_analysis":
+        extra_refs = [{"table": "agent_evidence_analyses", "key": snap["analysis_id"], "record_id": snap["analysis_id"]}] + \
+            [{"table": "agent_document_chunks", "key": d["chunk_id"], "record_id": d["document_id"]}
+             for d in snap["document_refs"]]
     return ScoreResult(
         status=SCORED, score=score, method=method.method_id, method_version=method.version,
         inputs={"n": n, "N": REFERENCE_POPULATION_N, "counted": what, "normalization": NORMALIZATION,
@@ -300,10 +323,14 @@ def _ai_frequency(session: Session, method: ScoringMethod, req: dict, agent: dic
                 "evidence_counts": sel.counts(), "counter_evidence_ids": sel.counter_evidence_ids,
                 "uncertain_evidence_ids": sel.uncertain_evidence_ids, "counted_feedback_ids": ids,
                 "human_reviewed_matches": sel.human_reviewed, "machine_validated_matches": sel.machine_validated,
-                "evidence_snapshot": snap},
+                "evidence_basis": basis, "analysis_id": snap.get("analysis_id"),
+                "missing_information": snap.get("missing_information", []),
+                "document_refs": snap.get("document_refs", []), "evidence_snapshot": snap},
         source_refs=[{"table": "evidence_selection_runs", "key": sel.selection_id, "record_id": sel.selection_id}]
-                    + [{"table": "feedback", "key": k, "record_id": None} for k in ids],
-        rationale=f"{n} distinct G60 comments with {what}; log-normalised against the fixed reference N = "
+                    + extra_refs + [{"table": "feedback", "key": k, "record_id": None} for k in ids],
+        rationale=("Evidence identified by this agent's AI analysis. " if basis == "agent_ai_analysis" else
+                   "Evidence from deterministic taxonomy matching (agent AI analysis not run for the current inputs). ")
+                  + f"{n} distinct G60 comments with {what}; log-normalised against the fixed reference N = "
                   f"{REFERENCE_POPULATION_N}. Counter-evidence: {len(sel.counter_evidence_ids)} comments; "
                   f"uncertain: {len(sel.uncertain_evidence_ids)}.",
         facts=[f"{n} distinct G60 feedback IDs counted ({what}).",

@@ -126,7 +126,8 @@ class EvidenceSelection:
 
     def snapshot(self) -> dict:
         """Frozen copy stored with a prioritization run (reproducibility)."""
-        return {"selection_id": self.selection_id, "requirement_version": self.requirement_version,
+        return {"selection_id": self.selection_id, "evidence_basis": "taxonomy_selection",
+                "requirement_version": self.requirement_version,
                 "observation_version_id": self.observation_version_id, "selector_version": self.selector_version,
                 "method": self.method, "coverage": self.coverage, "counts": self.counts(),
                 "supporting_complaint_ids": self.supporting_complaint_ids,
